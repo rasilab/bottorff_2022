@@ -40,10 +40,10 @@ cd ../
 for dir in */; do cd $dir; for dir in */; do cd $dir; mkdir output figures tables; cd ../; done; cd ../; done
 # copy modeling files needed for all models
 cd $base/modeling
-cp -R $modeling/pysb_ul4 ./pysb_ul4
 cp $modeling/*.py ./
 cp $modeling/setup.cfg ./
 for dir in */; do cd $dir; for dir in */; do cd $dir; cp $sim_runs/$andreev_buff/run_simulation.py ./; cp $sim_runs/$andreev_buff/Snakefile ./; cp $sim_runs/$andreev_buff/submit_cluster.sh ./; cp $sim_runs/$andreev_buff/cluster.yaml ./; cd ../; done; cd ../; done
+cp -R $modeling/pysb_ul4 ./pysb_ul4
 # copy 80s hit buffering files
 cd $base/modeling/buffering/80s_hit
 cp $sim_runs/$andreev_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
