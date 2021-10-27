@@ -2,12 +2,13 @@
 
 Paper citation
 
-Paper link
+[[paper link][Paper link]
 
-[[http://rasilab.fredhutch.org/]]
+[[http://rasilab.fredhutch.org/][Lab website]]
 
 This repository contains raw experimental data, code, and instructions for:
  - running simulations
+ - analyzing luminescent reporter assay data
  - generating figures in the manuscript
 
 ** Modeling
@@ -21,7 +22,9 @@ To run the simulations, install our lab's customized versions of:
 
 The instructions for installing the above software are provided in the respective links.
 
-Our kinetic model for quality control during eukaryotic translation is defined in [[file:]]. 
+Initialization of our kinetic model for quality control during eukaryotic translation is described in [[file:/modeling/pysb_ul4/__init__.py]]. 
+Simulated molecules are described in [[file:/modeling/pysb_ul4/molecules.py]].
+The default parameters are listed in [[file:/modeling/pysb_ul4/parameters.py]]. 
 This model is defined using the [[http://pysb.org/][PySB]] syntax.
 To simulate this model with its default parameters, run:
 #+BEGIN_SRC sh :exports code
