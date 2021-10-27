@@ -1,0 +1,116 @@
+---
+title: "Analyze luminescent data from reduced ribosome loading via 4ER1Cat"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(plotrix)
+```
+
+# Read in data
+
+```{r}
+counts <- read_tsv("../rawdata/20201121_fluc_nluc.tsv") %>%
+  print()
+```
+
+# Read in annotationsl
+
+```{r}
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+  print()
+```
+
+# Join data with annotations, normalize NLuc by Fluc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter, concentration) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  mutate(label = fct_reorder(label, label_order)) %>%
+  mutate(concentration = as.character(concentration)) %>% 
+  mutate(concentration = str_replace(concentration, "^0" , "–")) %>% 
+  mutate(concentration = str_replace(concentration, "116" , "+")) %>% 
+  mutate(concentration = fct_reorder(as.factor(concentration), concentration_order)) %>%
+  print()
+```
+
+# Import uORF2 mutant data for normalization
+
+```{r}
+
+norm_data <- read_csv("../../20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
+  filter(label == "gp48UTR-no-AUG") %>%
+  print()
+
+```
+
+# Plot Fluc / NLUc for Drug Treatment
+
+```{r, fig.width=2, fig.height=1}
+plot_data <- data %>%
+  filter(!is.na(concentration_order)) %>%
+  mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = concentration, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio, color = label, shape = label)) +  
+  geom_point(size = 2) +
+  geom_errorbar(width = 0.2, show.legend = F) +
+  labs(y = 'Nluc / Fluc (log2, a.u.)',
+       x = 'eIF4E inhibitor') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  coord_flip() +
+  theme_rasilab() +
+  scale_color_manual(values = cbPalette[c(2,1)])
+
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_4er1cat.pdf")
+```
+
+```{r, fig.width=0.75, fig.height=1}
+plot_data <- data %>%
+  filter(!is.na(concentration_order)) %>%
+  mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
+  group_by(concentration) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="no stall"]) %>%
+  ungroup() %>%
+  filter(label == 'WT') %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = concentration, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 1) +
+  geom_errorbar(width = 0.2, show.legend = F) +
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+       x = 'eIF4E inhibitor') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  coord_flip() +
+  theme_rasilab() +
+  scale_color_manual(values = cbPalette[c(2,1)])
+
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_4er1cat_normalized.pdf")
+```
+
+# Conclusions
+
+ - With reduced ribosome loading via a 5' synthetic uORF (seen in the no uORF2 elongation stall gray data), main ORF translation decreases less than expected (yellow data decreases less than gray data does)

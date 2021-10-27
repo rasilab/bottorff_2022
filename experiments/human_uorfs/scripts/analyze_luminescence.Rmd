@@ -1,0 +1,123 @@
+---
+title: "Analyze luminescent data from human uORFs"
+output: 
+  github_document:
+    toc: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(plotrix)
+
+theme_rasilab <- function() {
+  theme_classic(base_family = "Helvetica", base_size = 8) +
+    theme(
+      strip.background = ggplot2::element_blank(),
+      legend.text = element_text(size = 8),
+      strip.text.x = element_text(size = 8),
+      axis.line = element_line(color = "black", size=.25),
+      axis.text = element_text(color = "black", size = 8)
+    )
+}
+
+theme_set(theme_rasilab())
+```
+
+# Read in data
+
+```{r}
+counts <- read_tsv("../rawdata/20200927_fluc_nluc.tsv") %>%
+  print()
+```
+
+# Read in annotations
+
+```{r}
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+  janitor::clean_names() %>% 
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  # filter(fluc > 0) %>% 
+  filter(label != "mock") %>%
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -replicate) %>%
+  mutate(label = fct_rev(fct_reorder(label, label_order))) %>%
+  print()
+```
+
+# Plot Fluc / NLUc for subset samples 
+
+```{r, fig.width=3, fig.height=2}
+plot_data <- data %>%
+  group_by(reporter) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  # select only reporters of interest
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="P22A"]) %>%
+  filter(!is.na(label_order)) %>% 
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
+            xmin = mean_ratio - se_ratio, color = status)) +
+  geom_point(size = 2) +
+  geom_errorbar(width = 0.25, show.legend = F) +
+  labs(x = 'Nluc / Fluc (log2 a.u.)', y = '', color = '') +
+  scale_color_manual(values = cbPalette[c(3,1,2)])
+
+ggsave("../figures/nluc_fluc_ratio_human_uorfs.pdf")
+```
+# Calculate p-values for WT vs noAUG 
+
+```{r}
+data %>% 
+  filter(!is.na(label_order)) %>% 
+  filter(status %in% c("WT", "no AUG")) %>% 
+  group_by(label) %>% 
+  nest() %>%
+  mutate(ttest = map(data, function(df) t.test(ratio ~ status, df) %>% broom::tidy())) %>% 
+  unnest(ttest) %>% 
+  select(-data, -matches("estimate|conf")) %>% 
+  mutate(p.value = round(p.value, 4)) %>% 
+  knitr::kable()
+```
+
+
+# Calculate p-values for WT vs P to A
+
+```{r}
+data %>% 
+  filter(!is.na(label_order)) %>% 
+  filter(status %in% c("WT", "P to A")) %>% 
+  group_by(label) %>% 
+  nest() %>%
+  mutate(ttest = map(data, function(df) t.test(ratio ~ status, df) %>% broom::tidy())) %>% 
+  unnest(ttest) %>% 
+  select(-data, -matches("estimate|conf")) %>% 
+  mutate(p.value = round(p.value, 4)) %>% 
+  knitr::kable()
+```
+
+# Conclusions
+
+ - several human uORFs have repressive diproline motifs
+ - unlike UL4 uORF2, most of these human uORFs are repressive even without their diproline motifs

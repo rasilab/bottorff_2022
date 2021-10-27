@@ -1,0 +1,82 @@
+---
+title: "Analyze luminescent data from UL4 uORF2 control mutants"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(plotrix)
+library(tidyverse)
+library(rasilabRtemplates)
+```
+
+# Read in data
+
+```{r}
+counts <- read_csv("../rawdata/20190422_fluc_nluc.csv") %>% 
+  print()
+```
+
+# Read in annotations
+
+```{r}
+annotations <- read_csv("../annotations/sampleannotations.csv") %>% 
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  mutate(label = fct_reorder(label, label_order)) %>%
+  print()
+```
+# Plot Fluc / NLUc for WT and 3 standard controls
+
+```{r, fig.width=2.4, fig.height=0.9}
+plot_data <- data %>%
+  # select only reporters of interest
+  filter(str_detect(reporter, "pASHS64|pTBHS[123]")) %>%
+  # export control mutant data to normalize 4er1cat to before max normalizing
+  write_csv("../tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
+  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>% 
+  print()
+
+plot_data %>% 
+  mutate_if(is.numeric, . %>% round(2)) %>% 
+  write_csv("../tables/nluc_fluc_control_mutants.csv")
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = label, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 1) +
+  geom_errorbar(width = 0.5) +
+  labs(y = 'Nluc / Fluc (log2, a.u.)',
+       x = '') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
+  coord_flip() +
+  theme_rasilab()
+ggsave("../figures/nluc_fluc_ratio_ul4_control_mutants.pdf")
+```
+
+# Conclusions
+
+ - WT UL4 5' UTR strongly represses main ORF translation
+ - Removing the uORF2 start codon or stall (P22A mutation) abolishes UL4 5' UTR repressiveness
+ - Improving uORF2's initiation (via an improved Kozak mutation) increases the repressiveness of the UL4 5' UTR

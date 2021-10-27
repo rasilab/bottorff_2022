@@ -1,0 +1,55 @@
+well	reporter	label	replicate	status	label_order	status_order
+B2	mock	mock	1		0	
+B3	pASHS64	WT UL4	1		1	
+B4	pTBHS1	P22A	1		2	
+B5	pTBHS2	uORF2 no AUG	1		3	
+B6	pTBHS3	uORF2 strong Kozak	1		4	
+B7	pTBHS18	GC52	1	WT	11	1
+B8	pTBHS19	GC62	1	WT	12	1
+B9	pTBHS20	GC78	1	WT	14	1
+B10	pTBHS21	GC92	1	WT	15	1
+C10	mock	mock	2		0	
+C9	pASHS64	WT UL4	2		1	
+C8	pTBHS1	P22A	2		2	
+C7	pTBHS2	uORF2 no AUG	2		3	
+C6	pTBHS3	uORF2 strong Kozak	2		4	
+C5	pTBHS18	GC52	2	WT	11	1
+C4	pTBHS19	GC62	2	WT	12	1
+C3	pTBHS20	GC78	2	WT	14	1
+C2	pTBHS21	GC92	2	WT	15	1
+D2	mock	mock	3		0	
+D3	pASHS64	WT UL4	3		1	
+D4	pTBHS1	P22A	3		2	
+D5	pTBHS2	uORF2 no AUG	3		3	
+D6	pTBHS3	uORF2 strong Kozak	3		4	
+D7	pTBHS18	GC52	3	WT	11	1
+D8	pTBHS19	GC62	3	WT	12	1
+D9	pTBHS20	GC78	3	WT	14	1
+D10	pTBHS21	GC92	3	WT	15	1
+E2	mock	mock	4		0	
+E3	pTBHS22	CAA repeat	1	WT	13	1
+E4	pTBHS35	GC52	1	no stall	11	2
+E5	pTBHS36	GC62	1	no stall	12	2
+E6	pTBHS37	GC78	1	no stall	14	2
+E7	pTBHS38	GC92	1	no stall	15	2
+E8	pTBHS39	CAA repeat	1	no stall	13	2
+E9	pTBHS53	GAPDH strong uORF2	1		6	
+E10	pTBHS54	GAPDH no AUG strong uORF2	1		5	
+F10	mock	mock	5		0	
+F9	pTBHS22	CAA repeat	2	WT	13	1
+F8	pTBHS35	GC52	2	no stall	11	2
+F7	pTBHS36	GC62	2	no stall	12	2
+F6	pTBHS37	GC78	2	no stall	14	2
+F5	pTBHS38	GC92	2	no stall	15	2
+F4	pTBHS39	CAA repeat	2	no stall	13	2
+F3	pTBHS53	GAPDH strong uORF2	2		6	
+F2	pTBHS54	GAPDH no AUG strong uORF2	2		5	
+G2	mock	mock	6		0	
+G3	pTBHS22	CAA repeat	3	WT	13	1
+G4	pTBHS35	GC52	3	no stall	11	2
+G5	pTBHS36	GC62	3	no stall	12	2
+G6	pTBHS37	GC78	3	no stall	14	2
+G7	pTBHS38	GC92	3	no stall	15	2
+G8	pTBHS39	CAA repeat	3	no stall	13	2
+G9	pTBHS53	GAPDH strong uORF2	3		6	
+G10	pTBHS54	GAPDH no AUG strong uORF2	3		5	

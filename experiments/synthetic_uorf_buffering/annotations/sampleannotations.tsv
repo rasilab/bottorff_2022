@@ -1,0 +1,61 @@
+well	reporter	label	replicate	status	label_order	status_order
+B2	mock	mock	1			
+B3	pASHS64	WT UL4	1			
+B4	pTBHS1	P22A	1			
+B5	pTBHS2	uORF2 no AUG	1			
+B6	pTBHS3	uORF2 strong Kozak	1			
+B7	pTBHS12	GAPDH GACACC stop before uORF2	1	WT	2	1
+B8	pTBHS13	GAPDH GACACC stop before uORF2	1	no stall	2	2
+B9	pTBHS40	K10Q S12P	1			
+B10	pTBHS41	GAPDH ACTGTC stop before uORF2	1	WT	5	1
+B11	pTBHS42	GAPDH CATTGT stop before uORF2	1	WT	7	1
+C11	mock	mock	2			
+C10	pASHS64	WT UL4	2			
+C9	pTBHS1	P22A	2			
+C8	pTBHS2	uORF2 no AUG	2			
+C7	pTBHS3	uORF2 strong Kozak	2			
+C6	pTBHS12	GAPDH GACACC stop before uORF2	2	WT	2	1
+C5	pTBHS13	GAPDH GACACC stop before uORF2	2	no stall	2	2
+C4	pTBHS40	K10Q S12P	2			
+C3	pTBHS41	GAPDH ACTGTC stop before uORF2	2	WT	5	1
+C2	pTBHS42	GAPDH CATTGT stop before uORF2	2	WT	7	1
+D2	mock	mock	3			
+D3	pASHS64	WT UL4	3			
+D4	pTBHS1	P22A	3			
+D5	pTBHS2	uORF2 no AUG	3			
+D6	pTBHS3	uORF2 strong Kozak	3			1
+D7	pTBHS12	GAPDH GACACC stop before uORF2	3	WT	2	2
+D8	pTBHS13	GAPDH GACACC stop before uORF2	3	no stall	2	
+D9	pTBHS40	K10Q S12P	3			
+D10	pTBHS41	GAPDH ACTGTC stop before uORF2	3	WT	5	1
+D11	pTBHS42	GAPDH CATTGT stop before uORF2	3	WT	7	1
+E2	pTBHS43	GAPDH GAATCG stop before uORF2	1	WT	3	1
+E3	pTBHS44	GAPDH TACTAT stop before uORF2	1	WT	6	1
+E4	pTBHS45	GAPDH TCCAAA stop before uORF2	1	WT	1	1
+E5	pTBHS46	GAPDH TTTGAA stop before uORF2	1	WT	4	1
+E6	pTBHS47	GAPDH ACTGTC stop before uORF2	1	no stall	5	2
+E7	pTBHS48	GAPDH CATTGT stop before uORF2	1	no stall	7	2
+E8	pTBHS49	GAPDH GAATCG stop before uORF2	1	no stall	3	2
+E9	pTBHS50	GAPDH TACTAT stop before uORF2	1	no stall	6	2
+E10	pTBHS51	GAPDH TCCAAA stop before uORF2 	1	no stall	1	2
+E11	pTBHS52	GAPDH TTTGAA stop before uORF2	1	no stall	4	2
+F11	pTBHS43	GAPDH GAATCG stop before uORF2	2	WT	3	1
+F10	pTBHS44	GAPDH TACTAT stop before uORF2	2	WT	6	1
+F9	pTBHS45	GAPDH TCCAAA stop before uORF2	2	WT	1	1
+F8	pTBHS46	GAPDH TTTGAA stop before uORF2	2	WT	4	1
+F7	pTBHS47	GAPDH ACTGTC stop before uORF2	2	no stall	5	2
+F6	pTBHS48	GAPDH CATTGT stop before uORF2	2	no stall	7	2
+F5	pTBHS49	GAPDH GAATCG stop before uORF2	2	no stall	3	2
+F4	pTBHS50	GAPDH TACTAT stop before uORF2	2	no stall	6	2
+F3	pTBHS51	GAPDH TCCAAA stop before uORF2 	2	no stall	1	2
+F2	pTBHS52	GAPDH TTTGAA stop before uORF2	2	no stall	4	2
+G2	pTBHS43	GAPDH GAATCG stop before uORF2	3	WT	3	1
+G3	pTBHS44	GAPDH TACTAT stop before uORF2	3	WT	6	1
+G4	pTBHS45	GAPDH TCCAAA stop before uORF2	3	WT	1	1
+G5	pTBHS46	GAPDH TTTGAA stop before uORF2	3	WT	4	1
+G6	pTBHS47	GAPDH ACTGTC stop before uORF2	3	no stall	5	2
+G7	pTBHS48	GAPDH CATTGT stop before uORF2	3	no stall	7	2
+G8	pTBHS49	GAPDH GAATCG stop before uORF2	3	no stall	3	2
+G9	pTBHS50	GAPDH TACTAT stop before uORF2	3	no stall	6	2
+G10	pTBHS51	GAPDH TCCAAA stop before uORF2 	3	no stall	1	2
+G11	pTBHS52	GAPDH TTTGAA stop before uORF2	3	no stall	4	2

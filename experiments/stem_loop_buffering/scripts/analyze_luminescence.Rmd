@@ -1,0 +1,105 @@
+---
+title: "Analyze luminescent data from reduced ribosome loading via a stem loop"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(plotrix)
+```
+
+# Read in data
+
+```{r}
+counts <- read_tsv("../rawdata/20191223_fluc_nluc.tsv") %>%
+  print()
+```
+
+# Read in annotationsl
+
+```{r}
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  arrange(desc(status)) %>% 
+  mutate(label = str_replace(label, "GC", "")) %>% 
+  mutate(label = str_replace(label, "CAA repeat", "no SL")) %>% 
+  mutate(label = fct_reorder(label, label_order)) %>%
+  mutate(status = fct_reorder(status, status_order)) %>%
+  print()
+```
+# Plot Fluc / Nluc for Stem Loops
+
+```{r, fig.width=2.5, fig.height=1.25}
+plot_data <- data %>%
+  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
+  filter(!is.na(status)) %>% 
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = label, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio, color = status, shape = status)) +  
+  geom_point(size = 2) +
+  geom_errorbar(width = 0.5, show.legend = F) +
+  labs(y = 'Nluc / Fluc (log2, a.u.)',
+       x = 'stem loop GC %') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=5)) +
+  coord_flip() +
+  theme_rasilab() +
+  scale_color_manual(values = cbPalette[c(2,1)])
+
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop.pdf")
+```
+
+```{r, fig.width=1, fig.height=1.125}
+plot_data <- data %>%
+  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
+  filter(!is.na(status)) %>%
+  group_by(label) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[status=="no stall"]) %>%
+  ungroup() %>%
+  filter(status == 'WT') %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = label, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 1) +
+  geom_errorbar(width = 0.5, show.legend = F) +
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+       x = 'stem loop GC %') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  coord_flip() +
+  theme_rasilab() +
+  scale_color_manual(values = cbPalette[c(2,1)])
+
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop_normalized.pdf")
+```
+
+# Conclusions
+
+ - With reduced ribosome loading via a 5' synthetic uORF (seen in the no uORF2 elongation stall gray data), main ORF translation decreases less than expected (yellow data decreases less than gray data does)

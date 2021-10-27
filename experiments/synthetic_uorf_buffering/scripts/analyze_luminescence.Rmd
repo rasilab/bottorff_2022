@@ -1,0 +1,104 @@
+---
+title: "Analyze luminescent data from reduced ribosome loading via a 5' synthetic uORF"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(plotrix)
+library(tidyverse)
+library(rasilabRtemplates)
+```
+
+# Read in data
+
+```{r}
+counts <- read_tsv("../rawdata/20191021_fluc_nluc.tsv") %>% 
+  print()
+```
+
+# Read in annotations
+
+```{r}
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>% 
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error. Max normalize (max = no AUG control)
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>%
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  slice(1) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  mutate(kozak = str_extract(label, "(?<=GAPDH )[ACTG]{6}")) %>% 
+  mutate(kozak = fct_rev(fct_reorder(kozak, label_order))) %>%
+  mutate(status = fct_reorder(status, status_order)) %>%
+  print()
+```
+# Plot Fluc / NLuc for different synthetic uORF mutants
+
+```{r, fig.width=2.4, fig.height=1.5}
+plot_data <- data %>%
+  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
+  # select only reporters of interest
+  filter(!is.na(label_order)) %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = kozak, y = mean_ratio, ymax = mean_ratio + se_ratio, color = status, shape = status,
+            ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 2) +
+  geom_errorbar(width = 0.5, show.legend = F) +
+  labs(y = 'Nluc / Fluc (log2, a.u.)',
+       x = 'synthetic uORF Kozak') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_color_manual(values = cbPalette[c(2,1)]) +
+  coord_flip() +
+  theme_rasilab()
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5'_synthetic_uorf.pdf")
+```
+
+# Plot Fluc / NLuc for different synthetic uORF mutants normalized by no stall
+
+```{r, fig.width=1, fig.height=1.25}
+plot_data <- data %>%
+  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
+  # select only reporters of interest
+  filter(!is.na(label_order)) %>%
+  group_by(kozak) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[status=="no stall"]) %>%
+  ungroup() %>%
+  filter(status == 'WT') %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = kozak, y = mean_ratio, ymax = mean_ratio + se_ratio, ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 1) +
+  geom_errorbar(width = 0.5, show.legend = F) +
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+       x = 'synthetic uORF Kozak') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  scale_color_manual(values = cbPalette[c(2,1)]) +
+  coord_flip() +
+  theme_rasilab()
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5'_synthetic_uorf_normalized.pdf")
+```
+
+# Conclusions
+
+ - With reduced ribosome loading via a 5' synthetic uORF (seen in the no uORF2 elongation stall gray data), main ORF translation actually increases (yellow data)

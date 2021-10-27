@@ -1,0 +1,89 @@
+---
+title: "Analyze luminescent data from reduced ribosome loading +/- perturbed uORF2 d_stall"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(plotrix)
+
+theme_rasilab <- function() {
+  theme_classic(base_family = "Helvetica", base_size = 8) +
+    theme(
+      strip.background = ggplot2::element_blank(),
+      legend.text = element_text(size = 8),
+      strip.text.x = element_text(size = 8),
+      axis.line = element_line(color = "black", size=.25),
+      axis.text = element_text(color = "black", size = 8)
+    )
+}
+
+theme_set(theme_rasilab())
+```
+
+# Read in data
+
+```{r}
+counts <- read_tsv("../rawdata/20201006_fluc_nluc.tsv") %>%
+  print()
+```
+
+# Read in annotations
+
+```{r}
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+  janitor::clean_names() %>% 
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - 2, nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(fluc > 0) %>% 
+  filter(label != "mock") %>%
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  slice(1) %>%
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  mutate(label = fct_reorder(label, label_order)) %>%
+  print()
+```
+
+# Plot Fluc / NLUc for GAPDH added and longer d_stall
+
+```{r, fig.width=3.6, fig.height=1}
+plot_data <- data %>%
+  # select only reporters of interest
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="uORF2 no AUG"]) %>%
+  filter(!is.na(group)) %>%
+  filter(group != "strong_kozak") %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
+            xmin = mean_ratio - se_ratio, color = status, shape = status)) +
+  geom_point(size = 2) +
+  geom_errorbar(width = 0.5, show.legend = F) +
+  labs(x = 'Nluc / Fluc (log2, a.u.)', y = '', color = '') +
+  scale_color_manual(values = cbPalette) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3))
+ggsave("../figures/nluc_fluc_ratio_reduced_ribosome_loading_5'_synthetic_uorf_longer_d_stall.pdf")
+```
+
+# Results/conclusions
+
+ - Buffering against reductions in main ORF translation is present with a longer uORF2 d_stall (top 2 rows, with a reduction in gray data, yellow data goes up) as it is in WT uORF2 (bottom 2 rows)

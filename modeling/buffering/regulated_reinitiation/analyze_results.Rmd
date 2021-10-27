@@ -1,0 +1,163 @@
+---
+title: "Regulated re-initiation model"
+author: "`r Sys.info()[['user']]`"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  github_document:
+    toc: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+# Load libraries
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(viridis)
+# disable scientific notation
+options(scipen=999)
+```
+
+# Read reaction firing data
+```{r}
+rxn_data <- list.files("output/", pattern = "rxn_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>%
+  print()
+```
+
+# Read simulation time data
+```{r}
+sim_data <- list.files("output/", pattern = "molecule_type_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>% 
+  filter(mol_type %in% c("simulated_time", "cpu_time")) %>% 
+  spread(mol_type, mol_type_id) %>% 
+  print()
+```
+
+# Read last reaction time data
+
+```{r}
+last_rxn_data <- list.files("output/", pattern = "molecule_type_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>% 
+  filter(mol_type == "last_rxn_firing_time") %>%
+  spread(mol_type, mol_type_id) %>% 
+  print()
+```
+
+# Check to make sure last reaction fired near end of simulation. 
+0 rows output means all simulations' last reactions fired in last 0.1% of simulated time
+
+```{r}
+check_rxn <- last_rxn_data %>%
+  left_join(sim_data, by = "sim_id") %>%
+  mutate(ratio = last_rxn_firing_time / simulated_time) %>%
+  filter(ratio < 0.999) %>%
+  print()
+```
+
+# Read simulation parameters
+```{r}
+annotations  <- read_tsv('sim.params.tsv') %>%
+  print()
+```
+
+# Calculate protein synthesis rate of main ORF
+
+```{r}
+psr_data <- rxn_data %>% 
+  mutate(mrna_loc = str_extract(name, "\\d+$")) %>% 
+  left_join(annotations %>% select(sim_id, uorf2_stop, orf_stop), by = "sim_id") %>% 
+  filter((mrna_loc == orf_stop) & str_detect(name, "terminate")) %>% 
+  group_by(sim_id, mrna_loc) %>% 
+  summarize(n_firings = sum(n_firings)) %>% 
+  left_join(sim_data, by = "sim_id") %>% 
+  mutate(psr = n_firings / simulated_time) %>% 
+  select(sim_id, mrna_loc, psr) %>% 
+  print()
+```
+
+# Get only annotations that we want to use for plotting
+
+```{r}
+param_data <- annotations %>%
+  mutate(uorf2_reinit = round(100 * 5 / (k_terminated_ssu_recycle_uorf2 + 5)),
+         uorf3_reinit = round(100 * 5 / (k_terminated_ssu_recycle_uorf3 + 5)),
+         uorf2_init = round(100 * k_start_uorf2 / (k_start_uorf2 + 5)),
+         uorf3_init = round(100 * k_start_uorf3 / (k_start_uorf3 + 5))) %>%
+  select(sim_id, uorf2_init, uorf3_init, uorf2_reinit, uorf3_reinit, n_tc_0) %>%
+  print()
+```
+
+# Combine all processed data into a single table
+```{r}
+data <- param_data %>% 
+  left_join(psr_data, by = "sim_id") %>%
+  print()
+```
+
+# Plot PSR as a function of uorf2/3 (re)init %s --> buffering requires high uORF2 reinit, low uORF3 reinit, high uORF3 init, ~agnostic to uORF2 init (as long as its not super low)
+
+```{r,fig.width=3,fig.height=2.25}
+plot_data <- data %>%
+  filter(uorf2_init %in% c(0, 98),
+         uorf3_init %in% c(0, 98),
+         uorf2_reinit != uorf3_reinit,
+         uorf2_reinit %in% c(1, 100),
+         uorf3_reinit %in% c(1, 100),
+         uorf2_init != 0 | uorf3_init !=0) %>%
+  print()
+
+reinit2_labeller <- function(x) paste0("uORF1\ncontinued\nscanning: ", x, "%")
+reinit3_labeller <- function(x) paste0("uORF2\ncontinued\nscanning: ", x, "%")
+
+plot_data %>% 
+  ggplot(aes(x = log2(n_tc_0), y = log2(psr), color = interaction(uorf2_init, uorf3_init))) +
+  facet_wrap(~ uorf2_reinit + uorf3_reinit, ncol = 3, labeller = labeller(uorf2_init = init2_labeller, uorf2_reinit = reinit2_labeller, uorf3_reinit = reinit3_labeller)) +
+  geom_point(size = 1) +
+  geom_line() +
+  scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  labs(y = "main ORF protein\noutput (log2, s-1)", x = "ternary complex concentration (log2)", color = "Baseline\nuORF1.\nuORF2\ninitiations (%)")
+
+  ggsave('figures/hinnebusch_buffering_main.pdf')
+```
+
+# 2 uORFs needed for hinnebusch buffering
+
+```{r,fig.width=3,fig.height=1.75}
+plot_data <- data %>%
+  filter(uorf2_reinit == 100,
+         uorf3_reinit == 1,
+         uorf2_init %in% c(0, 98),
+         uorf3_init %in% c(0, 98)) %>%
+  print()
+
+init2_labeller <- function(x) paste0("Baseline\nuORF1\ninitiation:\n", x, "%")
+
+plot_data %>% 
+  ggplot(aes(x = log2(n_tc_0), y = log2(psr), color = as.factor(uorf3_init))) +
+  facet_wrap(~ uorf2_init, ncol = 2, labeller = labeller(uorf2_init = init2_labeller)) +
+  geom_point(size = 1) +
+  geom_line() +
+  scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  labs(y = "main ORF protein\noutput (log2, s-1)", x = "ternary complex concentration (log2)", color = "Baseline uORF2\ninitiation (%)")
+
+  ggsave('figures/hinnebusch_buffering_supp.pdf')
+```
