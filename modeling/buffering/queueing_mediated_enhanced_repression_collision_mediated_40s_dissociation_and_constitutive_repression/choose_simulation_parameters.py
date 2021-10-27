@@ -3,17 +3,15 @@ Choose parameters for simulation
 
 Vary
 - cap binding rate, 5 values 
-- uORF2 start codon initiation strength, 3 values
+- uORF2 start codon initiation strength, 2 values
 - elongation stall duration, 2 values
 - scan abortive termination rate, 2 values
-- reinitiation rate, 1 value 
-- d_stall values: 2
+- reinitiation rate, 3 values 
+- l_scan_capture, 2 values
+- d_stall, 2 values
 
-Total of 120 values
+Total of 480 values
 
-- We want to vary reinitiation rate to see if we can fit the strong kozak
-control mutant while simultaneously fitting the wt control mutant using the
-initiation rate finely varied around a physiological value.
 """
 
 import numpy as np
@@ -32,7 +30,7 @@ and_params = {
     'l_scan_capture': [0, 3]
 }
 
-uorf2_lengths = [21, 22, 101]
+uorf2_lengths = [21, 22]
 uorf2_starts = [25]
 length_params = list()
 for l, n in it.product(uorf2_lengths, uorf2_starts):

@@ -2,18 +2,12 @@
 Choose parameters for simulation
 
 Vary
-- cap binding rate, 1 value 
-- uORF2 start codon initiation strength, 2 values
-- elongation stall duration, 1 value
+- uORF2 start codon initiation strength, 1 values
 - scan abortive termination rate, 2 values
-- reinitiation rate, 1 value 
-- d_stall length, 5 values
+- d_stall length, 16 values
 
-Total of 20 values
+Total of 32 values
 
-- We want to vary reinitiation rate to see if we can fit the strong kozak
-control mutant while simultaneously fitting the wt control mutant using the
-initiation rate finely varied around a physiological value.
 """
 
 import numpy as np
@@ -25,16 +19,13 @@ uorf2_reinitation_fractions = [0.5]
 # include each of these params and one of its values in each simulation
 and_params = {
     'k_cap_bind': [0.024],
-    'k_start_uorf2': [0, 0.5],
+    'k_start_uorf2': [0.5],
     'k_elong_stall': [0.001],
     # we multiply by default k_scan=5 that competes with re-initiation
     'k_terminated_ssu_recycle_uorf2': [5*(1-x) / x for x in uorf2_reinitation_fractions]
 }
 
 uorf2_lengths = [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 30, 31, 33]
-# exp d_stall list = [66, 69, 72, 75, 78, 87, 96], none are good for ivanov buffering
-# add lower d_stall values mirrored across 60 up to 78: 42, 45, 48, 51, 54
-# exp uorf2_length list = [23, 24, 25, 26, 27, 30, 33]
 uorf2_starts = [25]
 length_params = list()
 for l, n in it.product(uorf2_lengths, uorf2_starts):

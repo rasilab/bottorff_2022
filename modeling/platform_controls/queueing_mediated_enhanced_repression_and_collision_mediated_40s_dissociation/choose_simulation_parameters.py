@@ -6,13 +6,9 @@ Vary
 - uORF2 start codon initiation strength, 3 values
 - elongation stall duration, 2 values
 - scan abortive termination rate, 2 values
-- reinitiation rate, 1 value 
 
 Total of 60 values
 
-- We want to vary reinitiation rate to see if we can fit the strong kozak
-control mutant while simultaneously fitting the wt control mutant using the
-initiation rate finely varied around a physiological value.
 """
 
 import numpy as np

@@ -11,9 +11,6 @@ Vary
 
 Total of 360 values
 
-- We want to vary reinitiation rate to see if we can fit the strong kozak
-control mutant while simultaneously fitting the wt control mutant using the
-initiation rate finely varied around a physiological value.
 """
 
 import numpy as np
