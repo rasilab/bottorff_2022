@@ -1,5 +1,5 @@
 ---
-title: "Parameters key for Andreev buffering"
+title: "Analysis of computational simulations of the 80S-hit model"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -258,3 +258,12 @@ plot_data %>%
 ggsave('figures/andreev_buffering_supp_length.pdf', limitsize = FALSE)
 
 ```
+
+# Conclusions
+
+ - preferred translation in the 80S-hit model requires several conditions
+ 1) rare continued scanning following termination at the uORF
+ 2) a well-initiating uORF
+ - preferred translation also benefits from longer uORFs
+ - preferred translation is lost when parameters matched to experimental control data are used (uORF doesn't initiate well enough, continued scanning is too frequent, short uORF) whether or not an elongation stall is present
+ - when an elongation stall is included in the model, d_stall-dependent preferred translation is acquired only when d_stall equals an integer multiple of the ribosome footprint (30 nt here), similar to that in the queueing-mediated enhanced repression model

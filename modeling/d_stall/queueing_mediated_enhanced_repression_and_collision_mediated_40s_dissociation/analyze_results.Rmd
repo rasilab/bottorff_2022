@@ -1,5 +1,5 @@
 ---
-title: "Computational modeling predictions from perturbations to d_stall in the queueing-mediated enhanced repression and collision-mediated 40S dissociation models"
+title: "Analysis of computational simulations of perturbed d_stall in the queueing-mediated enhanced repression and collision-mediated 40S dissociation models"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 

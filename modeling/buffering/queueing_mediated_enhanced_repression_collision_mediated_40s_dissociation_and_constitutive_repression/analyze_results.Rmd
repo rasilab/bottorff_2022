@@ -1,5 +1,5 @@
 ---
-title: "Parameters key for buffering in constitutive, Ivanov, Geballe models"
+title: "Analysis of computational simulations of the constitutive repression, queueing-mediated enhanced repression, and collision-mediated 40S dissociation models"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -258,3 +258,9 @@ plot_data %>%
 ggsave('figures/geballe_buffering.pdf', limitsize = FALSE)
 
 ```
+
+# Conclusions
+
+ - the constitutive repression model has no buffering behavior regardless of how well the uORF initiates or how often continued scanning occurs
+ - preferred translation in the queueing-mediated enhanced repression model depends on d_stall equalling an integer multiple of the ribosome footprint (30 nt here)
+ - preferred translation in the collision-mediated 40S dissociation model depends on the dissociation rate

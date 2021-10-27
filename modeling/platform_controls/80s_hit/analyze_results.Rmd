@@ -1,5 +1,5 @@
 ---
-title: "Andreev model: tuning parameters to fit control data"
+title: "Analysis of computational simulations of control data in the 80S-hit model"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -107,7 +107,7 @@ data <- param_data %>%
   rename(k_recycle = k_terminated_ssu_recycle_uorf2,
          k_abort = k_scan_term_5_hit_80s
          ) %>% 
-  mutate(k_recycle = round(k_recycle)) %>% 
+  mutate(k_recycle = round(k_recycle, 1)) %>%
   print()
 ```
 
@@ -216,3 +216,11 @@ plot_data_controls %>%
   ggsave('figures/fit_params_predicted_controls.pdf')
 
 ```
+
+# Conclusions
+
+ - parameters can be found such that computational modeling of the 80S-hit model matches experimental control data from *UL4* uORF2
+ 1) dissociation rate of 2/s
+ 2) recycling rate of 1.7/s
+ 3) cap binding rate of 0.016/s
+ 4) 2, 80% uORF initiation in WT, stronger Kozak contexts

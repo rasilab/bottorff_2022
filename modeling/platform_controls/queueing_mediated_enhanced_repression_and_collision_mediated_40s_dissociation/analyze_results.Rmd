@@ -1,5 +1,5 @@
 ---
-title: "Ivanov and Andreev models with finely tuned initiation and varying reinitiation"
+title: "Analysis of computational simulations of control data in the queueing-mediated enhanced repression and collision-mediated 40S dissociation models"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -10,16 +10,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 ```
-
-# Some observations from this analysis
-
-- I had decreased the initiation rate for WT uORF2 from k_start_uorf2 = 0.5 to
-0.2. However, this seems to make the fit significantly worse below compared to
-to the previous fit [here](https://github.com/rasilab/tybottorffdocs/blob/e9da429/modeling/simulation_runs/0a_ivanov_geballe_models_vary_reinit_init_for_fitting_controls/analyze_results.md).
-- So we might want to do a broader parameter sweep to identify right values. If not,
-we can think about reverting to k_start_uorf2 = 0.5.
-- We also want to decrease the k_start_uorf2 to 0.1 since that will give 2% initiation
-frequency which will be 20-30-fold lower than the 50% initiation efficiency of strong Kozak.
 
 # Load libraries
 ```{r}
@@ -211,3 +201,10 @@ plot_data_controls %>%
   
   ggsave('figures/fit_params_predicted_controls.pdf')
 ```
+
+# Conclusions
+
+ - parameters can be found such that computational modeling of the queueing-mediated enhanced repression and collision-mediated 40S dissociation models matches experimental control data from *UL4* uORF2
+ 1) recycling rate of 5/s
+ 2) cap binding rate of ~0.024/s
+ 3) 9, 50% uORF initiation in WT, stronger Kozak contexts
