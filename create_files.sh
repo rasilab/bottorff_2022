@@ -25,7 +25,7 @@ cd $base
 mkdir experiments modeling
 cd $base/experiments
 mkdir platform_controls d_stall_repressiveness d_stall_buffering human_uorfs stem_loop_buffering drug_buffering synthetic_uorf_buffering
-for dir in */; do cd $dir; mkdir annotations data scripts figures tables; cd ../; done
+for dir in */; do cd $dir; mkdir annotations rawdata scripts figures tables; cd ../; done
 cd $base/modeling
 mkdir buffering platform_controls d_stall
 cd buffering
@@ -76,34 +76,34 @@ cp $sim_runs/$d_stall/sim.params.tsv ./
 cd $base/experiments/platform_controls/
 cp $luc_assay/$platform_controls/annotations/sampleannotations.csv ./annotations
 cp $luc_assay/$platform_controls/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$platform_controls/rawdata/20190422_fluc_nluc.csv ./data
+cp $luc_assay/$platform_controls/rawdata/20190422_fluc_nluc.csv ./rawdata
 # copy d_stall repressiveness files
 cd $base/experiments/d_stall_repressiveness/
 cp $luc_assay/$d_stall_repressiveness/annotations/sampleannotations.csv ./annotations
 cp $luc_assay/$d_stall_repressiveness/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$d_stall_repressiveness/rawdata/20190829_fluc_nluc.csv ./data
+cp $luc_assay/$d_stall_repressiveness/rawdata/20190829_fluc_nluc.csv ./rawdata
 # copy d_stall buffering files
 cd $base/experiments/d_stall_buffering/
 cp $luc_assay/$d_stall_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$d_stall_buffering/scripts/analyze_luminescence.Rmd ./scripts
-cp $luc_assay/$d_stall_buffering/rawdata/20201006_fluc_nluc.tsv ./data
+cp $luc_assay/$d_stall_buffering/rawdata/20201006_fluc_nluc.tsv ./rawdata
 # copy human uORF files
 cd $base/experiments/human_uorfs/
 cp $luc_assay/$human_uorfs/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$human_uorfs/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$human_uorfs/rawdata/20200927_fluc_nluc.tsv ./data
+cp $luc_assay/$human_uorfs/rawdata/20200927_fluc_nluc.tsv ./rawdata
 # copy stem loop buffering files
 cd $base/experiments/stem_loop_buffering/
 cp $luc_assay/$stem_loop_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$stem_loop_buffering/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$stem_loop_buffering/rawdata/20191223_fluc_nluc.tsv ./data
+cp $luc_assay/$stem_loop_buffering/rawdata/20191223_fluc_nluc.tsv ./rawdata
 # copy drug buffering files
 cd $base/experiments/drug_buffering/
 cp $luc_assay/$drug_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$drug_buffering/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$drug_buffering/rawdata/20201121_fluc_nluc.tsv ./data
+cp $luc_assay/$drug_buffering/rawdata/20201121_fluc_nluc.tsv ./rawdata
 # copy synthetic uorf buffering files
 cd $base/experiments/synthetic_uorf_buffering/
 cp $luc_assay/$synthetic_uorf_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$synthetic_uorf_buffering/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
-cp $luc_assay/$synthetic_uorf_buffering/rawdata/20191021_fluc_nluc.tsv ./data
+cp $luc_assay/$synthetic_uorf_buffering/rawdata/20191021_fluc_nluc.tsv ./rawdata
