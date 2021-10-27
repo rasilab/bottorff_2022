@@ -27,15 +27,13 @@ cd $base/experiments
 mkdir platform_controls d_stall_repressiveness d_stall_buffering human_uorfs stem_loop_buffering drug_buffering synthetic_uorf_buffering
 for dir in */; do cd $dir; mkdir annotations data scripts figures tables; cd ../; done
 cd $base/modeling
-mkdir buffering platform_controls d_stall fitting
+mkdir buffering platform_controls d_stall
 cd buffering
 mkdir 80s_hit queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression regulated_reinitiation
 cd ../platform_controls
 mkdir 80s_hit queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation
 cd ../d_stall
 mkdir queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation
-cd ../fitting
-mkdir queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation 80s_hit
 cd ../
 for dir in */; do cd $dir; for dir in */; do cd $dir; mkdir output figures tables; cd ../; done; cd ../; done
 # copy modeling files needed for all models
