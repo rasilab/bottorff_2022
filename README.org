@@ -15,6 +15,9 @@ This repository contains raw experimental data, code, and instructions for:
 
 *** Default run
 
+ - Python >=3.6 is necessary
+ - conda >=4.10 is necessary?
+
 To run the simulations, install our lab's customized versions of:
 - [[https://www.ncbi.nlm.nih.gov/pubmed/23423320][PySB]]: https://github.com/rasilab/PySB
 - [[https://www.ncbi.nlm.nih.gov/pubmed/27402907][BioNetGen]]: https://github.com/rasilab/BioNetGen
@@ -107,6 +110,7 @@ To invoke the above workflow, run:
 #+BEGIN_SRC sh :exports code
 cd modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/
 # check what will be run using a dry run using [[https://snakemake.readthedocs.io/en/stable/][Snakemake]]
+# modules CMake and snakemake must be loaded
 snakemake -np
 # use a SLURM cluster for running simulations
 sh submit_cluster.sh > submit.log 2> submit.log &
