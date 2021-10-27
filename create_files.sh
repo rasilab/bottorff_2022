@@ -48,26 +48,32 @@ cp -R $modeling/pysb_ul4 ./pysb_ul4
 cd $base/modeling/buffering/80s_hit
 cp $sim_runs/$andreev_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$andreev_buff/choose_simulation_parameters.py ./
+cp $sim_runs/$andreev_buff/sim.params.tsv ./
 # copy buffering files for ivanov, geballe, constitutive repression models
 cd $base/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression
 cp $sim_runs/$ivanov_geballe_const_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$ivanov_geballe_const_buff/choose_simulation_parameters.py ./
+cp $sim_runs/$ivanov_geballe_const_buff/sim.params.tsv ./
 # copy regulated reinitiation buffering files
 cd $base/modeling/buffering/regulated_reinitiation
 cp $sim_runs/$gcn4_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$gcn4_buff/choose_simulation_parameters.py ./
+cp $sim_runs/$gcn4_buff/sim.params.tsv ./
 # copy 80s hit platform control files
 cd $base/modeling/platform_controls/80s_hit
 cp $sim_runs/$andreev_controls/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$andreev_controls/choose_simulation_parameters.py ./
+cp $sim_runs/$andreev_controls/sim.params.tsv ./
 # copy ivanov and geballe platform control files
 cd $base/modeling/platform_controls/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation
 cp $sim_runs/$ivanov_geballe_controls/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$ivanov_geballe_controls/choose_simulation_parameters.py ./
+cp $sim_runs/$ivanov_geballe_controls/sim.params.tsv ./
 # copy ivanov and geballe d_stall files
 cd $base/modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation
 cp $sim_runs/$d_stall/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$d_stall/choose_simulation_parameters.py ./
+cp $sim_runs/$d_stall/sim.params.tsv ./
 # copy platform control files
 cd $base/experiments/platform_controls/
 cp $luc_assay/$platform_controls/annotations/sampleannotations.csv ./annotations
