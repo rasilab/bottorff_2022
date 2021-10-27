@@ -121,6 +121,6 @@ Once all submitted jobs have completed, file types analogous to those mentioned 
 The RMarkdown scripts can be knitted to generate the figures by:
 
 #+BEGIN_SRC sh :exports code
-cd analysis/flow
+cd experiments
 for file in *.Rmd; do R -e "rmarkdown::render('$file')"; done
 #+END_SRC
