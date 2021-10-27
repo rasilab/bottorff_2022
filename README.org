@@ -46,6 +46,13 @@ cd modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated
 python run_simulation.py 0
 #+END_SRC
 
+Running this run_simulation.py file does the following...
+- reads the table of kinetic parameter combinations that we want to simulate in this run from the sim.params.tsv file
+- sets simulation time, recording intervals
+- gets the specific simulation to run as a number from the command line (in this case 0)
+- creates a BioNetGen file for that simulation by exporting the PySB model
+- runs NFSim simulation using the BioNetGen as input
+
 The above run displays the following output:
 #+BEGIN_SRC
 
