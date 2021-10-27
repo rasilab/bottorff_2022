@@ -31,19 +31,74 @@ This model is defined using the [[http://pysb.org/][PySB]] syntax.
 *** Parameter sweep
 
 Simulations with systematic variation of parameters are run from the 3 sub-directories in [[file:modeling/buffering]], the 1 sub-directory in [[file:modeling/d_stall]], the 2 sub-directories in [[file:modeling/fitting]], and the 2 sub-directories in [[file:modeling/platform_controls]].
-Below, we describe this workflow using a specific example in the [[file:modeling/buffering/80s_hit]] sub-directory that generated Fig. 3B in our paper.
+Below, we describe this workflow using a specific example in the [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation]] sub-directory that generated Fig. 5B in our paper.
 All other sub-directories contain a very similar workflow.
 
-For the set of x simulations in [[file:modeling/simulation_runs/]], y param is systematically varied.
-The parameters that are varied from their default values are chosen in [[file:modeling/simulation_runs/choose_simulation_parameters.py]] and written as a tab-separated file [[file:modeling/simulation_runs/sim.params.tsv]] in the same directory.
-The script [[file:modeling/simulation_runs/run_simulation.py]] runs the simulation with a single parameter set. 
-This parameter set is decided by the single argument to this script which specifies the row number in [[file:modeling/simulation_runs/sim.params.tsv]].
+For the set of 32 simulations in [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation]], the scanning abortive termination rate and d_stall lengths are systematically varied.
+The parameters that are varied from their default values are chosen in [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/choose_simulation_parameters.py]] and written as a tab-separated file [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/sim.params.tsv]] in the same directory.
+The script [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/run_simulation.py]] runs the simulation with a single parameter set. 
+This parameter set is decided by the single argument to this script which specifies the row number in [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/sim.params.tsv]].
 
-Simulations are often run on a cluster using the cluster configuration [[file:modeling/simulation_runs/csat_model_vary_num_stalls/cluster.yaml]].
+To simulate this model with the parameter combintions in row 0 of [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/sim.params.tsv]], run:
+
+#+BEGIN_SRC sh :exports code
+cd modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/
+python run_simulation.py 0
+#+END_SRC
+
+The above run displays the following output:
+#+BEGIN_SRC
+
+BioNetGen version 2.4.0
+Reading from file ./output/model_0.bngl (level 0)
+Read 45 parameters.
+Read 4 molecule types.
+Read 1 observable(s).
+Read 4 species.
+Read 3522 reaction rule(s).
+Wrote model in xml format to output/model_0.xml.
+Finished processing file ./output/model_0.bngl.
+CPU TIME: total 11.95 s.
+NFsim -xml ./output/model_0.xml -sim 10000000 -oSteps 10 -seed 111 -o ./output/model_0.gdat -rxnlog ./output/model_0.rxns.tsv -utl 3 -gml 1000000 -maxcputime 60000 -connect
+# starting NFsim v1.11...
+# seeding random number generator with: 111
+# reading xml file (./output/model_0.xml)
+-------]
+# preparing simulation...
+Connectivity inferred for 1000 reactions.
+# equilibrating for :0s.
+# simulating system for: 1.000000e+07 second(s).
+
+Sim time: 0.000000e+00  CPU time (total): 7.200000e-05s  events (step): 0
+Sim time: 1.000000e+06  CPU time (total): 2.031491e+01s  events (step): 1524284
+Sim time: 2.000000e+06  CPU time (total): 4.314762e+01s  events (step): 1704197
+Sim time: 3.000000e+06  CPU time (total): 6.531075e+01s  events (step): 1644701
+Sim time: 4.000000e+06  CPU time (total): 8.787699e+01s  events (step): 1671801
+Sim time: 5.000000e+06  CPU time (total): 1.094084e+02s  events (step): 1594118
+Sim time: 6.000000e+06  CPU time (total): 1.328089e+02s  events (step): 1738741
+Sim time: 7.000000e+06  CPU time (total): 1.529001e+02s  events (step): 1552469
+Sim time: 8.000000e+06  CPU time (total): 1.753266e+02s  events (step): 1709336
+Sim time: 9.000000e+06  CPU time (total): 1.975324e+02s  events (step): 1696740
+Sim time: 1.000000e+07  CPU time (total): 2.187359e+02s  events (step): 1648252
+
+# simulated 16484640 reactions in 2.187378e+02s
+# 7.536255e+04 reactions/sec, 1.326919e-05 CPU seconds/event
+# null events: 0 1.326919e-05 CPU seconds/non-null event
+# done.  Total CPU time: 223.376s
+
+#+END_SRC
+
+CPU times will be a bit different depending on the machine.
+
+model_0.molecule_type_list.tsv.gz  model_0.params.tsv.gz  model_0.rxn_list.tsv.gz
+
+At the end of the run, =model_0.molecule_type_list.tsv.gz=, =model_0.params.tsv.gz=, and =model_0.rxn_list.tsv.gz= files should be present in the [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/output]] folder.
+
+Simulations are often run on a cluster using the cluster configuration [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/cluster.yaml]].
 
 To invoke the above workflow, run:
 #+BEGIN_SRC sh :exports code
-cd modeling/simulation_runs/
+cd modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/
 # check what will be run using a dry run using [[https://snakemake.readthedocs.io/en/stable/][Snakemake]]
 snakemake -np
 # use a SLURM cluster for running simulations
@@ -52,21 +107,7 @@ sh submit_cluster.sh > submit.log 2> submit.log &
 # snakemake
 #+END_SRC
 
-To simulate this model, run:
-
-#+BEGIN_SRC sh :exports code
-cd modeling
-python tasep.py
-#+END_SRC
-
-The above run displays the following output:
-#+BEGIN_SRC
-
-#+END_SRC
-
-CPU times will be a bit different depending on the machine.
-
-At the end of the run, =files= files should be present in the [[file:modeling/]] folder.
+Once all submitted jobs have completed, file types analogous to those mentioned above generated following running a single parameter combination will be present in [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/output]] for all parameter combinations (row numbers within [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/sim.params.tsv]]).
 
 ** Source data for figures
 
