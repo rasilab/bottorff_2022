@@ -24,9 +24,36 @@ The instructions for installing the above software are provided in the respectiv
 
 Initialization of our kinetic model for quality control during eukaryotic translation is described in [[file:/modeling/pysb_ul4/__init__.py]]. 
 Simulated molecules are described in [[file:/modeling/pysb_ul4/molecules.py]].
-The default parameters are listed in [[file:/modeling/pysb_ul4/parameters.py]]. 
+Simulated reactions are described in [[file:/modeling/pysb_ul4/reactions]]
+The default parameters are listed in [[file:/modeling/pysb_ul4/parameters.py]].
 This model is defined using the [[http://pysb.org/][PySB]] syntax.
-To simulate this model with its default parameters, run:
+
+*** Parameter sweep
+
+Simulations with systematic variation of parameters are run from the 3 sub-directories in [[file:modeling/buffering]], the 1 sub-directory in [[file:modeling/d_stall]], the 2 sub-directories in [[file:modeling/fitting]], and the 2 sub-directories in [[file:modeling/platform_controls]].
+Below, we describe this workflow using a specific example in the [[file:modeling/buffering/80s_hit]] sub-directory that generated Fig. 3B in our paper.
+All other sub-directories contain a very similar workflow.
+
+For the set of x simulations in [[file:modeling/simulation_runs/]], y param is systematically varied.
+The parameters that are varied from their default values are chosen in [[file:modeling/simulation_runs/choose_simulation_parameters.py]] and written as a tab-separated file [[file:modeling/simulation_runs/sim.params.tsv]] in the same directory.
+The script [[file:modeling/simulation_runs/run_simulation.py]] runs the simulation with a single parameter set. 
+This parameter set is decided by the single argument to this script which specifies the row number in [[file:modeling/simulation_runs/sim.params.tsv]].
+
+Simulations are often run on a cluster using the cluster configuration [[file:modeling/simulation_runs/csat_model_vary_num_stalls/cluster.yaml]].
+
+To invoke the above workflow, run:
+#+BEGIN_SRC sh :exports code
+cd modeling/simulation_runs/
+# check what will be run using a dry run using [[https://snakemake.readthedocs.io/en/stable/][Snakemake]]
+snakemake -np
+# use a SLURM cluster for running simulations
+sh submit_cluster.sh > submit.log 2> submit.log &
+# uncomment line below to run everything locally; can take a very long time!!
+# snakemake
+#+END_SRC
+
+To simulate this model, run:
+
 #+BEGIN_SRC sh :exports code
 cd modeling
 python tasep.py
@@ -40,31 +67,6 @@ The above run displays the following output:
 CPU times will be a bit different depending on the machine.
 
 At the end of the run, =files= files should be present in the [[file:modeling/]] folder.
-
-*** Parameter sweep
-
-Simulations with systematic variation of parameters are run from the 9 sub-directories in [[file:modeling/]].
-Each of these sub-directories contains a [[https://snakemake.readthedocs.io/en/stable/][Snakemake]] workflow that chooses the parameters and runs the simulations.
-Below, we describe this workflow using a specific example in the [[file:modeling/simulation_runs/]] sub-directory that generated Fig. 3A in our paper.
-All other sub-directories contain a very similar workflow.
-
-For the set of x simulations in [[file:modeling/simulation_runs/]], y param is systematically varied.
-The parameters that are varied from their default values are chosen in [[file:modeling/simulation_runs/choose_simulation_parameters.py]] and written as a tab-separated file [[file:modeling/simulation_runs/sim.params.tsv]] in the same directory.
-The script [[file:modeling/simulation_runs/run_simulation.py]] runs the simulation with a single parameter set. 
-This parameter set is decided by the single argument to this script which specifies the row number in [[file:modeling/simulation_runs/sim.params.tsv]].
-
-Simulations are often run on a cluster using the cluster configuration [[file:modeling/simulation_runs/csat_model_vary_num_stalls/cluster.yaml]].
-
-To invoke the above workflow, run:
-#+BEGIN_SRC sh :exports code
-cd modeling/simulation_runs/
-# check what will be run using a dry run
-snakemake -np
-# use a SLURM cluster for running simulations
-sh submit_cluster.sh > submit.log 2> submit.log &
-# uncomment line below to run everything locally; can take a very long time!!
-# snakemake
-#+END_SRC
 
 ** Source data for figures
 
