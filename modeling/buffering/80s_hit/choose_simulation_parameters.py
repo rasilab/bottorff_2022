@@ -27,7 +27,7 @@ and_params = {
     'k_elong': [2, 5],
     'k_elong_stall': [0.001, 2],
     # we multiply by default k_scan=5 that competes with re-initiation
-    'k_terminated_ssu_recycle_uorf2': [2, 2495],
+    'k_terminated_ssu_recycle_uorf2': [1.7, 2495],
 }
 
 uorf2_lengths = [21, 22, 100]
