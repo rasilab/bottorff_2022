@@ -122,5 +122,5 @@ The RMarkdown scripts can be knitted to generate the figures by:
 
 #+BEGIN_SRC sh :exports code
 cd experiments
-for file in *.Rmd; do R -e "rmarkdown::render('$file')"; done
+for dir in *; do cd $dir; mkdir figures; mkdir tables; cd scripts; for file in *.Rmd; do R -e "rmarkdown::render('$file')"; done; cd ../../; done
 #+END_SRC
