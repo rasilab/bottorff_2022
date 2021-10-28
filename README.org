@@ -139,9 +139,7 @@ for dir in *; do cd $dir; mkdir figures; mkdir tables; cd scripts; for file in *
 [[https://github.com/rasilab/bottorff_2022/blob/main/experiments/platform_controls/figures/fig_2c.pdf][Figure 2C]]
 
 Figure 2D is created redundantly in two locations:
-[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/figures/fig_2d.pdf][Figure 2D]]
-
-[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/80s_hit/figures/fig_2d.pdf][Figure 2D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/figures/fig_2d.pdf][Figure 2D]] and [[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/80s_hit/figures/fig_2d.pdf][Figure 2D]]
 
 [[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression/figures/fig_3a.pdf][Figure 3A]]
 
@@ -160,11 +158,7 @@ Figure 2D is created redundantly in two locations:
 [[https://github.com/rasilab/bottorff_2022/blob/main/experiments/synthetic_uorf_buffering/figures/fig_4c.pdf][Figure 4C]]
 
 Figure 4D has three parts that come from the following locations:
-[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/synthetic_uorf_buffering/figures/fig_4d.pdf][Figure 4D]]
-
-[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/drug_buffering/figures/fig_4d.pdf][Figure 4D]]
-
-[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/stem_loop_buffering/figures/fig_4d.pdf][Figure 4D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/synthetic_uorf_buffering/figures/fig_4d.pdf][Figure 4D, part 1]], [[https://github.com/rasilab/bottorff_2022/blob/main/experiments/drug_buffering/figures/fig_4d.pdf][Figure 4D, part 2]], and [[https://github.com/rasilab/bottorff_2022/blob/main/experiments/stem_loop_buffering/figures/fig_4d.pdf][Figure 4D, part 3]]
 
 [[https://github.com/rasilab/bottorff_2022/blob/main/experiments/d_stall_repressiveness/figures/fig_5a.pdf][Figure 5A]]
 
