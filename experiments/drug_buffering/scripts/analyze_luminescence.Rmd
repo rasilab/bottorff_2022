@@ -55,7 +55,7 @@ data <- counts %>%
 
 ```{r}
 
-norm_data <- read_csv("../../20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
+norm_data <- read_csv("../../platform_controls/tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
   filter(label == "gp48UTR-no-AUG") %>%
   print()
 
