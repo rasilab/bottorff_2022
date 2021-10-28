@@ -100,8 +100,6 @@ Sim time: 1.000000e+07  CPU time (total): 2.187359e+02s  events (step): 1648252
 
 CPU times will be a bit different depending on the machine.
 
-model_0.molecule_type_list.tsv.gz  model_0.params.tsv.gz  model_0.rxn_list.tsv.gz
-
 At the end of the run, =model_0.molecule_type_list.tsv.gz=, =model_0.params.tsv.gz=, and =model_0.rxn_list.tsv.gz= files should be present in the [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/output]] folder.
 
 Simulations are often run on a cluster using the cluster configuration [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/cluster.yaml]].
@@ -120,7 +118,14 @@ sh submit_cluster.sh > submit.log 2> submit.log &
 
 Once all submitted jobs have completed, file types analogous to those mentioned above generated following running a single parameter combination will be present in [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/output]] for all parameter combinations (row numbers within [[file:modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/sim.params.tsv]]).
 
-** Source data for figures
+The RMarkdown scripts can be knitted to generate the figures by:
+
+#+BEGIN_SRC sh :exports code
+cd modeling
+for dir in *; do cd $dir; for dir in *; do cd $dir; for file in *.Rmd; do R -e "rmarkdown::render('$file')"; done; cd ../; done; cd ../; done
+#+END_SRC
+
+** Experimental analysis
 
 The RMarkdown scripts can be knitted to generate the figures by:
 
