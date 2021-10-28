@@ -2,7 +2,7 @@
 
 Paper citation
 
-[[paper link][Paper link]
+[[paper link][Paper link]]
 
 [[http://rasilab.fredhutch.org/][Lab website]]
 
@@ -127,7 +127,29 @@ for dir in *; do cd $dir; for dir in *; do cd $dir; for file in *.Rmd; do R -e "
 
 *** Figure links
 
-
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/platform_controls/figures/fig_2c.pdf][Figure 2C]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/figures/fig_2d.pdf][Figure 2D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/platform_controls/80s_hit/figures/fig_2d.pdf][Figure 2D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression/figures/fig_3a.pdf][Figure 3A]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/80s_hit/figures/fig_3b.pdf][Figure 3B]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression/figures/fig_3c.pdf][Figure 3C]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression/figures/fig_3d.pdf][Figure 3D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/regulated_reinitiation/figures/fig_3e.pdf][Figure 3E]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/stem_loop_buffering/figures/fig_4a.pdf][Figure 4A]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/drug_buffering/figures/fig_4b.pdf][Figure 4B]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/synthetic_uorf_buffering/figures/fig_4c.pdf][Figure 4C]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/synthetic_uorf_buffering/figures/fig_4d.pdf][Figure 4D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/drug_buffering/figures/fig_4d.pdf][Figure 4D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/stem_loop_buffering/figures/fig_4d.pdf][Figure 4D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/d_stall_repressiveness/figures/fig_5a.pdf][Figure 5A]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/d_stall/queueing_mediated_enhanced_repression_and_collision_mediated_40s_dissociation/figures/fig_5b.pdf][Figure 5B]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/human_uorfs/figures/fig_6.pdf][Figure 6]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/80s_hit/figures/fig_s2a.pdf][Figure S2A]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression/figures/fig_s2b.pdf][Figure S2B]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/80s_hit/figures/fig_s2c.pdf][Figure S2C]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/80s_hit/figures/fig_s2d.pdf][Figure S2D]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/modeling/buffering/regulated_reinitiation/figures/fig_s2e.pdf][Figure S2E]]
+[[https://github.com/rasilab/bottorff_2022/blob/main/experiments/d_stall_buffering/figures/fig_s3.pdf][Figure S3]]
 
 ** Experimental analysis
 
