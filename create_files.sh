@@ -77,6 +77,8 @@ cd $base/experiments/platform_controls/
 cp $luc_assay/$platform_controls/annotations/sampleannotations.csv ./annotations
 cp $luc_assay/$platform_controls/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
 cp $luc_assay/$platform_controls/rawdata/20190422_fluc_nluc.csv ./rawdata
+cp $luc_assay/$platform_controls/tables/nluc_fluc_control_mutants_not_normalized.csv ./tables
+cp $luc_assay/$platform_controls/tables/nluc_fluc_control_mutants.csv ./tables
 # copy d_stall repressiveness files
 cd $base/experiments/d_stall_repressiveness/
 cp $luc_assay/$d_stall_repressiveness/annotations/sampleannotations.csv ./annotations
@@ -107,3 +109,11 @@ cd $base/experiments/synthetic_uorf_buffering/
 cp $luc_assay/$synthetic_uorf_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$synthetic_uorf_buffering/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
 cp $luc_assay/$synthetic_uorf_buffering/rawdata/20191021_fluc_nluc.tsv ./rawdata
+# replace irrelevant python path with generic
+cd $base
+# this currently doesn't replace anything for some reason
+#find . -type f -name "*.py" -print0 | xargs -0 sed -i 's#/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python#/path/to/python#g'
+# replace broken .Rmd links with working ones
+find . -type f -name "*.Rmd" -print0 | xargs -0 sed -i 's#"/fh/fast/subramaniam_a/user/tbottorf/analysis/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv"#../../../experiments/platform_controls/tables/nluc_fluc_control_mutants.csv#g'
+# need to do this after above line
+find . -type f -name "*.Rmd" -print0 | xargs -0 sed -i 's#20190422_exp2_ul4_mutants#platform_controls#g'
