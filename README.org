@@ -1,4 +1,4 @@
-#+TITLE: Translational buffering by ribosome stalling in upstream open reading frames
+#+TITLE: Translational buffering by ribosome stalls in upstream open reading frames
 
 Paper citation
 
