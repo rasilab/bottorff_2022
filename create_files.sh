@@ -109,10 +109,10 @@ cd $base/experiments/synthetic_uorf_buffering/
 cp $luc_assay/$synthetic_uorf_buffering/annotations/sampleannotations.tsv ./annotations
 cp $luc_assay/$synthetic_uorf_buffering/scripts/analyze_luminescence_ty.Rmd ./scripts/analyze_luminescence.Rmd
 cp $luc_assay/$synthetic_uorf_buffering/rawdata/20191021_fluc_nluc.tsv ./rawdata
-# replace irrelevant cluster account name, doesn't work yet
-find . -type f -name "*.Rmd" -print0 | xargs -0 sed -i 's#"account" : "rasi"#"account" : "account_name"#g'
-# replace irrelevant python path with generic
+# replace irrelevant cluster account name
 cd $base
+find . -type f -name "*.yaml" -print0 | xargs -0 sed -i 's/"rasi"/"account_name"/g'
+# replace irrelevant python path with generic
 find . -type f -name "Snakefile" -print0 | xargs -0 sed -i 's#/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python#/path/to/python#g'
 # replace broken .Rmd links with working ones
 find . -type f -name "*.Rmd" -print0 | xargs -0 sed -i 's#"/fh/fast/subramaniam_a/user/tbottorf/analysis/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv"#../../../experiments/platform_controls/tables/nluc_fluc_control_mutants.csv#g'
