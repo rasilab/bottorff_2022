@@ -182,11 +182,22 @@ fit_data %>%
   knitr::kable()
 ```
 
+# Read in 80S-hit control predcitions to make 1 plot with all 3 models
+
+```{r}
+
+other_data <- read_csv("../0c_andreev_vary_params_for_fitting_controls/tables/fit_params.csv") %>%
+  mutate(Model = "80S-hit") %>%
+  print()
+
+```
+
 # Use RMS error minimized parameters to model control mutant behavior
 
-```{r,fig.width=4.5,fig.height=1.5}
+```{r,fig.width=5.5,fig.height=1}
 plot_data_controls <- read_csv("./tables/fit_k_cap_bind.csv") %>%
   mutate(Model = if_else(k_abort == 0, "traffic jam-mediated enhanced repression", "collide and dissociate")) %>%
+  full_join(other_data) %>%
   select(-rms, -k_recycle) %>%
   pivot_longer(cols = no_aug:strong, names_to = "mutant", values_to = "psr") %>%
   print()

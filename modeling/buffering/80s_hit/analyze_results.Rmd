@@ -123,7 +123,7 @@ plot_data <- data %>%
          !(k_elong_stall > k_elong),
          k_elong_stall == k_scan,
          uorf2_length == 100,
-         uorf_reinit %in% c(0.2, 71.4),
+         uorf_reinit %in% c(0.2, 74.6),
          k_abort == 200) %>%
   print()
 
@@ -151,7 +151,7 @@ ggsave('figures/andreev_buffering_main.pdf', limitsize = FALSE)
 plot_data <- data %>%
   filter(k_scan == k_elong,
          k_scan == 5,
-         uorf_reinit == 71.4,
+         uorf_reinit == 74.6,
          k_abort == 2,
          d_stall == 63,
          uorf_init == 80) %>%
@@ -198,36 +198,6 @@ plot_data %>%
        color = "Baseline uORF\ninitiation (%)")
 
 ggsave('figures/andreev_buffering_supp_queueing.pdf', limitsize = FALSE)
-
-```
-
-# Plot PSR as a function of initiation rate for different k_scan = k_elong speeds. For whatever reason, raising these speeds (equally) reduces buffering. Abortive termination rate is very high (200/s), so that shouldn't be close enough to the speeds in question (2 & 5) to make a difference in competition between rates. uORF init = 80%, uORF reinit = 2% (high init and low reinit needed for buffering). No elongation stall here, and Ivanov behavior wouldn't be very relevant here because uORF initiation is already so high (80%, not much room to grow)
-
-```{r,fig.width=3,fig.height=1.5}
-plot_data <- data %>%
-  filter(k_scan == k_elong,
-         !(k_elong_stall > k_elong),
-         k_elong_stall == k_scan,
-         uorf2_length == 21,
-         uorf_reinit == 0.2,
-         k_abort == 200,
-         uorf_init == 80) %>%
-  print()
-
-k_abort_labeller <- function(x) paste0("dissociation rate: ", x, " s-1")
-
-plot_data %>% 
-  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(k_scan))) +
-  #facet_wrap(~ k_abort, ncol = 5, labeller = labeller(k_abort = k_abort_labeller)) +
-  geom_point(size = 1) +
-  geom_line() +
-  viridis::scale_color_viridis(discrete = T, end = 0.9) +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
-  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "k_scan & k_elong (codons/s)")
-
-ggsave('figures/andreev_buffering_supp_speed.pdf', limitsize = FALSE)
 
 ```
 

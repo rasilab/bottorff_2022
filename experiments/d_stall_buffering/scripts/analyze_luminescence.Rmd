@@ -81,7 +81,7 @@ plot_data %>%
   labs(x = 'Nluc / Fluc (log2, a.u.)', y = '', color = '') +
   scale_color_manual(values = cbPalette) +
   scale_x_continuous(breaks = scales::pretty_breaks(n=3))
-ggsave("../figures/nluc_fluc_ratio_reduced_ribosome_loading_5'_synthetic_uorf_longer_d_stall.pdf")
+ggsave("../figures/nluc_fluc_ratio_reduced_ribosome_loading_5_synthetic_uorf_longer_d_stall.pdf")
 ```
 
 # Results/conclusions

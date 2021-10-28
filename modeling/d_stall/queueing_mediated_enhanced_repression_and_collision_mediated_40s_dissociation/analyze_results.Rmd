@@ -125,7 +125,7 @@ plot_data %>%
   labs(y = "main ORF protein output (log2, s-1)", x = "dstall (nt)") +
   coord_flip()
 
-  ggsave('figures/d_stall_predictions_queueing-mediated_enhanced repression_collision-mediated_40S dissociation.pdf')
+  ggsave('figures/d_stall_predictions_queueing-mediated_enhanced_repression_collision-mediated_40S_dissociation.pdf')
 
 ```
 

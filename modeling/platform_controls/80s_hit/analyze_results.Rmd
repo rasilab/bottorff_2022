@@ -184,7 +184,7 @@ fit_data %>%
 
 ```
 
-# Read in Geballe/Ivanov control predcitions to make 1 plot with all 3 models
+# Read in queueing-mediated enhanced repression and collision-mediated 40S dissociation control predcitions to make 1 plot with all 3 models
 
 ```{r}
 

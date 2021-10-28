@@ -115,35 +115,6 @@ data <- param_data %>%
   print()
 ```
 
-# Investigate length bias for ivanov/geballe
-
-```{r,fig.width=5,fig.height=2.75}
-plot_data <- data %>%
-  filter(k_elong_stall == 0.001,
-         uorf_init != 0,
-         uorf_reinit == 50,
-         l_scan_capture == 0) %>%
-  mutate(model = if_else(k_abort == 0, "Ivanov", "Geballe")) %>%
-  print()
-
-model_labeller <- function(x) paste0("Model : ", x, "")
-queue_labeller <- function(x) paste0("queue size: \n", x, " footprints")
-
-plot_data %>% 
-  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(uorf_init))) +
-  facet_wrap(~ model + queue_size, ncol = 4, labeller = labeller(model = model_labeller, queue_size = queue_labeller)) +
-  geom_point(size = 1) +
-  geom_line() +
-  viridis::scale_color_viridis(discrete = T, end = 0.9) +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
-  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "Baseline uORF\ninitiation (%)")
-
-ggsave('figures/ivanov_geballe_length_bias.pdf', limitsize = FALSE)
-
-```
-
 # Plot PSR as a function of initiation rate for different rates of uORF2 initiation for constitutive repression model
 
 ```{r,fig.width=3,fig.height=1.25}

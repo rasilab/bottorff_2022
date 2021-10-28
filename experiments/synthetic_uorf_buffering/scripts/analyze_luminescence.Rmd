@@ -69,7 +69,7 @@ plot_data %>%
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
   theme_rasilab()
-ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5'_synthetic_uorf.pdf")
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5_synthetic_uorf.pdf")
 ```
 
 # Plot Fluc / NLuc for different synthetic uORF mutants normalized by no stall
@@ -96,7 +96,7 @@ plot_data %>%
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
   theme_rasilab()
-ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5'_synthetic_uorf_normalized.pdf")
+ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5_synthetic_uorf_normalized.pdf")
 ```
 
 # Conclusions
