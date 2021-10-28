@@ -1,4 +1,4 @@
-#!/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python
+#!/path/to/python
 """Workflow for running simulations in this folder
 
   :Author: Arvind Rasi Subramaniam

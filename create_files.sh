@@ -112,7 +112,7 @@ cp $luc_assay/$synthetic_uorf_buffering/rawdata/20191021_fluc_nluc.tsv ./rawdata
 # replace irrelevant python path with generic
 cd $base
 # this currently doesn't replace anything for some reason
-#find . -type f -name "*.py" -print0 | xargs -0 sed -i 's#/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python#/path/to/python#g'
+find . -type f -name "Snakefile" -print0 | xargs -0 sed -i 's#/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python#/path/to/python#g'
 # replace broken .Rmd links with working ones
 find . -type f -name "*.Rmd" -print0 | xargs -0 sed -i 's#"/fh/fast/subramaniam_a/user/tbottorf/analysis/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv"#../../../experiments/platform_controls/tables/nluc_fluc_control_mutants.csv#g'
 # need to do this after above line
