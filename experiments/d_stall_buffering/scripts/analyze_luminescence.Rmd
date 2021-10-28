@@ -62,7 +62,7 @@ data <- counts %>%
   print()
 ```
 
-# Plot Fluc / NLUc for GAPDH added and longer d_stall
+# Plot FLuc / NLuc for GAPDH added and longer d_stall
 
 ```{r, fig.width=3.6, fig.height=1}
 plot_data <- data %>%

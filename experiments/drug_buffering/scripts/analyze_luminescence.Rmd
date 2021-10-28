@@ -61,7 +61,7 @@ norm_data <- read_csv("../../20190422_exp2_ul4_mutants/tables/nluc_fluc_control_
 
 ```
 
-# Plot Fluc / NLUc for Drug Treatment
+# Plot FLuc / NLuc for Drug Treatment
 
 ```{r, fig.width=2, fig.height=1}
 plot_data <- data %>%

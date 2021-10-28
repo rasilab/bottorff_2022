@@ -46,7 +46,7 @@ data <- counts %>%
   mutate(label = fct_reorder(label, label_order)) %>%
   print()
 ```
-# Plot Fluc / NLUc for WT and 3 standard controls
+# Plot FLuc / NLuc for WT and 3 standard controls
 
 ```{r, fig.width=2.4, fig.height=0.9}
 plot_data <- data %>%

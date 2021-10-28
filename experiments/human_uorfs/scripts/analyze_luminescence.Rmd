@@ -63,7 +63,7 @@ data <- counts %>%
   print()
 ```
 
-# Plot Fluc / NLUc for subset samples 
+# Plot FLuc / NLuc for subset samples 
 
 ```{r, fig.width=3, fig.height=2}
 plot_data <- data %>%
