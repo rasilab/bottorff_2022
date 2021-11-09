@@ -84,7 +84,7 @@ psr_data <- rxn_data %>%
   left_join(annotations %>% select(sim_id, uorf2_stop, orf_stop), by = "sim_id") %>% 
   filter((mrna_loc == orf_stop) & str_detect(name, "terminate")) %>% 
   group_by(sim_id, mrna_loc) %>% 
-  summarize(n_firings = sum(n_firings)) %>% 
+  dplyr::summarize(n_firings = sum(n_firings)) %>% 
   left_join(sim_data, by = "sim_id") %>% 
   mutate(psr = n_firings / simulated_time) %>% 
   select(sim_id, mrna_loc, psr) %>% 
@@ -103,14 +103,13 @@ param_data <- annotations %>%
 ```{r}
 data <- param_data %>% 
   left_join(psr_data, by = "sim_id") %>%
-  rename(k_abort = k_scan_term_3_hit_80s) %>% 
+  dplyr::rename(k_abort = k_scan_term_3_hit_80s) %>% 
   print()
 ```
 
 # Plot PSR as a function of d_stall and k_abort rates
 ```{r,fig.width=3.5,fig.height=1.5}
 plot_data <- data %>%
-  #filter(d_stall %in% c(60, 66, 90, 96)) %>%
   mutate(Model = if_else(k_abort == 0, "queueing-mediated\nenhanced repression", "collision-mediated\n40S dissociation")) %>%
   mutate(psr = psr/max(psr)) %>%
   filter(k_start_uorf2 != 0) %>%
@@ -118,11 +117,12 @@ plot_data <- data %>%
 
 plot_data %>% 
   ggplot(aes(x = d_stall, y = log2(psr), color = Model, group = Model)) +
-  #facet_wrap(~ k_abort + k_start_uorf2 + k_recycle, ncol = 3, labeller = label_both, scales = "free") +
   geom_point() +
   geom_line() +
   scale_color_viridis(discrete = T, end = 0.9) +
   labs(y = "main ORF protein output (log2, s-1)", x = "dstall (nt)") +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   coord_flip()
 
   ggsave('figures/d_stall_predictions_queueing-mediated_enhanced_repression_collision-mediated_40S_dissociation.pdf')

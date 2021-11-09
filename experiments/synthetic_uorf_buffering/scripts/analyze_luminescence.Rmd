@@ -63,18 +63,18 @@ plot_data %>%
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(y = 'Nluc / Fluc (log2, a.u.)',
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
        x = 'synthetic uORF Kozak') +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_y_continuous(limits = c(-6, 0), breaks = seq(-6, 0, by = 3)) +
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
-  theme_rasilab()
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5_synthetic_uorf.pdf")
 ```
 
 # Plot Fluc / NLuc for different synthetic uORF mutants normalized by no stall
 
-```{r, fig.width=1, fig.height=1.25}
+```{r, fig.width=0.75, fig.height=1.5}
 plot_data <- data %>%
   mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
   # select only reporters of interest
@@ -90,12 +90,12 @@ plot_data %>%
  ggplot(aes(x = kozak, y = mean_ratio, ymax = mean_ratio + se_ratio, ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 1) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+  labs(y = 'WT / no stall\n(ratio)',
        x = 'synthetic uORF Kozak') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
-  theme_rasilab()
+  theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5_synthetic_uorf_normalized.pdf")
 ```
 

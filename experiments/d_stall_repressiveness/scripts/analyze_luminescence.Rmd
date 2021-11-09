@@ -81,7 +81,7 @@ plot_data %>%
   geom_errorbar(width = 0.5, show.legend = F) +
   labs(x = 'Nluc / Fluc (log2 a.u.)', y = '', color = '') +
   scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank(), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
 ggsave("../figures/nluc_fluc_ratio_vary_uorf2_d_stall.pdf")
 ```

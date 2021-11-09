@@ -71,7 +71,7 @@ plot_data %>%
        x = '') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
   coord_flip() +
-  theme_rasilab()
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 ggsave("../figures/nluc_fluc_ratio_ul4_control_mutants.pdf")
 ```
 

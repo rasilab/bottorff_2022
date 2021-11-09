@@ -100,8 +100,8 @@ psr_data <- rxn_data %>%
 param_data <- annotations %>%
   mutate(uorf_init = round(100*k_start_uorf2 / (5 + k_start_uorf2)),2,
          d_stall = x_stall - uorf2_start,
-         uorf2_length = 1/3*(uorf2_stop - uorf2_start),
-         uorf_reinit = round(100*5/(k_terminated_ssu_recycle_uorf2 + 5),1)) %>%
+         uorf2_length = 1/3*(uorf2_stop - uorf2_start)) %>%
+  mutate(uorf_reinit = if_else(k_terminated_ssu_recycle_uorf2 == 1.7, round(100*5/(k_terminated_ssu_recycle_uorf2+5)), 100*5/(k_terminated_ssu_recycle_uorf2+5))) %>%
   select(sim_id, k_cap_bind, uorf_init, k_scan_term_5_hit_80s, d_stall, uorf2_length, uorf_reinit, k_scan, k_elong, k_elong_stall) %>%
   print()
 ```
@@ -123,7 +123,7 @@ plot_data <- data %>%
          !(k_elong_stall > k_elong),
          k_elong_stall == k_scan,
          uorf2_length == 100,
-         uorf_reinit %in% c(0.2, 74.6),
+         uorf_reinit %in% c(0.2, 75),
          k_abort == 200) %>%
   print()
 
@@ -137,10 +137,13 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "Baseline uORF\ninitiation (%)")
-
+       color = "Baseline uORF\ninitiation (%)") + 
+  #theme(panel.grid.major.y = element_line(color = "grey", linetype = "dashed"), axis.title.x = element_text(size = 18), axis.text.y = element_text(size = 18), axis.text.x = element_text(size = 18), axis.title.y = element_text(size = 18), legend.text = element_text(size = 18), legend.title = element_text(size = 18), strip.text.x = element_text(size = 18))
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+  
+  
 ggsave('figures/andreev_buffering_main.pdf', limitsize = FALSE)
 
 ```
@@ -151,10 +154,10 @@ ggsave('figures/andreev_buffering_main.pdf', limitsize = FALSE)
 plot_data <- data %>%
   filter(k_scan == k_elong,
          k_scan == 5,
-         uorf_reinit == 74.6,
+         uorf_reinit == 75,
          k_abort == 2,
          d_stall == 63,
-         uorf_init == 80) %>%
+         uorf_init == 2) %>%
   mutate(stall = if_else(k_elong_stall == 2, "no", "yes")) %>%
   print()
 
@@ -164,9 +167,10 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
   labs(x = "ribosome loading\n(log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "elongation\nstall")
+       color = "elongation\nstall") +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
 ggsave('figures/andreev_buffering_control_matched.pdf', limitsize = FALSE)
 
@@ -193,9 +197,10 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "Baseline uORF\ninitiation (%)")
+       color = "Baseline uORF\ninitiation (%)") + 
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
 ggsave('figures/andreev_buffering_supp_queueing.pdf', limitsize = FALSE)
 
@@ -221,9 +226,10 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
   labs(x = "ribosome loading\n(log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "uORF length\n(codons)")
+       color = "uORF length\n(codons)") + 
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
 ggsave('figures/andreev_buffering_supp_length.pdf', limitsize = FALSE)
 
@@ -235,5 +241,5 @@ ggsave('figures/andreev_buffering_supp_length.pdf', limitsize = FALSE)
  1) rare continued scanning following termination at the uORF
  2) a well-initiating uORF
  - preferred translation also benefits from longer uORFs
- - preferred translation is lost when parameters matched to experimental control data are used (uORF doesn't initiate well enough, continued scanning is too frequent, short uORF) whether or not an elongation stall is present
+ - buffering is lost when parameters matched to experimental control data are used (uORF doesn't initiate well enough, continued scanning is too frequent, short uORF) whether or not an elongation stall is present
  - when an elongation stall is included in the model, d_stall-dependent preferred translation is acquired only when d_stall equals an integer multiple of the ribosome footprint (30 nt here), similar to that in the queueing-mediated enhanced repression model

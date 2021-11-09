@@ -83,7 +83,7 @@ psr_data <- rxn_data %>%
   left_join(annotations %>% select(sim_id, uorf2_stop, orf_stop), by = "sim_id") %>% 
   filter((mrna_loc == orf_stop) & str_detect(name, "terminate")) %>% 
   group_by(sim_id, mrna_loc) %>% 
-  summarize(n_firings = sum(n_firings)) %>% 
+  dplyr::summarize(n_firings = sum(n_firings)) %>% 
   left_join(sim_data, by = "sim_id") %>% 
   mutate(psr = n_firings / simulated_time) %>% 
   select(sim_id, mrna_loc, psr) %>% 
@@ -96,8 +96,8 @@ psr_data <- rxn_data %>%
 param_data <- annotations %>%
   mutate(uorf2_reinit = round(100 * 5 / (k_terminated_ssu_recycle_uorf2 + 5)),
          uorf3_reinit = round(100 * 5 / (k_terminated_ssu_recycle_uorf3 + 5)),
-         uorf2_init = round(100 * k_start_uorf2 / (k_start_uorf2 + 5)),
-         uorf3_init = round(100 * k_start_uorf3 / (k_start_uorf3 + 5))) %>%
+         uorf2_init = round_any(100 * k_start_uorf2 / (k_start_uorf2 + 5), 10),
+         uorf3_init = round_any(100 * k_start_uorf3 / (k_start_uorf3 + 5), 10)) %>%
   select(sim_id, uorf2_init, uorf3_init, uorf2_reinit, uorf3_reinit, n_tc_0) %>%
   print()
 ```
@@ -113,8 +113,8 @@ data <- param_data %>%
 
 ```{r,fig.width=3,fig.height=2.25}
 plot_data <- data %>%
-  filter(uorf2_init %in% c(0, 98),
-         uorf3_init %in% c(0, 98),
+  filter(uorf2_init %in% c(0, 100),
+         uorf3_init %in% c(0, 100),
          uorf2_reinit != uorf3_reinit,
          uorf2_reinit %in% c(1, 100),
          uorf3_reinit %in% c(1, 100),
@@ -131,7 +131,8 @@ plot_data %>%
   geom_line() +
   scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(y = "main ORF protein\noutput (log2, s-1)", x = "ternary complex concentration (log2)", color = "Baseline\nuORF1.\nuORF2\ninitiations (%)")
 
   ggsave('figures/hinnebusch_buffering_main.pdf')
@@ -142,7 +143,7 @@ plot_data %>%
 ```{r}
 
 start_codon_rxns <- rxn_data %>%
-  filter(str_detect(name, "^(scan_[:digit:]|scan_from_|scan_to)")) %>% 
+  filter(str_detect(name, "^(scan_[:digit:]|scan_from_|scan_to)")) %>%
   # uORF2/3 and main ORF start at 25, 97, 232
   filter(str_detect(name, c("_25$|_97$|_232$"))) %>%
   select(sim_id, name) %>%
@@ -199,8 +200,8 @@ start_codon_data <- start_codon_data_raw %>%
   mutate(initiate_97 = round((100*(scan_to_elongate_97 + scan_to_elongate_from_leading_collision_97 + scan_to_elongate_from_trailing_elongation_collision_97 + scan_to_elongate_from_trailing_scan_collision_97) / total_97), 1)) %>%
   mutate(initiate_232 = round((100*(scan_to_elongate_232 + scan_to_elongate_from_leading_collision_232 + scan_to_elongate_from_trailing_elongation_collision_232 + scan_to_elongate_from_trailing_scan_collision_232) / total_232), 1)) %>%
   select(sim_id, uorf2_init, uorf3_init, uorf2_reinit, uorf3_reinit, n_tc_0, initiate_25, initiate_97, initiate_232) %>%
-  filter(uorf2_init == 98,
-         uorf3_init %in% c(21, 98),
+  filter(uorf2_init == 100,
+         uorf3_init %in% c(20, 100),
          uorf2_reinit == 100,
          uorf3_reinit == 100) %>%
   print()
@@ -211,7 +212,8 @@ start_codon_data %>%
   geom_line() +
   scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(y = "uORF2 initiation\n(real, %)", x = "ternary complex\nconcentration (log2)", color = "uORF2\ninitiation\n(predicted, %)")
 
 ggsave('figures/hinnebusch_supp_tc_dependent_init.pdf')

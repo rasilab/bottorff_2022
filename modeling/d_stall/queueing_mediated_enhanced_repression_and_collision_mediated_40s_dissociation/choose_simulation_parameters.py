@@ -2,11 +2,11 @@
 Choose parameters for simulation
 
 Vary
-- uORF2 start codon initiation strength, 1 values
+- uORF2 start codon initiation strength, 2 values
 - scan abortive termination rate, 2 values
 - d_stall length, 16 values
 
-Total of 32 values
+Total of 64 values
 
 """
 
@@ -19,7 +19,7 @@ uorf2_reinitation_fractions = [0.5]
 # include each of these params and one of its values in each simulation
 and_params = {
     'k_cap_bind': [0.024],
-    'k_start_uorf2': [0.5],
+    'k_start_uorf2': [0, 0.5],
     'k_elong_stall': [0.001],
     # we multiply by default k_scan=5 that competes with re-initiation
     'k_terminated_ssu_recycle_uorf2': [5*(1-x) / x for x in uorf2_reinitation_fractions]

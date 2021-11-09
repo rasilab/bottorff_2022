@@ -80,7 +80,8 @@ plot_data %>%
   geom_errorbar(width = 0.5, show.legend = F) +
   labs(x = 'Nluc / Fluc (log2, a.u.)', y = '', color = '') +
   scale_color_manual(values = cbPalette) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=3))
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 ggsave("../figures/nluc_fluc_ratio_reduced_ribosome_loading_5_synthetic_uorf_longer_d_stall.pdf")
 ```
 

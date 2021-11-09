@@ -64,17 +64,17 @@ plot_data %>%
             ymin = mean_ratio - se_ratio, color = status, shape = status)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(y = 'Nluc / Fluc (log2, a.u.)',
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
        x = 'stem loop GC %') +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=5)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
   coord_flip() +
-  theme_rasilab() +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   scale_color_manual(values = cbPalette[c(2,1)])
 
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop.pdf")
 ```
 
-```{r, fig.width=1, fig.height=1.125}
+```{r, fig.width=0.75, fig.height=1.25}
 plot_data <- data %>%
   mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
   filter(!is.na(status)) %>%
@@ -90,11 +90,11 @@ plot_data %>%
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 1) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+  labs(y = 'WT / no stall\n(ratio)',
        x = 'stem loop GC %') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
   coord_flip() +
-  theme_rasilab() +
+  theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
   scale_color_manual(values = cbPalette[c(2,1)])
 
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop_normalized.pdf")

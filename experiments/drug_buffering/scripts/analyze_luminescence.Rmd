@@ -63,7 +63,7 @@ norm_data <- read_csv("../../platform_controls/tables/nluc_fluc_control_mutants_
 
 # Plot FLuc / NLuc for Drug Treatment
 
-```{r, fig.width=2, fig.height=1}
+```{r, fig.width=1.75, fig.height=1}
 plot_data <- data %>%
   filter(!is.na(concentration_order)) %>%
   mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
@@ -75,11 +75,11 @@ plot_data %>%
             ymin = mean_ratio - se_ratio, color = label, shape = label)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.2, show.legend = F) +
-  labs(y = 'Nluc / Fluc (log2, a.u.)',
+  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
        x = 'eIF4E inhibitor') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
   coord_flip() +
-  theme_rasilab() +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   scale_color_manual(values = cbPalette[c(2,1)])
 
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_4er1cat.pdf")
@@ -101,11 +101,11 @@ plot_data %>%
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 1) +
   geom_errorbar(width = 0.2, show.legend = F) +
-  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+  labs(y = 'WT / no stall\n(ratio)',
        x = 'eIF4E inhibitor') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
   coord_flip() +
-  theme_rasilab() +
+  theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
   scale_color_manual(values = cbPalette[c(2,1)])
 
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_4er1cat_normalized.pdf")

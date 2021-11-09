@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 library(tidyverse)
 library(rasilabRtemplates)
 library(viridis)
+library(plyr)
+library(dplyr)
 # disable scientific notation
 options(scipen=999)
 ```
@@ -83,14 +85,14 @@ annotations  <- read_tsv('sim.params.tsv') %>%
 
 ```{r}
 psr_data <- rxn_data %>% 
-  mutate(mrna_loc = str_extract(name, "\\d+$")) %>% 
+  mutate(mrna_loc = str_extract(name, "\\d+$")) %>%
   left_join(annotations %>% select(sim_id, uorf2_stop, orf_stop), by = "sim_id") %>% 
   filter((mrna_loc == orf_stop) & str_detect(name, "terminate")) %>% 
   group_by(sim_id, mrna_loc) %>% 
-  summarize(n_firings = sum(n_firings)) %>% 
+  dplyr::summarize(n_firings = sum(n_firings)) %>%
   left_join(sim_data, by = "sim_id") %>% 
   mutate(psr = n_firings / simulated_time) %>% 
-  select(sim_id, mrna_loc, psr) %>% 
+  select(sim_id, mrna_loc, psr) %>%
   print()
 ```
 
@@ -103,6 +105,7 @@ param_data <- annotations %>%
   mutate(uorf_reinit = 100*5/(k_terminated_ssu_recycle_uorf2 + 5)) %>%
   mutate(queue_size = d_stall / 30) %>%
   select(sim_id, k_cap_bind, k_elong_stall, uorf_init, k_scan_term_3_hit_80s, d_stall, uorf_reinit, l_scan_capture, queue_size) %>%
+  mutate(uorf_init = round_any(uorf_init, 10)) %>%
   print()
 ```
 
@@ -111,7 +114,7 @@ param_data <- annotations %>%
 ```{r}
 data <- param_data %>% 
   left_join(psr_data, by = "sim_id") %>%
-  rename(k_abort = k_scan_term_3_hit_80s) %>% 
+  dplyr::rename(k_abort = k_scan_term_3_hit_80s) %>% 
   print()
 ```
 
@@ -134,8 +137,9 @@ plot_data %>%
   geom_point(size = 1) +
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
@@ -164,7 +168,8 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
@@ -193,8 +198,9 @@ plot_data %>%
   geom_point(size = 1) +
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
@@ -222,7 +228,8 @@ plot_data %>%
   geom_line() +
   viridis::scale_color_viridis(discrete = T, end = 0.9) +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
