@@ -103,8 +103,7 @@ param_data <- annotations %>%
   mutate(uorf_init = round(100*k_start_uorf2 / (5 + k_start_uorf2)),2) %>%
   mutate(d_stall = x_stall - uorf2_start) %>%
   mutate(uorf_reinit = 100*5/(k_terminated_ssu_recycle_uorf2 + 5)) %>%
-  mutate(queue_size = d_stall / 30) %>%
-  select(sim_id, k_cap_bind, k_elong_stall, uorf_init, k_scan_term_3_hit_80s, d_stall, uorf_reinit, l_scan_capture, queue_size) %>%
+  select(sim_id, k_cap_bind, k_elong_stall, uorf_init, k_scan_term_3_hit_80s, d_stall, uorf_reinit, l_scan_capture) %>%
   mutate(uorf_init = round_any(uorf_init, 10)) %>%
   print()
 ```
@@ -235,6 +234,65 @@ plot_data %>%
 
 ggsave('figures/geballe_buffering.pdf', limitsize = FALSE)
 
+```
+
+# Get the rxns for scanning and initiating ribosomes at uORF2 start codons either 25 nt
+
+```{r}
+subset_rxns_uorf <- rxn_data %>% 
+  filter(str_detect(name, "^(scan_[:digit:]|scan_from_|scan_to)")) %>% 
+  filter(str_detect(name, c("_25$"))) %>%
+  select(sim_id, name) %>%
+  print()
+```
+
+# Get the number of scanning and initiating ribosomes at uORF2 start codon 25 nt and join with parameters
+
+```{r}
+uorf2_init_data <- rxn_data %>% 
+  right_join(subset_rxns_uorf, by = c("sim_id", "name")) %>%
+  select(sim_id, n_firings, name) %>% 
+  spread(name, n_firings) %>% 
+  left_join(param_data, by = c("sim_id")) %>%
+  print()
+```
+
+# Get the fraction of scanning and initiating ribosomes at 25 nt uORF2 start codon
+
+```{r}
+uorf2_n_data_25 <- uorf2_init_data %>%
+  mutate(total = scan_25 + scan_to_elongate_25 + scan_to_elongate_from_leading_collision_25) %>% 
+  mutate(init_fraction = (scan_to_elongate_25 + scan_to_elongate_from_leading_collision_25) / total * 100) %>%
+  print()
+```
+
+# Ivanov uORF initiation faceted by d_stall
+
+```{r,fig.width=3,fig.height=1.25}
+plot_data <- data %>%
+  left_join(uorf2_n_data_25, by = c("sim_id", "uorf_init", "k_elong_stall", "k_cap_bind", "l_scan_capture", "d_stall", "uorf_reinit")) %>%
+  filter(k_elong_stall == 0.001,
+         uorf_init != 0,
+         uorf_reinit == 50,
+         l_scan_capture == 0,
+         k_abort == 0) %>%
+  print()
+
+d_stall_labeller <- function(x) paste0("d_stall: ", x, " nt")
+
+plot_data %>% 
+  ggplot(aes(x = log2(k_cap_bind), y = init_fraction, color = as.factor(uorf_init))) +
+  facet_wrap(~ d_stall, ncol = 2, labeller = labeller(d_stall = d_stall_labeller)) +
+  geom_point(size = 1) +
+  geom_line() +
+  viridis::scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
+  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
+       color = "Baseline uORF\ninitiation (%)")
+
+ggsave('figures/ivanov_increased_init_from_queue.pdf')
 ```
 
 # Conclusions

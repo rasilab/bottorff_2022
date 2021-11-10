@@ -47,10 +47,10 @@ cd $base/modeling/buffering/80s_hit
 cp $sim_runs/$andreev_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
 cp $sim_runs/$andreev_buff/choose_simulation_parameters.py ./
 cp $sim_runs/$andreev_buff/sim.params.tsv ./
-cp $sim_runs/$andreev_buff/figures/andreev_buffering_control_matched.pdf ./figures/fig_s2d.pdf
+cp $sim_runs/$andreev_buff/figures/andreev_buffering_control_matched.pdf ./figures/fig_s2b.pdf
 cp $sim_runs/$andreev_buff/figures/andreev_buffering_main.pdf ./figures/fig_3b.pdf
 cp $sim_runs/$andreev_buff/figures/andreev_buffering_supp_length.pdf ./figures/fig_s2a.pdf
-cp $sim_runs/$andreev_buff/figures/andreev_buffering_supp_queueing.pdf ./figures/fig_s2c.pdf
+cp $sim_runs/$andreev_buff/figures/andreev_buffering_supp_queueing.pdf ./figures/fig_s2f.pdf
 # copy buffering files for ivanov, geballe, constitutive repression models
 cd $base/modeling/buffering/queueing_mediated_enhanced_repression_collision_mediated_40s_dissociation_and_constitutive_repression
 cp $sim_runs/$ivanov_geballe_const_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
@@ -59,7 +59,8 @@ cp $sim_runs/$ivanov_geballe_const_buff/sim.params.tsv ./
 cp $sim_runs/$ivanov_geballe_const_buff/figures/constitutive_repression_no_buffering.pdf ./figures/fig_3a.pdf
 cp $sim_runs/$ivanov_geballe_const_buff/figures/ivanov_buffering_main.pdf ./figures/fig_3c.pdf
 cp $sim_runs/$ivanov_geballe_const_buff/figures/geballe_buffering.pdf ./figures/fig_3d.pdf
-cp $sim_runs/$ivanov_geballe_const_buff/figures/ivanov_buffering_supp.pdf ./figures/fig_s2b.pdf
+cp $sim_runs/$ivanov_geballe_const_buff/figures/ivanov_buffering_supp.pdf ./figures/fig_s2d.pdf
+cp $sim_runs/$ivanov_geballe_const_buff/figures/ivanov_increased_init_from_queue.pdf ./figures/fig_s2c.pdf
 # copy regulated reinitiation buffering files
 cd $base/modeling/buffering/regulated_reinitiation
 cp $sim_runs/$gcn4_buff/analyze_results_ty.Rmd ./analyze_results.Rmd
