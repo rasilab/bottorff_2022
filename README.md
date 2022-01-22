@@ -53,6 +53,9 @@ following command:
 docker build -t bottorff_2022 .
 ```
 
+An image of the above Docker build is provided as a GitHub package
+[here](https://github.com/rasilab/bottorff_2022/pkgs/container/bottorff_2022).
+
 Alternately, opening this folder in [VScode](https://code.visualstudio.com/)
 editor with the [Remote -
 Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
