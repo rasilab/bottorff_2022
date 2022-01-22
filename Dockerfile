@@ -29,3 +29,12 @@ RUN /opt/conda/envs/R/bin/R -s -e "IRkernel::installspec()"
 
 # Set up shell for conda activation
 RUN eval "$(conda shell.bash hook)"
+
+# Install pysb_ul4 as package to make it available for all modeling
+COPY modeling/setup.py /install/ul4/
+COPY modeling/setup.cfg /install/ul4/
+COPY modeling/pysb_ul4 /install/ul4/pysb_ul4/
+RUN conda run -n py pip install -e /install/ul4/
+
+# Make R visible to python environment
+ENV PATH="$PATH:/opt/conda/envs/R/bin"
