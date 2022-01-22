@@ -2,7 +2,9 @@ name: py
 channels:
   - conda-forge
   - defaults
+  - bioconda
 dependencies:
+  - snakemake
   - jupyter
   - pandas
   - matplotlib
