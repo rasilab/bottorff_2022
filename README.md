@@ -65,10 +65,12 @@ folder, provided you have Docker installed. See instructions
 
 ## Reproducing Simulations and Analyses
 
+### Desktop computer
+
 To reproduce all simulations and analyses in the paper, run the following:
 
 ```sh
-docker run --rm -it -v $(pwd):/workspace bottorff_2022 sh run_everything.sh
+docker run --rm -it -v $(pwd):/workspace bottorff_2022 cd workspace && sh run_everything.sh
 ```
 
 The above command will take a very long time to run (days or weeks depending on
@@ -78,3 +80,25 @@ created Docker environment. See README.md in [experiments](./experiments) and
 [modeling](./modeling) folders for further information. See
 [run_everything.sh](run_everything.sh) for which folders correspond to which
 figures in the manuscript (included as comments).
+
+### Fred Hutch computing cluster
+
+On the Fred Hutch computing cluster, we reproduce the simulations using
+[Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html)containers
+and [Slurm](https://slurm.schedmd.com/documentation.html) workload manager as follows:
+
+```
+# by convention, we specific SCRATCH_FOLDER below to be the same path as 
+$MY_GIT_FOLDER below except /fh/fast is replaced by /fh/scratch/delete90
+
+cd $SCRATCH_FOLDER 
+module load Singularity
+singularity pull docker://ghcr.io/rasilab/bottorff_2022
+
+cd $MY_GIT_FOLDER
+git clone git@github.com:rasilab/bottorff_2022.git
+cd bottorff_2022
+ln -s $SCRATCH_FOLDER/bottorff_2022_latest.sif .
+singularity exec bottorff_2022_latest.sif /bin/bash
+sh run_everything.sh
+```
