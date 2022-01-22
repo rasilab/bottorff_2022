@@ -6,7 +6,7 @@
 import argparse
 import sys
 import subprocess as sp
-from model import Model
+from pysb_ul4 import Model
 from pysb.export import export
 
 parser = argparse.ArgumentParser(description='Run simulation.')
@@ -28,10 +28,10 @@ utl = '3'  # max number of bonds to traverse during simulation
 network = '-connect'  # whether to infer reaction network connectivity
 
 # instantiate the model class with default parameter values
-model = Model(params_file="model.params.yaml")
+model = Model()
 
 outdir = '.'
-bnglfile = f'{outdir}/gp48.bngl'
+bnglfile = f'{outdir}/ul4.bngl'
 xmlfile = bnglfile.replace('.bngl', '.xml')
 gdatfile = bnglfile.replace('.bngl', '.gdat')
 rxnfile = bnglfile.replace('.bngl', '.rxns.tsv')
@@ -50,7 +50,7 @@ nfsim_command = [
     '-seed', seed, '-o', gdatfile, '-rxnlog', rxnfile,
     '-utl', utl,
     '-gml', gml, '-maxcputime', maxcputime,
-    network, '-trackconnected'
+    network
 ]
 print(" ".join(nfsim_command))
 

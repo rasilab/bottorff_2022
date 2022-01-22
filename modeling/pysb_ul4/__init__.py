@@ -34,9 +34,9 @@ class Model(sb.Model):
             except KeyError:
                 raise(f'Parameter {k} not in model {self.name}.')
 
-        self.l_mrna = l_mrna.value
-        self.l_ribo = l_ribo.value
-        self.l_ssu = l_ssu.value
+        self.l_mrna = int(l_mrna.value)
+        self.l_ribo = int(l_ribo.value)
+        self.l_ssu = int(l_ssu.value)
 
 
     def define_molecules(self):
@@ -131,23 +131,23 @@ class Model(sb.Model):
         # strictly speaking, this should occur only when the scanning ribosome is positioned at the exact A-site nucleotide.
         # the different k_start values mimic different initiation context strengths.
         start_and_rate = {
-            uorf1_start.value: k_start_uorf1,
-            uorf2_start.value: k_start_uorf2,
-            uorf3_start.value: k_start_uorf3,
-            orf_start.value: k_start_orf
+            int(uorf1_start.value): k_start_uorf1,
+            int(uorf2_start.value): k_start_uorf2,
+            int(uorf3_start.value): k_start_uorf3,
+            int(orf_start.value): k_start_orf
         }
         for start, rate in start_and_rate.items():
-            for nt in range(start - l_scan_capture.value, start + l_scan_capture.value + 1):
+            for nt in range(start - int(l_scan_capture.value), start + int(l_scan_capture.value) + 1):
                 scan_to_elongate(model, tc=self.tc, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, pos=nt,
                                  k=rate, newpos=start)
 
         from .reactions.translation_elongation import elongate
 
         # elongation
-        for nt in (list(range(uorf1_start.value, uorf1_stop.value, 3)) +
-                   list(range(uorf2_start.value, uorf2_stop.value, 3)) +
-                   list(range(uorf3_start.value, uorf3_stop.value, 3)) +
-                   list(range(orf_start.value, orf_stop.value, 3))):
+        for nt in (list(range(int(uorf1_start.value), int(uorf1_stop.value), 3)) +
+                   list(range(int(uorf2_start.value), int(uorf2_stop.value), 3)) +
+                   list(range(int(uorf3_start.value), int(uorf3_stop.value), 3)) +
+                   list(range(int(orf_start.value), int(orf_stop.value), 3))):
             if n_stall.value != 1:
                 raise("There can be only one stall in this model!")
             if nt == x_stall.value:
@@ -168,10 +168,10 @@ class Model(sb.Model):
         # scanning to the next nt, then it is as stable as a regular scanning ssu on mRNA
         # but still needs to bind TC in order to initiate at a start codon
         stop_and_rates = {
-            uorf1_stop.value: (k_term, k_terminated_ssu_recycle),
-            uorf2_stop.value: (k_term_uorf2, k_terminated_ssu_recycle_uorf2),
-            uorf3_stop.value: (k_term_uorf3, k_terminated_ssu_recycle_uorf3),
-            orf_stop.value: (k_term, k_terminated_ssu_recycle)
+            int(uorf1_stop.value): (k_term, k_terminated_ssu_recycle),
+            int(uorf2_stop.value): (k_term_uorf2, k_terminated_ssu_recycle_uorf2),
+            int(uorf3_stop.value): (k_term_uorf3, k_terminated_ssu_recycle_uorf3),
+            int(orf_stop.value): (k_term, k_terminated_ssu_recycle)
         }
         for nt, rates in stop_and_rates.items():
             terminate(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, pos=nt, k=rates[0])
