@@ -105,6 +105,7 @@ class Model(sb.Model):
             bind_tc_free_ssu,
             bind_cap_pic,
             scan,
+            backwards_scan,
             scan_to_elongate,
         )
         # ternary complex binding to ssu
@@ -119,11 +120,16 @@ class Model(sb.Model):
             scan(model, tc=self.tc, ssu=self.ssu, lsu=self.lsu,
                  mrna=self.mrna, pos=nt, k=k_scan)
 
+        # backwards scanning from pos nt to nt - 1
+        for nt in range(1, self.l_mrna):
+            backwards_scan(model, tc=self.tc, ssu=self.ssu, lsu=self.lsu,
+                 mrna=self.mrna, pos=nt, k=k_backwards_scan)
+
         # transition from scanning to elongating ribosome.
         # this can occur only within 'l_mrna_capture' nt on either side of the start codon.
         # this is to mimic the idea of enhanced initiation of queued scanning ribosomes in ivanov 2018.
         # strictly speaking, this should occur only when the scanning ribosome is positioned at the exact A-site nucleotide.
-        # the different k_start values mimic different intiation context strengths.
+        # the different k_start values mimic different initiation context strengths.
         start_and_rate = {
             uorf1_start.value: k_start_uorf1,
             uorf2_start.value: k_start_uorf2,
@@ -175,6 +181,7 @@ class Model(sb.Model):
         from .reactions.ribosome_collision import (
             collide_upon_elongation,
             collide_upon_scanning,
+            collide_upon_backwards_scanning,
         )
 
         # collisions
@@ -185,9 +192,12 @@ class Model(sb.Model):
             # to keep the kinetic definition of termination and recycling simple
             if nt in stop_codons:
                 continue
-            # scanning ribosomes collide at the rate at which they scan
+            # scanning ribosomes collide with leading obstacles at the rate at which they scan
             if nt < self.l_mrna - self.l_ssu:
                 collide_upon_scanning(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, pos=nt, k=k_scan)
+            # scanning ribosomes collide with trailing obstacles at the rate at which they backwards scan
+            if nt > self.l_ssu:
+                collide_upon_backwards_scanning(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, pos=nt, k=k_backwards_scan)
             # 80S ribosomes collide at the rate at which they elongate
             if nt < self.l_mrna - self.l_ribo:
                 if nt == x_stall.value:
@@ -209,55 +219,56 @@ class Model(sb.Model):
         from .reactions.elongation_premature_termination import elong_preterm_no_hit
 
         # scanning ribosome terminates if it reaches the end of mRNA, either with or without 5' collision
-        scan_terminate_no_hit(model, ssu=self.ssu, mrna=self.mrna, pos=self.l_mrna-1, k=k_scan_term_3_end)
-        scan_terminate_5_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+        # I didn't do anything specific for backwards scanning reaching 5' end of mRNA, hopefully it just sits there and waits to forward scan
+        scan_terminate_no_hit(model, ssu=self.ssu, mrna=self.mrna, tc=self.tc, pos=self.l_mrna-1, k=k_scan_term_3_end)
+        scan_terminate_5_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
             pos=self.l_mrna-1, k=k_scan_term_3_end)
-        scan_terminate_5_hit_scanning(model, ssu=self.ssu, mrna=self.mrna,
+        scan_terminate_5_hit_scanning(model, ssu=self.ssu, mrna=self.mrna, tc=self.tc, 
             pos=self.l_mrna-1, k=k_scan_term_3_end)
 
         # abortion by scanning and elongating ribosomes
         for nt in range(self.l_mrna - 1):
-            scan_terminate_no_hit(model, ssu=self.ssu, mrna=self.mrna, 
+            scan_terminate_no_hit(model, ssu=self.ssu, mrna=self.mrna, tc=self.tc, 
             pos=nt, k=k_scan_term_no_hit)
             elong_preterm_no_hit(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
             pos=nt, k=k_elong_preterm_no_hit)
 
         # abortion by scanning ribosomes that hit a leading elongating ribosome
         for nt in range(self.l_mrna - self.l_ssu):
-            scan_terminate_3_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+            scan_terminate_3_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_3_hit_80s)
 
         # abortion by scanning ribosomes that hit a leading scanning ribosome
         for nt in range(self.l_mrna - self.l_ssu):
-            scan_terminate_3_hit_scanning(model, ssu=self.ssu, mrna=self.mrna, 
+            scan_terminate_3_hit_scanning(model, ssu=self.ssu, mrna=self.mrna, tc=self.tc,  
             pos=nt, k=k_scan_term_3_hit_40s)
 
-        # abortion by scanning ribosomes that are hit by a trailing elongating ribosome
+        # abortion by scanning ribosomes that hit (or are hit by) a trailing elongating ribosome
         for nt in range(self.l_ribo, self.l_mrna - 1):
-            scan_terminate_5_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+            scan_terminate_5_hit_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_5_hit_80s)
 
-        # abortion by scanning ribosomes that are hit by a trailing scanning ribosome
+        # abortion by scanning ribosomes that hit (or are hit by) a trailing scanning ribosome
         for nt in range(self.l_ssu, self.l_mrna - 1):
-            scan_terminate_5_hit_scanning(model, ssu=self.ssu, mrna=self.mrna, 
+            scan_terminate_5_hit_scanning(model, ssu=self.ssu, mrna=self.mrna, tc=self.tc,  
             pos=nt, k=k_scan_term_5_hit_40s)
 
         # abortion by scanning ribosomes that hit a leading elongating ribosome and trailing elongating ribosome
         for nt in range(self.l_ribo, self.l_mrna - self.l_ssu):
-            scan_terminate_both_hit_elongating_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+            scan_terminate_both_hit_elongating_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_both_hit_80s_80s)
 
         # abortion by scanning ribosomes that hit a leading scanning ribosome and trailing elongating ribosome
         for nt in range(self.l_ribo, self.l_mrna - self.l_ssu):
-            scan_terminate_both_hit_elongating_scanning(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+            scan_terminate_both_hit_elongating_scanning(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_both_hit_80s_40s)
 
         # abortion by scanning ribosomes that hit a leading elongating ribosome and trailing scanning ribosome
         for nt in range(self.l_ssu, self.l_mrna - self.l_ssu):
-            scan_terminate_both_hit_scanning_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, 
+            scan_terminate_both_hit_scanning_elongating(model, ssu=self.ssu, lsu=self.lsu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_both_hit_40s_80s)
 
         # abortion by scanning ribosomes that hit a leading scanning ribosome and trailing scanning ribosome
         for nt in range(self.l_ssu, self.l_mrna - self.l_ssu):
-            scan_terminate_both_hit_scanning_scanning(self, ssu=self.ssu, mrna=self.mrna, 
+            scan_terminate_both_hit_scanning_scanning(self, ssu=self.ssu, mrna=self.mrna, tc=self.tc,  
                 pos=nt, k=k_scan_term_both_hit_40s_40s)

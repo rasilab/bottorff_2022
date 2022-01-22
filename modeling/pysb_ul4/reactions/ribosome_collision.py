@@ -42,3 +42,23 @@ def collide_upon_scanning(model, ssu, lsu, mrna, pos, k):
 			ssu(**ssu_product_args) % ssu(**
 											leading_ssu_product_args) % mrna(**mrna_product_args),
 			k)
+
+def collide_upon_backwards_scanning(model, ssu, lsu, mrna, pos, k):
+	"""The PIC at pos collides with a scanning or elongating ribosome at pos - l_ssu
+	because its scanning is blocked.
+	"""
+
+	mrna_reactant_args = {f'nt{pos}': 1, f'nt{pos - model.l_ssu}': 2}
+	mrna_product_args = {f'nt{pos}': 1, f'nt{pos - model.l_ssu}': 2}
+
+	ssu_reactant_args = {'asite': 1, 'hit5': None, 'isbi': None}
+	ssu_product_args = {'asite': 1, 'hit5': 3, 'isbi': None}
+
+	trailing_ssu_reactant_args = {'asite': 2, 'hit3': None}
+	trailing_ssu_product_args = {'asite': 2, 'hit3': 3}
+
+	sb.Rule(f'collide_upon_backwards_scanning_{pos}',
+			ssu(**ssu_reactant_args) % ssu(**trailing_ssu_reactant_args) % mrna(**mrna_reactant_args) >>
+			ssu(**ssu_product_args) % ssu(**
+											trailing_ssu_product_args) % mrna(**mrna_product_args),
+			k)

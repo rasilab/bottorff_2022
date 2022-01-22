@@ -107,6 +107,15 @@
     - estimated to be the same order of magnitude as elongation in vassilenko 2011
     - it is in fact 2x higher than elongation rate in vassilenko 2011
 
+- param: k_backwards_scan
+  value: 0.00001
+  desc: backwards scanning rate of pre-initiation complexes
+  ref: gu2021,matsuda2006
+  pubmed: 34782646,16682564
+  unit: nt s-1
+  range: 
+  comment:
+    - will fit rate to data that interaction between adjacent start codons due to backwards scanning ~disappears around 15 nt distance
 
 - param: k_term
   value: 1

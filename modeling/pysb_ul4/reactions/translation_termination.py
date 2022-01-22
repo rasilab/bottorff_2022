@@ -56,28 +56,45 @@ def recycle_terminated_ssu(model, ssu, lsu, mrna, pos, k):
 		mrna_reactant_args[f'nt{pos - model.l_ssu}'] = 2
 		mrna_product_args[f'nt{pos - model.l_ssu}'] = 2
 		ssu_reactant_args['hit5'] = 3
-		trailing_ssu_reactant_args = {'asite': 2, 'hit3': 3, 'isbi': None}
-		trailing_ssu_product_args = {
-			'asite': 2, 'hit3': None, 'isbi': None}
-		sb.Rule(f'recycle_from_scan_collision_{pos}',
+		trailing_ssu_reactant_args = {'asite': 2, 'hit3': 3}
+		trailing_ssu_product_args = {'asite': 2, 'hit3': None}
+		sb.Rule(f'recycle_from_trailing_collision_{pos}',
 				ssu(**ssu_reactant_args) % ssu(**trailing_ssu_reactant_args) % mrna(**mrna_reactant_args) >>
-				ssu(**ssu_product_args) + ssu(**
-												trailing_ssu_product_args) % mrna(**mrna_product_args),
+				ssu(**ssu_product_args) + ssu(**trailing_ssu_product_args) % mrna(**mrna_product_args),
 				k)
 
-	# recycle out of a collision with a trailing elongating ribosome
+	# recycle out of a collision with a leading scanning ribosome
 	mrna_reactant_args = copy.deepcopy(mrna_reactant_temp)
 	mrna_product_args = copy.deepcopy(mrna_product_temp)
-	if pos > model.l_ribo - 1:
-		mrna_reactant_args[f'nt{pos - model.l_ribo}'] = 2
-		mrna_product_args[f'nt{pos - model.l_ribo}'] = 2
+
+	if pos < model.l_mrna - model.l_ssu:
+		mrna_reactant_args[f'nt{pos + model.l_ssu}'] = 2
+		mrna_product_args[f'nt{pos + model.l_ssu}'] = 2
+		ssu_reactant_args['hit5'] = None
+		ssu_reactant_args['hit3'] = 3
+		leading_ssu_reactant_args = {'asite': 2, 'hit5': 3}
+		leading_ssu_product_args = {'asite': 2, 'hit5': None}
+		sb.Rule(f'recycle_from_leading_collision_{pos}',
+				ssu(**ssu_reactant_args) % ssu(**leading_ssu_reactant_args) % mrna(**mrna_reactant_args) >>
+				ssu(**ssu_product_args) + ssu(**leading_ssu_product_args) % mrna(**mrna_product_args),
+				k)
+
+	# recycle out of a collision with leading and trailing scanning ribosomes
+	mrna_reactant_args = copy.deepcopy(mrna_reactant_temp)
+	mrna_product_args = copy.deepcopy(mrna_product_temp)
+
+	if ((pos < model.l_mrna - model.l_ssu) and (pos > model.l_ssu - 1)):
+		mrna_reactant_args[f'nt{pos - model.l_ssu}'] = 2
+		mrna_product_args[f'nt{pos - model.l_ssu}'] = 2
+		mrna_reactant_args[f'nt{pos + model.l_ssu}'] = 4
+		mrna_product_args[f'nt{pos + model.l_ssu}'] = 4
 		ssu_reactant_args['hit5'] = 3
-		trailing_ssu_reactant_args = {'asite': 2, 'hit3': 3, 'isbi': 6}
-		trailing_ssu_product_args = {'asite': 2, 'hit3': None, 'isbi': 6}
-		trailing_lsu_reactant_args = {'isbi': 6}
-		trailing_lsu_product_args = {'isbi': 6}
-		sb.Rule(f'recycle_from_elongation_collision_{pos}',
-				ssu(**ssu_reactant_args) % ssu(**trailing_ssu_reactant_args) % lsu(**trailing_lsu_reactant_args) % mrna(**mrna_reactant_args) >>
-				ssu(**ssu_product_args) + ssu(**trailing_ssu_product_args) % lsu(**
-																					trailing_lsu_product_args) % mrna(**mrna_product_args),
+		ssu_reactant_args['hit3'] = 5
+		trailing_ssu_reactant_args = {'asite': 2, 'hit3': 3}
+		trailing_ssu_product_args = {'asite': 2, 'hit3': None}
+		leading_ssu_reactant_args = {'asite': 4, 'hit5': 5}
+		leading_ssu_product_args = {'asite': 4, 'hit5': None}
+		sb.Rule(f'recycle_from_both_collision_{pos}',
+				ssu(**ssu_reactant_args) % ssu(**trailing_ssu_reactant_args) % mrna(**mrna_reactant_args) % ssu(**leading_ssu_reactant_args) >>
+				ssu(**ssu_product_args) + ssu(**trailing_ssu_product_args) % mrna(**mrna_product_args) % ssu(**leading_ssu_product_args)  ,
 				k)

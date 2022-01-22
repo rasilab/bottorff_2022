@@ -99,6 +99,74 @@ def scan(model, tc, ssu, lsu, mrna, pos, k):
                 lsu(**trailing_lsu_product_args) % mrna(**mrna_product_args),
                 k)
 
+def backwards_scan(model, tc, ssu, lsu, mrna, pos, k):
+    """The PIC scans from mRNA position pos to pos - 1 at rate k.
+    This can occur only if it not blocked by a trailing scanning or elongating ribosome.
+    """
+
+    mrna_reactant_args = {f'nt{pos}': 1, f'nt{pos - 1}': None}
+    mrna_product_args = {f'nt{pos}': None, f'nt{pos - 1}': 1}
+
+    ssu_reactant_args = {'asite': 1, 'hit5': None,
+                            'hit3': None, 'isbi': None, 'terminating': None}
+    ssu_product_args = {'asite': 1, 'hit5': None,
+                        'hit3': None, 'isbi': None, 'terminating': 'no'}
+
+    # PICs can backwards scan only if there is no scanning or elongating ribosome in back.
+    # applies only if another ribosome can fit in the 5' side.
+    if ((pos > model.l_ssu - 1) and (model.l_ssu > 1)):
+        mrna_reactant_args[f'nt{pos - model.l_ssu}'] = None
+        mrna_product_args[f'nt{pos - model.l_ssu}'] = None
+    # if ribosome backwards scans into footprint from 5' end, cap is no longer free to bind another PIC
+    if pos == model.l_ssu:
+        mrna_reactant_args['end5'] = 'free'
+        mrna_product_args['end5'] = 'blocked'
+
+    sb.Rule(f'backwards_scan_{pos}',
+            ssu(**ssu_reactant_args) % mrna(**mrna_reactant_args) >> 
+            ssu(**ssu_product_args) % mrna(**mrna_product_args),
+            k)
+
+    # create temporary copy of mrna_reactant and mrna_product args for different conditions
+    mrna_reactant_temp = copy.deepcopy(mrna_reactant_args)
+    mrna_product_temp = copy.deepcopy(mrna_product_args)
+
+    # backwards scan out of a collision with a leading scanning ribosome
+    mrna_reactant_args = copy.deepcopy(mrna_reactant_temp)
+    mrna_product_args = copy.deepcopy(mrna_product_temp)
+    if pos < model.l_mrna - model.l_ssu:
+        mrna_reactant_args[f'nt{pos + model.l_ssu}'] = 2
+        mrna_product_args[f'nt{pos + model.l_ssu}'] = 2
+        ssu_reactant_args['hit3'] = 3
+        ssu_product_args['hit3'] = None
+        leading_ssu_reactant_args = {'asite': 2, 'hit5': 3, 'isbi': None}
+        leading_ssu_product_args = {
+            'asite': 2, 'hit5': None, 'isbi': None}
+        sb.Rule(f'backwards_scan_from_scan_collision_{pos}',
+                ssu(**ssu_reactant_args) % ssu(**leading_ssu_reactant_args) % 
+                mrna(**mrna_reactant_args) >>
+                ssu(**ssu_product_args) % ssu(**leading_ssu_product_args) % 
+                mrna(**mrna_product_args),
+                k)
+
+    # backwards scan out of a collision with a leading elongating ribosome
+    mrna_reactant_args = copy.deepcopy(mrna_reactant_temp)
+    mrna_product_args = copy.deepcopy(mrna_product_temp)
+    if pos < model.l_mrna - model.l_ribo:
+        mrna_reactant_args[f'nt{pos + model.l_ribo}'] = 2
+        mrna_product_args[f'nt{pos + model.l_ribo}'] = 2
+        ssu_reactant_args['hit3'] = 3
+        ssu_product_args['hit3'] = None
+        leading_ssu_reactant_args = {'asite': 2, 'hit5': 3, 'isbi': 6}
+        leading_ssu_product_args = {'asite': 2, 'hit5': None, 'isbi': 6}
+        leading_lsu_reactant_args = {'isbi': 6}
+        leading_lsu_product_args = {'isbi': 6}
+        sb.Rule(f'backwards_scan_from_elongation_collision_{pos}',
+                ssu(**ssu_reactant_args) % ssu(**leading_ssu_reactant_args) % 
+                lsu(**leading_lsu_reactant_args) % mrna(**mrna_reactant_args) >>
+                ssu(**ssu_product_args) % ssu(**leading_ssu_product_args) % 
+                lsu(**leading_lsu_product_args) % mrna(**mrna_product_args),
+                k)
 
 def scan_to_elongate(model, tc, ssu, lsu, mrna, pos, k, newpos):
     """Convert scanning ribosomes at pos to elongating ribosomes at newpos.
