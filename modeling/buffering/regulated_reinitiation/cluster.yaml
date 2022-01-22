@@ -1,5 +1,0 @@
-"__default__" :
-  "account" : "account_name"
-  "time" : "02:00:00"
-  "name" : "{rule}.{wildcards}"
-  "n" : 1
