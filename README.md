@@ -19,6 +19,7 @@ bioRxiv 2022.01.06.475296; doi: https://doi.org/10.1101/2022.01.06.475296
 **Contents**
 - [Abstract](#abstract)
 - [Software Installation](#software-installation)
+- [Reproducing Simulations and Analyses](#reproducing-simulations-and-analyses)
 
 ## Abstract
 
@@ -58,3 +59,19 @@ Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote
 extension will automatically generate the above Docker image and mount this
 folder, provided you have Docker installed. See instructions
 [here](https://code.visualstudio.com/docs/remote/containers).
+
+## Reproducing Simulations and Analyses
+
+To reproduce all simulations and analyses in the paper, run the following:
+
+```sh
+docker run --rm -it -v $(pwd):/workspace bottorff_2022 sh run_everything.sh
+```
+
+The above command will take a very long time to run (days or weeks depending on
+your computer). Instead, you will likely want to open subfolders for specific
+experiments or simulations and run the scripts separately there in the above
+created Docker environment. See README.md in [experiments](./experiments) and
+[modeling](./modeling) folders for further information. See
+[run_everything.sh](run_everything.sh) for which folders correspond to which
+figures in the manuscript (included as comments).
