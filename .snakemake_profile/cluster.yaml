@@ -1,0 +1,4 @@
+"__default__" :
+  "time" : "02:00:00"
+  "name" : "{rule}.{wildcards}"
+  "n" : 1
