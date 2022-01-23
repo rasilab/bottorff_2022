@@ -72,35 +72,48 @@ folder, provided you have Docker installed. See instructions
 To reproduce all simulations and analyses in the paper, run the following:
 
 ```bash
-docker run --rm -it -v $(pwd):/workspace bottorff_2022 cd workspace && sh run_everything.sh
+docker run --rm -it -v $(pwd):/workspace bottorff_2022 /bin/bash
+cd workspace 
+sh run_everything.sh
 ```
 
-The above command will take a very long time to run (days or weeks depending on
-your computer). Instead, you will likely want to open subfolders for specific
-experiments or simulations and run the scripts separately there in the above
-created Docker environment. See README.md in [experiments](./experiments) and
-[modeling](./modeling) folders for further information. See
-[run_everything.sh](run_everything.sh) for which folders correspond to which
-figures in the manuscript (included as comments).
+The last above command will take a very long time to run (days or weeks
+depending on your computer). Instead, you will likely want to open subfolders
+for specific experiments or simulations and run the scripts separately there in
+the above created Docker environment. See README.md in
+[experiments](./experiments) and [modeling](./modeling) folders for further
+information. See [run_everything.sh](run_everything.sh) for which folders
+correspond to which figures in the manuscript (included as comments).
 
 ### Fred Hutch computing cluster
 
-On the Fred Hutch computing cluster, we reproduce the simulations using 
-[Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html) containers
-and [Slurm](https://slurm.schedmd.com/documentation.html) workload manager as follows:
+On the Fred Hutch computing cluster, we reproduce the simulations using
+[Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html)
+containers and [Slurm](https://slurm.schedmd.com/documentation.html) workload
+manager as follows:
 
 ```bash
 # by convention, we specific SCRATCH_FOLDER below to be the same path as 
-$MY_GIT_FOLDER below except /fh/fast is replaced by /fh/scratch/delete90
+# $MY_GIT_FOLDER below except /fh/fast is replaced by /fh/scratch/delete90
 
+# go to scratch folder
 cd $SCRATCH_FOLDER 
+# load singularity module
 module load Singularity
+# pull docker image from GitHub and convert to .sif file 
 singularity pull docker://ghcr.io/rasilab/bottorff_2022
 
+# go to the standard folder that has all git repos
 cd $MY_GIT_FOLDER
+# clone this repo and go inside
 git clone git@github.com:rasilab/bottorff_2022.git
 cd bottorff_2022
+# symbolically link the singularity image to avoid having these huge files
 ln -s $SCRATCH_FOLDER/bottorff_2022_latest.sif .
-singularity exec bottorff_2022_latest.sif /bin/bash
-sh run_everything.sh
+# this conda environment contains snakemake-minimal and pandas and has to be
+# outside the Singularity container since it cannot call singularity otherwise
+conda activate snakemake
+# run everything with singularity and slurm
+# see run_everything.sh for details on what the two arguments do
+sh run_everything.sh --use-singularity --use-cluster
 ```
