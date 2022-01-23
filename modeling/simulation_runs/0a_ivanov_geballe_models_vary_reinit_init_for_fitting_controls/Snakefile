@@ -1,0 +1,53 @@
+#!/fh/fast/subramaniam_a/user/rasi/lib/miniconda3/bin/python
+"""Workflow for running simulations in this folder
+
+  :Author: Arvind Rasi Subramaniam
+  :Date: 20 Feb 2019
+"""
+
+# This generates the sim.params.tsv below
+include: "choose_simulation_parameters.py"
+
+
+import pandas as pd
+input_params = pd.read_table("sim.params.tsv", index_col=0)
+# For running simulations in a singularity container
+singularity: "../../../bottorff_2022_latest.sif"
+
+# These rules are run locally
+localrules: all
+
+
+rule all:
+  """List of all files we want at the end"""
+  input: 
+    "analyze_results.nbconvert.ipynb"
+
+
+rule analyze_data:
+  """Analyze simulation results and make figures"""
+  input: 
+    params = [f'output/model_{n}.params.tsv.gz' for n in range(len(input_params))],
+    molecules = [f'output/model_{n}.molecule_type_list.tsv.gz' for n in range(len(input_params))],
+    reactions = [f'output/model_{n}.rxn_list.tsv.gz' for n in range(len(input_params))],
+    notebook = 'analyze_results.ipynb'
+  output:
+    "analyze_results.nbconvert.ipynb"
+  shell:
+    """
+    export JUPYTER_CONFIG_DIR=$PWD
+    jupyter nbconvert --to notebook --execute --NotebookClient.kernel_name='ir' {input.notebook}
+    """
+
+
+rule run_simulation:
+  """Run simulation for each parameter combination"""
+  input:
+    "choose_simulation_parameters.py",
+  output:
+    "output/model_{n}.params.tsv.gz",
+    "output/model_{n}.rxn_list.tsv.gz",
+    "output/model_{n}.molecule_type_list.tsv.gz"
+  threads: 1
+  shell:
+    "python run_simulation.py {wildcards.n}"
