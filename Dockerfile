@@ -26,6 +26,9 @@ RUN conda env create -f /install/R_environment.yml
 # Set up R jupyter kernel and make it visible to python
 ENV PATH="/opt/conda/envs/py/bin:$PATH"
 RUN /opt/conda/envs/R/bin/R -s -e "IRkernel::installspec(sys_prefix = T)"
+# Set jupyter data dir for discovering kernels
+ENV JUPYTER_DATA_DIR="/opt/conda/envs/py/share/jupyter"
+
 # install rasilab R templates
 RUN /opt/conda/envs/R/bin/R -s -e "devtools::install_github('rasilab/rasilabRtemplates')"
 
