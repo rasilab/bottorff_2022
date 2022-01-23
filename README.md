@@ -100,6 +100,7 @@ cd $SCRATCH_FOLDER
 git clone git@github.com:rasilab/bottorff_2022.git
 cd bottorff_2022
 # load singularity module
+module purge
 module load Singularity
 # pull docker image from GitHub and convert to .sif file 
 singularity pull docker://ghcr.io/rasilab/bottorff_2022
