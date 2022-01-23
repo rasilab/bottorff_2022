@@ -86,7 +86,7 @@ figures in the manuscript (included as comments).
 ### Fred Hutch computing cluster
 
 On the Fred Hutch computing cluster, we reproduce the simulations using 
-[Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html)containers
+[Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html) containers
 and [Slurm](https://slurm.schedmd.com/documentation.html) workload manager as follows:
 
 ```bash
