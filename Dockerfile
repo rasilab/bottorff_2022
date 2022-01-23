@@ -24,11 +24,10 @@ RUN conda run -n py pip install -e /pysb/
 COPY .install/R_environment.yml /install/R_environment.yml
 RUN conda env create -f /install/R_environment.yml
 # Set up R jupyter kernel and make it visible to python
-ENV PATH="$PATH:/opt/conda/envs/py/bin"
-RUN /opt/conda/envs/R/bin/R -s -e "IRkernel::installspec()"
-
-# Set up shell for conda activation
-RUN eval "$(conda shell.bash hook)"
+ENV PATH="/opt/conda/envs/py/bin:$PATH"
+RUN /opt/conda/envs/R/bin/R -s -e "IRkernel::installspec(sys_prefix = T)"
+# install rasilab R templates
+RUN /opt/conda/envs/R/bin/R -s -e "devtools::install_github('rasilab/rasilabRtemplates')"
 
 # Install pysb_ul4 as package to make it available for all modeling
 COPY modeling/setup.py /install/ul4/
@@ -38,3 +37,6 @@ RUN conda run -n py pip install -e /install/ul4/
 
 # Make R visible to python environment
 ENV PATH="$PATH:/opt/conda/envs/R/bin"
+
+# Make 'py' as default conda environment
+RUN sed -i 's/conda activate base/conda activate py/' /root/.bashrc

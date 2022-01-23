@@ -5,3 +5,5 @@ channels:
 dependencies:
   - r-tidyverse
   - r-irkernel
+  - r-viridis
+  - r-devtools
