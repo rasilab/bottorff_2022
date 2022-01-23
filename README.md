@@ -93,23 +93,16 @@ containers and [Slurm](https://slurm.schedmd.com/documentation.html) workload
 manager as follows:
 
 ```bash
-# by convention, we specific SCRATCH_FOLDER below to be the same path as 
-# $MY_GIT_FOLDER below except /fh/fast is replaced by /fh/scratch/delete90
-
-# go to scratch folder
+$SCRATCH_FOLDER="/fh/scratch/delete90/subramaniam_lab/user/tbottorff/git"
+mkdir -p $SCRATCH_FOLDER
 cd $SCRATCH_FOLDER 
+# clone this repo and go inside
+git clone git@github.com:rasilab/bottorff_2022.git
+cd bottorff_2022
 # load singularity module
 module load Singularity
 # pull docker image from GitHub and convert to .sif file 
 singularity pull docker://ghcr.io/rasilab/bottorff_2022
-
-# go to the standard folder that has all git repos
-cd $MY_GIT_FOLDER
-# clone this repo and go inside
-git clone git@github.com:rasilab/bottorff_2022.git
-cd bottorff_2022
-# symbolically link the singularity image to avoid having these huge files
-ln -s $SCRATCH_FOLDER/bottorff_2022_latest.sif .
 # this conda environment contains snakemake-minimal and pandas and has to be
 # outside the Singularity container since it cannot call singularity otherwise
 conda activate snakemake
