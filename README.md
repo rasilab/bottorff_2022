@@ -20,6 +20,8 @@ bioRxiv 2022.01.06.475296; doi: https://doi.org/10.1101/2022.01.06.475296
 - [Abstract](#abstract)
 - [Software Installation](#software-installation)
 - [Reproducing Simulations and Analyses](#reproducing-simulations-and-analyses)
+  - [Desktop computer](#desktop-computer)
+  - [Fred Hutch computing cluster](#fred-hutch-computing-cluster)
 
 ## Abstract
 
@@ -49,7 +51,7 @@ Software for running simulations and analyzing results are specified in
 installing [Docker](https://docs.docker.com/engine/install/) and running the
 following command:
 
-```sh
+```bash
 docker build -t bottorff_2022 .
 ```
 
@@ -69,7 +71,7 @@ folder, provided you have Docker installed. See instructions
 
 To reproduce all simulations and analyses in the paper, run the following:
 
-```sh
+```bash
 docker run --rm -it -v $(pwd):/workspace bottorff_2022 cd workspace && sh run_everything.sh
 ```
 
@@ -83,11 +85,11 @@ figures in the manuscript (included as comments).
 
 ### Fred Hutch computing cluster
 
-On the Fred Hutch computing cluster, we reproduce the simulations using
+On the Fred Hutch computing cluster, we reproduce the simulations using 
 [Singularity](https://sylabs.io/guides/3.5/user-guide/introduction.html)containers
 and [Slurm](https://slurm.schedmd.com/documentation.html) workload manager as follows:
 
-```
+```bash
 # by convention, we specific SCRATCH_FOLDER below to be the same path as 
 $MY_GIT_FOLDER below except /fh/fast is replaced by /fh/scratch/delete90
 
