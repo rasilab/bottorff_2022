@@ -93,9 +93,8 @@ containers and [Slurm](https://slurm.schedmd.com/documentation.html) workload
 manager as follows:
 
 ```bash
-$SCRATCH_FOLDER="/fh/scratch/delete90/subramaniam_lab/user/tbottorff/git"
-mkdir -p $SCRATCH_FOLDER
-cd $SCRATCH_FOLDER 
+mkdir -p /fh/scratch/delete90/subramaniam_a/user/tbottorf/git/
+cd /fh/scratch/delete90/subramaniam_a/user/tbottorf/git/
 # clone this repo and go inside
 git clone git@github.com:rasilab/bottorff_2022.git
 cd bottorff_2022
