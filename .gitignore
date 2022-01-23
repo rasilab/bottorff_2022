@@ -2,5 +2,8 @@
 *.log
 *.out
 *.sif
+*.nbconvert.ipynb
+migrated
+sim.params.tsv
 .snakemake/
 output/
