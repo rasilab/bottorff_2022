@@ -1,1 +1,6 @@
 *.pyc
+*.log
+*.out
+*.sif
+.snakemake/
+output/
