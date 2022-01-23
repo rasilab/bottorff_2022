@@ -53,8 +53,8 @@ sp.run(['BNG2.pl', '--xml', '--outdir', outdir, bnglfile])
 
 # parameters for NFsim
 equilibrium_time = 0  # seconds
-tstop = str(10000)  # seconds
-maxcputime = str(1000 * 60)  # seconds
+tstop = str(1000000)  # seconds
+maxcputime = str(2000 * 60)  # seconds
 osteps = str(10)  # number of time samples
 seed = str(111)  # random number initial seed
 gml = str(1000000)  # max num of mol allowed in simulation
