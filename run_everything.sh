@@ -29,6 +29,7 @@ fi
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 4B
+# needs table from experiments/luciferase_assays/20190422_exp2_ul4_mutants, should be fine as long as 2C run before 4B...?
 #cd experiments/luciferase_assays/20201121_exp15_4er1cat_wt_p22a_nluc_pest
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
@@ -37,14 +38,17 @@ fi
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 5B
+# uses plotrix library, perhaps an issue?
 #cd #cd experiments/luciferase_assays/20190829_exp4_early_gapdh_stop_no_start_exp5_eYFP_longer_uORF2_exp6_stem_loops
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 5C
+# uses plotrix library, perhaps an issue?
 #cd experiments/luciferase_assays/20201006_exps_4_gapdh_p22a_strong_d_stall
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 6
+# uses plotrix library, perhaps an issue?
 #cd #cd experiments/luciferase_assays/20200927_exp18_p22a_wt_no_aug
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
@@ -55,10 +59,10 @@ fi
 # the script does not find data outside its parent directory
 
 # figure 2D
-cd modeling/simulation_runs/0a_ivanov_geballe_models_vary_reinit_init_for_fitting_controls/
-snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 #cd modeling/simulation_runs/0c_andreev_vary_params_for_fitting_controls
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd modeling/simulation_runs/0a_ivanov_geballe_models_vary_reinit_init_for_fitting_controls/
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figures 3A, 3C, 3D, S2C, S2E, S2F
 #cd modeling/simulation_runs/0e_constitutive_ivanov_geballe_buffering
