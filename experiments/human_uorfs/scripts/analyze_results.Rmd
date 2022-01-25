@@ -77,7 +77,7 @@ plot_data <- data %>%
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
  ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
-            xmin = mean_ratio - se_ratio, color = status)) +
+            xmin = mean_ratio - se_ratio, color = Status)) +
   geom_point(size = 2) +
   geom_errorbar(width = 0.25, show.legend = F) +
   labs(x = 'NLuc / FLuc (log2 a.u.)', y = '', color = '') +
@@ -91,10 +91,10 @@ ggsave("../figures/fig_6.pdf")
 ```{r}
 data %>% 
   filter(!is.na(label_order)) %>% 
-  filter(status %in% c("WT", "no AUG")) %>% 
+  filter(Status %in% c("WT", "no AUG")) %>% 
   group_by(label) %>% 
   nest() %>%
-  mutate(ttest = map(data, function(df) t.test(ratio ~ status, df) %>% broom::tidy())) %>% 
+  mutate(ttest = map(data, function(df) t.test(ratio ~ Status, df) %>% broom::tidy())) %>% 
   unnest(ttest) %>% 
   select(-data, -matches("estimate|conf")) %>% 
   mutate(p.value = round(p.value, 4)) %>% 
@@ -107,10 +107,10 @@ data %>%
 ```{r}
 data %>% 
   filter(!is.na(label_order)) %>% 
-  filter(status %in% c("WT", "P to A")) %>% 
+  filter(Status %in% c("WT", "P to A")) %>% 
   group_by(label) %>% 
   nest() %>%
-  mutate(ttest = map(data, function(df) t.test(ratio ~ status, df) %>% broom::tidy())) %>% 
+  mutate(ttest = map(data, function(df) t.test(ratio ~ Status, df) %>% broom::tidy())) %>% 
   unnest(ttest) %>% 
   select(-data, -matches("estimate|conf")) %>% 
   mutate(p.value = round(p.value, 4)) %>% 
