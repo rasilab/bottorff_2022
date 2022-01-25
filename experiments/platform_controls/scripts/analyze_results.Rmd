@@ -67,16 +67,10 @@ plot_data %>%
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 1) +
   geom_errorbar(width = 0.5) +
-  labs(y = 'Nluc / Fluc (log2, a.u.)',
+  labs(y = 'NLuc / FLuc (log2, a.u.)',
        x = '') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
   coord_flip() +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 ggsave("../figures/nluc_fluc_ratio_ul4_control_mutants.pdf")
 ```
-
-# Conclusions
-
- - WT UL4 5' UTR strongly represses main ORF translation
- - Removing the uORF2 start codon or stall (P22A mutation) abolishes UL4 5' UTR repressiveness
- - Improving uORF2's initiation (via an improved Kozak mutation) increases the repressiveness of the UL4 5' UTR

@@ -1,0 +1,234 @@
+---
+title: "Analysis of computational simulations of the 80S-hit model"
+author: "`r Sys.info()[['user']]`"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  github_document:
+    toc: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(rasilabRtemplates)
+library(viridis)
+# disable scientific notation
+options(scipen=999)
+```
+
+# Read reaction firing data
+
+```{r}
+rxn_data <- list.files("output/", pattern = "rxn_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>%
+  print()
+```
+
+# Read simulation time data
+
+```{r}
+sim_data <- list.files("output/", pattern = "molecule_type_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>% 
+  filter(mol_type %in% c("simulated_time", "cpu_time")) %>% 
+  spread(mol_type, mol_type_id) %>% 
+  print()
+```
+
+# Read last reaction time data
+
+```{r}
+last_rxn_data <- list.files("output/", pattern = "molecule_type_list.tsv.gz", full.names = T) %>% 
+  enframe() %>% 
+  mutate(sim_id = as.integer(str_extract(value, "(?<=model_)\\d+"))) %>% 
+  mutate(data = map(value, read_tsv)) %>%
+  select(-name, -value) %>% 
+  unnest() %>% 
+  filter(mol_type == "last_rxn_firing_time") %>%
+  spread(mol_type, mol_type_id) %>% 
+  print()
+```
+
+# Check to make sure last reaction fired near end of simulation. 
+0 rows output means all simulations' last reactions fired in last 0.1% of simulated time
+
+```{r}
+check_rxn <- last_rxn_data %>%
+  left_join(sim_data, by = "sim_id") %>%
+  mutate(ratio = last_rxn_firing_time / simulated_time) %>%
+  filter(ratio < 0.999) %>%
+  print()
+```
+
+# Read simulation parameters
+
+```{r}
+annotations  <- read_tsv('sim.params.tsv') %>%
+  print()
+```
+
+# Calculate protein synthesis rate of main ORF
+
+```{r}
+psr_data <- rxn_data %>% 
+  mutate(mrna_loc = str_extract(name, "\\d+$")) %>% 
+  left_join(annotations %>% select(sim_id, uorf2_stop, orf_stop), by = "sim_id") %>% 
+  filter((mrna_loc == orf_stop) & str_detect(name, "terminate")) %>% 
+  group_by(sim_id, mrna_loc) %>% 
+  summarize(n_firings = sum(n_firings)) %>% 
+  left_join(sim_data, by = "sim_id") %>% 
+  mutate(psr = n_firings / simulated_time) %>% 
+  select(sim_id, mrna_loc, psr) %>% 
+  print()
+```
+
+# Get only annotations that we want to use for plotting
+
+```{r}
+param_data <- annotations %>%
+  mutate(uorf_init = round(100*k_start_uorf2 / (5 + k_start_uorf2)),2,
+         d_stall = x_stall - uorf2_start,
+         uorf2_length = 1/3*(uorf2_stop - uorf2_start)) %>%
+  mutate(uorf_reinit = if_else(k_terminated_ssu_recycle_uorf2 == 1.7, round(100*5/(k_terminated_ssu_recycle_uorf2+5)), 100*5/(k_terminated_ssu_recycle_uorf2+5))) %>%
+  select(sim_id, k_cap_bind, uorf_init, k_scan_term_5_hit_80s, d_stall, uorf2_length, uorf_reinit, k_scan, k_elong, k_elong_stall) %>%
+  print()
+```
+
+# Combine all processed data into a single table
+
+```{r}
+data <- param_data %>% 
+  left_join(psr_data, by = "sim_id") %>%
+  rename(k_abort = k_scan_term_5_hit_80s) %>%
+  print()
+```
+
+# Plot PSR as a function of initiation rate for different uORF (re)init rates. k_scan = k_elong = k_elong_stall = 2 codons/s
+
+```{r,fig.width=3,fig.height=1.25}
+plot_data <- data %>%
+  filter(k_scan == k_elong,
+         !(k_elong_stall > k_elong),
+         k_elong_stall == k_scan,
+         uorf2_length == 100,
+         uorf_reinit %in% c(0.2, 75),
+         k_abort == 200) %>%
+  print()
+
+
+reinit_labeller <- function(x) paste0("re-initiation:\n", x, "%")
+
+plot_data %>% 
+  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(uorf_init))) +
+  facet_wrap(~ uorf_reinit, ncol = 5, labeller = labeller(uorf_reinit = reinit_labeller)) +
+  geom_point(size = 1) +
+  geom_line() +
+  viridis::scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
+       color = "Baseline uORF\ninitiation (%)") +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+  
+ggsave('figures/80S_hit_dissociation_buffering_main.pdf', limitsize = FALSE)
+
+```
+
+# With control matched params and a stall (with d_stall disallowing Ivanov), 80S-hit dissociation buffering ~abolished (reinit too high)
+
+```{r,fig.width=2,fig.height=1.25}
+plot_data <- data %>%
+  filter(k_scan == k_elong,
+         k_scan == 5,
+         uorf_reinit == 75,
+         k_abort == 2,
+         d_stall == 63,
+         uorf_init == 2) %>%
+  mutate(stall = if_else(k_elong_stall == 2, "no", "yes")) %>%
+  print()
+
+plot_data %>% 
+  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(stall))) +
+  geom_point(size = 1) +
+  geom_line() +
+  viridis::scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  labs(x = "ribosome loading\n(log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
+       color = "elongation\nstall") +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+
+ggsave('figures/80S_hit_dissociation_buffering_control_matched.pdf', limitsize = FALSE)
+
+```
+
+# 80S-hit dissociation acquires ivanov buffering when an elongation stall is present and baseline init is low (to allow for increase)
+
+```{r,fig.width=3,fig.height=1.25}
+plot_data <- data %>%
+  filter(k_scan == k_elong,
+         k_scan == 2,
+         k_elong_stall == 0.001,
+         uorf_reinit == 0.2,
+         k_abort == 2,
+         d_stall %in% c(60, 63)) %>%
+  print()
+
+d_stall_labeller <- function(x) paste0("d_stall: ", x, " nt")
+
+plot_data %>% 
+  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(uorf_init))) +
+  facet_wrap(~ d_stall, ncol = 2, labeller = labeller(d_stall = d_stall_labeller)) +
+  geom_point(size = 1) +
+  geom_line() +
+  viridis::scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
+       color = "Baseline uORF\ninitiation (%)") + 
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+
+ggsave('figures/80S_hit_dissociation_buffering_supp_queueing.pdf', limitsize = FALSE)
+
+```
+
+# Length supp figure
+
+```{r,fig.width=2,fig.height=1.25}
+plot_data <- data %>%
+  filter(k_scan == k_elong,
+         !(k_elong_stall > k_elong),
+         k_elong_stall == k_scan,
+         k_scan == 2,
+         uorf2_length %in% c(21, 100),
+         uorf_reinit == 0.2,
+         k_abort == 200,
+         uorf_init == 80) %>%
+  print()
+
+plot_data %>% 
+  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(uorf2_length))) +
+  geom_point(size = 1) +
+  geom_line() +
+  viridis::scale_color_viridis(discrete = T, end = 0.9) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  labs(x = "ribosome loading\n(log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
+       color = "uORF length\n(codons)") + 
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+
+ggsave('figures/80S_hit_dissociation_buffering_supp_length.pdf', limitsize = FALSE)
+
+```

@@ -55,7 +55,7 @@ data <- counts %>%
 
 ```{r}
 
-norm_data <- read_csv("../../platform_controls/tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
+norm_data <- read_csv("../../20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants_not_normalized.csv") %>%
   filter(label == "gp48UTR-no-AUG") %>%
   print()
 
@@ -75,7 +75,7 @@ plot_data %>%
             ymin = mean_ratio - se_ratio, color = label, shape = label)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.2, show.legend = F) +
-  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+  labs(y = 'NLuc / FLuc\n(log2, a.u.)',
        x = 'eIF4E inhibitor') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
   coord_flip() +
@@ -110,7 +110,3 @@ plot_data %>%
 
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_4er1cat_normalized.pdf")
 ```
-
-# Conclusions
-
- - With reduced ribosome loading via a 5' synthetic uORF (seen in the no uORF2 elongation stall gray data), main ORF translation decreases less than expected (yellow data decreases less than gray data does)

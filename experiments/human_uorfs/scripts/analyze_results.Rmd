@@ -81,7 +81,7 @@ plot_data %>%
             xmin = mean_ratio - se_ratio, color = status)) +
   geom_point(size = 2) +
   geom_errorbar(width = 0.25, show.legend = F) +
-  labs(x = 'Nluc / Fluc (log2 a.u.)', y = '', color = '') +
+  labs(x = 'NLuc / FLuc (log2 a.u.)', y = '', color = '') +
   scale_color_manual(values = cbPalette[c(3,1,2)]) +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
@@ -117,8 +117,3 @@ data %>%
   mutate(p.value = round(p.value, 4)) %>% 
   knitr::kable()
 ```
-
-# Conclusions
-
- - several human uORFs have repressive diproline motifs
- - unlike UL4 uORF2, most of these human uORFs are repressive even without their diproline motifs

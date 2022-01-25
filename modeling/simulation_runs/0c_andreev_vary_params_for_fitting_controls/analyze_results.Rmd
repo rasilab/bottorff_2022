@@ -1,5 +1,5 @@
 ---
-title: "Analysis of computational simulations of control data in the queueing-mediated enhanced repression and collision-mediated 40S dissociation models"
+title: "Analysis of computational simulations of control data in the 80S-hit model"
 author: "`r Sys.info()[['user']]`"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 library(tidyverse)
 library(rasilabRtemplates)
 library(viridis)
+library(dplyr)
 # disable scientific notation
 options(scipen=999)
 ```
@@ -72,6 +73,7 @@ check_rxn <- last_rxn_data %>%
 # Read simulation parameters
 ```{r}
 annotations  <- read_tsv('sim.params.tsv') %>%
+  mutate(uorf2_length = (uorf2_stop - uorf2_start)/3) %>%
   print()
 ```
 
@@ -94,7 +96,7 @@ psr_data <- rxn_data %>%
 
 ```{r}
 param_data <- annotations %>% 
-    select(sim_id, k_cap_bind, k_elong_stall, k_start_uorf2, k_scan_term_3_hit_80s, k_terminated_ssu_recycle_uorf2) %>%
+    select(sim_id, k_cap_bind, k_elong_stall, k_start_uorf2, k_scan_term_5_hit_80s, k_terminated_ssu_recycle_uorf2, uorf2_length) %>%
   print()
 ```
 
@@ -103,20 +105,20 @@ param_data <- annotations %>%
 data <- param_data %>% 
   left_join(psr_data, by = "sim_id") %>%
   dplyr::rename(k_recycle = k_terminated_ssu_recycle_uorf2,
-         k_abort = k_scan_term_3_hit_80s
+         k_abort = k_scan_term_5_hit_80s
          ) %>% 
-  mutate(k_recycle = round(k_recycle)) %>% 
+  mutate(k_recycle = round(k_recycle, 1)) %>%
   print()
 ```
 
-# Plot PSR as a function of initiation rate for different rates of uORF2 initiation and scan abortive termination for 50% reinitiation
+# Plot PSR as a function of initiation rate for different rates of uORF2 (re)initiation, length
 ```{r,fig.width=8,fig.height=3}
 plot_data <- data %>%
   print()
 
 plot_data %>% 
   ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(k_elong_stall),  group = k_elong_stall)) +
-  facet_wrap(~ k_abort + k_start_uorf2 + k_recycle, ncol = 3, labeller = label_both, scales = "free") +
+  facet_wrap(~ k_start_uorf2 + k_recycle + uorf2_length, ncol = 3, labeller = label_both, scales = "free") +
   geom_point() +
   geom_line() +
   scale_color_manual(values = cbPalette[c(2,1)])
@@ -127,7 +129,7 @@ plot_data %>%
 
 Based on standard error, if we fit within log2(0.1), that will be good enough.
 ```{r}
-expt_data <- read_csv("/fh/fast/subramaniam_a/user/tbottorf/analysis/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv") %>% 
+expt_data <- read_csv("../../experiments/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv") %>% 
   mutate(label = c("wt", "no_stall", "no_aug", "strong")) %>% 
   select(label, mean_ratio) %>%
   deframe() %>%
@@ -140,7 +142,7 @@ We fit a spline and evaluate it at 100 points so that we can get pretty close to
 
 ```{r}
 fit_data <- data %>% 
-  group_by(across(starts_with("k_"))) %>% 
+  group_by(across(starts_with("k_")), uorf2_length) %>% 
   ungroup(k_cap_bind) %>% 
   nest() %>% 
   mutate(fit = map(data, function(df) spline(x = df$k_cap_bind, y = df$psr, n = 100) %>% as.data.frame)) %>% 
@@ -153,20 +155,20 @@ fit_data <- data %>%
 # Extract the PSR of WT, strong Kozak, no stall w.r.t to no aug in the simulation and minimize the RMS error
 ```{r}
 fit_data %>% 
-  ungroup() %>% 
+  ungroup() %>%
   # convert stall to be a binary factor
   mutate(stall = if_else(k_elong_stall == 0.001, T, F)) %>% 
   # convert uORF2 start strength to be binary
-  mutate(kozak = if_else(k_start_uorf2 == 0.5, "WT", if_else(k_start_uorf2 == 0, "no_aug", "strong"))) %>% 
+  mutate(kozak = if_else(k_start_uorf2 == 0.1, "WT", if_else(k_start_uorf2 == 0, "no_aug", "strong"))) %>% 
   # assign mutant to the same names as experiments for easy comparison
   mutate(mutant = case_when(
     stall == T & kozak == "WT" ~ 'wt',
     stall == T & kozak == "strong" ~ 'strong',
     stall == F & kozak == "WT" ~ 'no_stall',
     stall == T & kozak == "no_aug" ~ "no_aug")) %>% 
-  # get rid of the of mutants that we are not minimizing (eg. strong kozak, no stall)
+  # get rid of the of mutants that we are not minimizing (eg. no stall + no aug/strong kozak)
   filter(!is.na(mutant)) %>% 
-  select(-stall, -kozak, -k_elong_stall, -k_start_uorf2) %>% 
+  select(-stall, -kozak, -k_elong_stall, -k_start_uorf2) %>%
   pivot_wider(names_from = "mutant", values_from = "psr") %>%
   # calculate the log2 difference between no_stall and wt / strong
   mutate(wt = log2(wt) - log2(no_aug)) %>% 
@@ -175,49 +177,9 @@ fit_data %>%
   # calculate RMS error
   mutate(rms = (wt - expt_data['wt'])^2 + (strong - expt_data['strong'])^2) %>% 
   # minimize RMS error in each model and for other parameters as needed
-  group_by(k_abort) %>%
   arrange(rms) %>%
   slice(1) %>%
-  write_csv("./tables/fit_k_cap_bind.csv") %>%
+  write_csv("./tables/fit_params.csv") %>%
   knitr::kable()
-```
-
-# Read in 80S-hit control predcitions to make 1 plot with all 3 models
-
-```{r}
-
-other_data <- read_csv("../0c_andreev_vary_params_for_fitting_controls/tables/fit_params.csv") %>%
-  mutate(Model = "80S-hit") %>%
-  print()
 
 ```
-
-# Use RMS error minimized parameters to model control mutant behavior
-
-```{r,fig.width=5.5,fig.height=1}
-plot_data_controls <- read_csv("./tables/fit_k_cap_bind.csv") %>%
-  mutate(Model = if_else(k_abort == 0, "traffic jam-mediated enhanced repression", "collide and dissociate")) %>%
-  full_join(other_data) %>%
-  select(-rms, -k_recycle) %>%
-  pivot_longer(cols = no_aug:strong, names_to = "mutant", values_to = "psr") %>%
-  print()
-
-plot_data_controls$mutant <- factor(plot_data_controls$mutant, levels=c("wt", "no_stall", "no_aug", "strong"), labels=c("wild-type", "no stall", "no start codon", "stronger Kozak"))
-
-plot_data_controls %>%
-  ggplot(aes(x = psr, y = mutant, shape = Model)) +
-  geom_jitter() +
-  scale_color_viridis(discrete = T, end = 0.9) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
-  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7), axis.title.y=element_blank()) +
-  labs(x = "log2 main ORF protein output (s-1)", y = "Mutant")
-  
-  ggsave('figures/fit_params_predicted_controls.pdf')
-```
-
-# Conclusions
-
- - parameters can be found such that computational modeling of the queueing-mediated enhanced repression and collision-mediated 40S dissociation models matches experimental control data from *UL4* uORF2
- 1) recycling rate of 5/s
- 2) cap binding rate of ~0.024/s
- 3) 9, 50% uORF initiation in WT, stronger Kozak contexts

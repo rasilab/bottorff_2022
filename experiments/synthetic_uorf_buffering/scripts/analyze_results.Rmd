@@ -63,7 +63,7 @@ plot_data %>%
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(y = 'Nluc / Fluc\n(log2, a.u.)',
+  labs(y = 'NLuc / FLuc\n(log2, a.u.)',
        x = 'synthetic uORF Kozak') +
   scale_y_continuous(limits = c(-6, 0), breaks = seq(-6, 0, by = 3)) +
   scale_color_manual(values = cbPalette[c(2,1)]) +
@@ -80,6 +80,7 @@ plot_data <- data %>%
   # select only reporters of interest
   filter(!is.na(label_order)) %>%
   group_by(kozak) %>%
+  mutate(se_ratio_test = se_ratio - mean_ratio[status=="no stall"]) %>%
   mutate(mean_ratio = mean_ratio - mean_ratio[status=="no stall"]) %>%
   ungroup() %>%
   filter(status == 'WT') %>%
@@ -98,7 +99,3 @@ plot_data %>%
   theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
 ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_5_synthetic_uorf_normalized.pdf")
 ```
-
-# Conclusions
-
- - With reduced ribosome loading via a 5' synthetic uORF (seen in the no uORF2 elongation stall gray data), main ORF translation actually increases (yellow data)

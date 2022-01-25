@@ -1,8 +1,6 @@
 ---
-title: "Analyze luminescent data from perturbed uORF2 d_stall mutants"
-output: 
-  github_document:
-    toc: 2
+title: "Analyze luminescent data from reduced ribosome loading +/- perturbed uORF2 d_stall"
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -33,14 +31,14 @@ theme_set(theme_rasilab())
 # Read in data
 
 ```{r}
-counts <- read_csv("../rawdata/20190829_fluc_nluc.csv") %>%
+counts <- read_tsv("../rawdata/20201006_fluc_nluc.tsv") %>%
   print()
 ```
 
 # Read in annotations
 
 ```{r}
-annotations <- read_csv("../annotations/sampleannotations.csv") %>%
+annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
   janitor::clean_names() %>% 
   print()
 ```
@@ -51,7 +49,7 @@ annotations <- read_csv("../annotations/sampleannotations.csv") %>%
 data <- counts %>% 
   pivot_wider(names_from = assay, values_from = counts) %>%
   left_join(annotations, by = "well") %>%
-  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  mutate(fluc = fluc - 2, nluc = nluc - mean(nluc[reporter == "mock"])) %>%
   filter(fluc > 0) %>% 
   filter(label != "mock") %>%
   mutate(ratio = log2(nluc) - log2(fluc)) %>% 
@@ -64,29 +62,25 @@ data <- counts %>%
   print()
 ```
 
-# Plot Fluc / Nluc for subset samples 
+# Plot FLuc / NLuc for GAPDH added and longer d_stall
 
-```{r, fig.width=2.6, fig.height=1.7}
+```{r, fig.width=3.6, fig.height=1}
 plot_data <- data %>%
   # select only reporters of interest
-  filter(!is.na(label_order)) %>% 
-  mutate(mean_ratio = mean_ratio - max(mean_ratio)) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="uORF2 no AUG"]) %>%
+  filter(!is.na(group)) %>%
+  filter(group != "strong_kozak") %>%
   print()
 
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
  ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
-            xmin = mean_ratio - se_ratio)) +
-  geom_point(size = 1) +
+            xmin = mean_ratio - se_ratio, color = status, shape = status)) +
+  geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(x = 'Nluc / Fluc (log2 a.u.)', y = '', color = '') +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
-  theme(panel.grid = element_blank(), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
-
-ggsave("../figures/nluc_fluc_ratio_vary_uorf2_d_stall.pdf")
+  labs(x = 'NLuc / FLuc (log2, a.u.)', y = '', color = '') +
+  scale_color_manual(values = cbPalette) +
+  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+ggsave("../figures/nluc_fluc_ratio_reduced_ribosome_loading_5_synthetic_uorf_longer_d_stall.pdf")
 ```
-
-# Conclusions
-
- - Varying the distance between the uORF2 elongation stall and its start codon (d_stall) doesn't change its repression of main ORF translation very much
- - The 10 eYFP codons longer uORF2 (longest d_stall) may be less repressive due to a weakened elongation stall, as we are inserting many bases into uORF2 and not just the terminus of uORF2 is important for its elongation stall
