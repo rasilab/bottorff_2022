@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 ```{r}
 library(tidyverse)
 library(rasilabRtemplates)
-library(plotrix)
 
 theme_rasilab <- function() {
   theme_classic(base_family = "Helvetica", base_size = 8) +
@@ -54,7 +53,7 @@ data <- counts %>%
   filter(label != "mock") %>%
   mutate(ratio = log2(nluc) - log2(fluc)) %>% 
   group_by(reporter) %>% 
-  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = sd(ratio)/sqrt(sum(!is.na(ratio)))) %>% 
   slice(1) %>%
   ungroup() %>% 
   select(-well, -fluc, -nluc, -ratio, -replicate) %>%
