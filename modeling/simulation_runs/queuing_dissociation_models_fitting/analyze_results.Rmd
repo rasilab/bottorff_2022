@@ -127,7 +127,7 @@ plot_data %>%
 
 Based on standard error, if we fit within log2(0.1), that will be good enough.
 ```{r}
-expt_data <- read_csv("../../experiments/luciferase_assays/20190422_exp2_ul4_mutants/tables/nluc_fluc_control_mutants.csv") %>% 
+expt_data <- read_csv("../../../experiments/platform_controls/tables/nluc_fluc_control_mutants.csv") %>% 
   mutate(label = c("wt", "no_stall", "no_aug", "strong")) %>% 
   select(label, mean_ratio) %>%
   deframe() %>%
@@ -186,7 +186,7 @@ fit_data %>%
 
 ```{r}
 
-other_data <- read_csv("../0c_andreev_vary_params_for_fitting_controls/tables/fit_params.csv") %>%
+other_data <- read_csv("../80s_hit_model_fitting/tables/fit_params.csv") %>%
   mutate(Model = "80S-hit") %>%
   print()
 
