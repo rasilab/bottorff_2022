@@ -1,8 +1,9 @@
 {
-    "build": {
-        "dockerfile": "../Dockerfile",
-        "context": "..",
-    },
+    "image":  "ghcr.io/rasilab/bottorff_2022",
+    // "build": {
+    //     "dockerfile": "../Dockerfile",
+    //     "context": "..",
+    // },
     "extensions": [
         "ms-python.python",
         "ms-toolsai.jupyter",
