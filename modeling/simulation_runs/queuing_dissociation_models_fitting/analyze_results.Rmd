@@ -138,7 +138,7 @@ expt_data <- read_csv("../../../experiments/platform_controls/tables/nluc_fluc_c
 
 We fit a spline and evaluate it at 100 points so that we can get pretty close to the experimental value
 
-```{r}
+```{r,eval=F}
 fit_data <- data %>% 
   group_by(across(starts_with("k_"))) %>% 
   ungroup(k_cap_bind) %>% 
@@ -151,7 +151,7 @@ fit_data <- data %>%
 ```
 
 # Extract the PSR of WT, strong Kozak, no stall w.r.t to no aug in the simulation and minimize the RMS error
-```{r}
+```{r,eval=F}
 fit_data %>% 
   ungroup() %>% 
   # convert stall to be a binary factor
@@ -184,7 +184,7 @@ fit_data %>%
 
 # Read in 80S-hit control predcitions to make 1 plot with all 3 models
 
-```{r}
+```{r,eval=F}
 
 other_data <- read_csv("../80s_hit_model_fitting/tables/fit_params.csv") %>%
   mutate(Model = "80S-hit") %>%
@@ -194,7 +194,7 @@ other_data <- read_csv("../80s_hit_model_fitting/tables/fit_params.csv") %>%
 
 # Use RMS error minimized parameters to model control mutant behavior
 
-```{r,fig.width=4.5,fig.height=1}
+```{r,fig.width=5.5,fig.height=1,eval=F}
 plot_data_controls <- read_csv("./tables/fit_k_cap_bind.csv") %>%
   mutate(Model = if_else(k_abort == 0, "traffic jam-mediated enhanced repression", "collide and dissociate")) %>%
   full_join(other_data) %>%

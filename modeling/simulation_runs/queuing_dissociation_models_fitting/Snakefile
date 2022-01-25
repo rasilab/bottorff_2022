@@ -21,7 +21,7 @@ localrules: all
 rule all:
   """List of all files we want at the end"""
   input: 
-    "analyze_results.nbconvert.ipynb"
+    "analyze_results.md"
 
 
 rule analyze_data:
@@ -29,15 +29,11 @@ rule analyze_data:
   input: 
     params = [f'output/model_{n}.params.tsv.gz' for n in range(len(input_params))],
     molecules = [f'output/model_{n}.molecule_type_list.tsv.gz' for n in range(len(input_params))],
-    reactions = [f'output/model_{n}.rxn_list.tsv.gz' for n in range(len(input_params))],
-    notebook = 'analyze_results.ipynb'
+    reactions = [f'output/model_{n}.rxn_list.tsv.gz' for n in range(len(input_params))]
   output:
-    "analyze_results.nbconvert.ipynb"
-  shell:
-    """
-    export JUPYTER_CONFIG_DIR=$PWD
-    jupyter nbconvert --to notebook --execute --NotebookClient.kernel_name='ir' {input.notebook}
-    """
+    "analyze_results.md"
+  script:
+    "analyze_results.Rmd"
 
 
 rule run_simulation:
