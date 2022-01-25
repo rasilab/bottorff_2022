@@ -212,5 +212,5 @@ plot_data_controls %>%
   theme(axis.text.y = element_text(size = 8), axis.text.x = element_text(size = 8), axis.title.y=element_blank()) +
   labs(x = "main ORF protein\noutput (log2, s-1)", y = "Mutant")
   
-  ggsave('figures/fit_params_predicted_controls.pdf')
+  ggsave('figures/fig_2d.pdf')
 ```

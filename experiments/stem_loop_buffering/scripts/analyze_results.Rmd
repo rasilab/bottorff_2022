@@ -70,7 +70,7 @@ plot_data %>%
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop.pdf")
+ggsave("../figures/fig_4a_left_panel.pdf")
 ```
 
 ```{r, fig.width=0.75, fig.height=1.25}
@@ -96,5 +96,5 @@ plot_data %>%
   theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
   scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/nluc_fluc_ratios_reduced_ribosome_loading_stem_loop_normalized.pdf")
+ggsave("../figures/fig_4a_right_panel.pdf")
 ```

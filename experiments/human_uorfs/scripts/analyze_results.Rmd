@@ -84,7 +84,7 @@ plot_data %>%
   scale_color_manual(values = cbPalette[c(3,1,2)]) +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave("../figures/nluc_fluc_ratio_human_uorfs.pdf")
+ggsave("../figures/fig_6.pdf")
 ```
 # Calculate p-values for WT vs noAUG 
 

@@ -130,6 +130,6 @@ plot_data %>%
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   coord_flip()
 
-  ggsave('figures/d_stall_backward_scanning_predictions_queueing-mediated_enhanced_repression_collision-mediated_40S_dissociation.pdf')
+  ggsave('figures/fig_5a.pdf')
 
 ```

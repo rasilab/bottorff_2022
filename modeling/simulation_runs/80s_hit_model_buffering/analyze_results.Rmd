@@ -142,7 +142,7 @@ plot_data %>%
        color = "Baseline uORF\ninitiation (%)") +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
   
-ggsave('figures/80S_hit_dissociation_buffering_main.pdf', limitsize = FALSE)
+ggsave('figures/fig_3b.pdf', limitsize = FALSE)
 
 ```
 
@@ -170,7 +170,7 @@ plot_data %>%
        color = "elongation\nstall") +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave('figures/80S_hit_dissociation_buffering_control_matched.pdf', limitsize = FALSE)
+ggsave('figures/fig_s2b.pdf', limitsize = FALSE)
 
 ```
 
@@ -200,7 +200,7 @@ plot_data %>%
        color = "Baseline uORF\ninitiation (%)") + 
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave('figures/80S_hit_dissociation_buffering_supp_queueing.pdf', limitsize = FALSE)
+ggsave('figures/fig_s3b.pdf', limitsize = FALSE)
 
 ```
 
@@ -229,6 +229,6 @@ plot_data %>%
        color = "uORF length\n(codons)") + 
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave('figures/80S_hit_dissociation_buffering_supp_length.pdf', limitsize = FALSE)
+ggsave('figures/fig_s2a.pdf', limitsize = FALSE)
 
 ```

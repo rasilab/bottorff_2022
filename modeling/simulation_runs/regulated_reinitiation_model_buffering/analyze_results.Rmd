@@ -135,7 +135,7 @@ plot_data %>%
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(y = "main ORF protein\noutput (log2, s-1)", x = "ternary complex concentration (log2)", color = "Baseline\nuORF1.\nuORF2\ninitiations (%)")
 
-  ggsave('figures/regulated_re_initiation_buffering_main.pdf')
+  ggsave('figures/fig_3e.pdf')
 ```
 
 # Get reactions at start codons
@@ -190,6 +190,6 @@ start_codon_data %>%
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   labs(y = "uORF2 initiation\n(real, %)", x = "ternary complex\nconcentration (log2)", color = "uORF2\ninitiation\n(predicted, %)")
 
-ggsave('figures/regulated_re_initiation_supp_tc_dependent_init.pdf')
+ggsave('figures/fig_s3a.pdf')
 
 ```

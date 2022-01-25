@@ -82,5 +82,5 @@ plot_data %>%
   scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
   theme(panel.grid = element_blank(), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave("../figures/nluc_fluc_ratio_vary_uorf2_d_stall.pdf")
+ggsave("../figures/fig_5b.pdf")
 ```

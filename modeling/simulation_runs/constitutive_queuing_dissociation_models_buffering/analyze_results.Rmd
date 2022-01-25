@@ -104,7 +104,7 @@ param_data <- annotations %>%
   mutate(uorf_init = round_any(uorf_init, 10)) %>%
   mutate(d_stall = x_stall - uorf2_start) %>%
   mutate(uorf_reinit = 100*5/(k_terminated_ssu_recycle_uorf2 + 5)) %>%
-  select(sim_id, k_cap_bind, k_elong_stall, uorf_init, k_scan_term_3_hit_80s, d_stall, uorf_reinit, l_scan_capture) %>%
+  select(sim_id, k_cap_bind, k_elong_stall, uorf_init, k_scan_term_3_hit_80s, d_stall, uorf_reinit) %>%
   print()
 ```
 
@@ -124,8 +124,7 @@ plot_data <- data %>%
   filter(k_elong_stall == 5,
          k_abort == 0,
          d_stall == 60,
-         uorf_reinit %in% c(10, 90),
-         l_scan_capture == 0) %>%
+         uorf_reinit %in% c(10, 90)) %>%
   print()
 
 reinit_labeller <- function(x) paste0("re-initiation:\n", x, "%")
@@ -142,7 +141,7 @@ plot_data %>%
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
-ggsave('figures/constitutive_repression_no_buffering.pdf', limitsize = FALSE)
+ggsave('figures/fig_3a.pdf', limitsize = FALSE)
 
 ```
 
@@ -154,7 +153,6 @@ plot_data <- data %>%
          uorf_init != 0,
          k_abort == 0,
          uorf_reinit == 50,
-         l_scan_capture == 0,
          d_stall %in% c(60, 63)) %>%
   print()
 
@@ -172,7 +170,7 @@ plot_data %>%
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
-ggsave('figures/queuing_mediated_enhanced_repression_buffering_main.pdf', limitsize = FALSE)
+ggsave('figures/fig_3c.pdf', limitsize = FALSE)
 
 ```
 
@@ -184,7 +182,6 @@ plot_data <- data %>%
          uorf_init != 0,
          k_abort == 2,
          uorf_reinit == 50,
-         l_scan_capture == 0,
          d_stall %in% c(60, 63)) %>%
   print()
 
@@ -202,38 +199,7 @@ plot_data %>%
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
-ggsave('figures/collision_mediated_40S_dissociation_buffering_dstall.pdf', limitsize = FALSE)
-
-```
-
-# Plot PSR as a function of initiation rate for different rates of uORF2 initiation, d_stall for queuing-mediated enhanced repression model
-
-```{r,fig.width=4,fig.height=1.5}
-plot_data <- data %>%
-  filter(k_elong_stall == 0.001,
-         uorf_init != 0,
-         k_abort == 0,
-         uorf_reinit == 50,
-         d_stall %in% c(60, 63),
-         d_stall + l_scan_capture != 63) %>%
-  print()
-
-d_stall_labeller <- function(x) paste0("d_stall: ", x, " nt")
-capture_labeller <- function(x) paste0("l_scan_capture: ", x, " nt")
-
-plot_data %>% 
-  ggplot(aes(x = log2(k_cap_bind), y = log2(psr), color = as.factor(uorf_init))) +
-  facet_wrap(~ d_stall + l_scan_capture, ncol = 2, scales = "free", labeller = labeller(d_stall = d_stall_labeller, l_scan_capture = capture_labeller)) +
-  geom_point(size = 1) +
-  geom_line() +
-  viridis::scale_color_viridis(discrete = T, end = 0.9) +
-  scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
-  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
-  labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
-       color = "Baseline uORF\ninitiation (%)")
-
-ggsave('figures/queuing_mediated_enhanced_repression_buffering_supp.pdf', limitsize = FALSE)
+ggsave('figures/fig_s2f.pdf', limitsize = FALSE)
 
 ```
 
@@ -245,8 +211,7 @@ plot_data <- data %>%
          uorf_init != 0,
          d_stall == 63,
          uorf_reinit == 50,
-         k_abort %in% c(0, 2),
-         l_scan_capture == 0) %>%
+         k_abort %in% c(0, 2)) %>%
   print()
 
 k_abort_labeller <- function(x) paste0("dissociation\nrate: ", x, " s-1")
@@ -263,7 +228,7 @@ plot_data %>%
   labs(x = "ribosome loading (log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "Baseline uORF\ninitiation (%)")
 
-ggsave('figures/collision_mediated_40S_dissociation_buffering.pdf', limitsize = FALSE)
+ggsave('figures/fig_3d.pdf', limitsize = FALSE)
 
 ```
 
@@ -301,11 +266,10 @@ uorf2_n_data_25 <- uorf2_init_data %>%
 
 ```{r,fig.width=3,fig.height=1.25}
 plot_data <- data %>%
-  left_join(uorf2_n_data_25, by = c("sim_id", "uorf_init", "k_elong_stall", "k_cap_bind", "l_scan_capture", "d_stall", "uorf_reinit")) %>%
+  left_join(uorf2_n_data_25, by = c("sim_id", "uorf_init", "k_elong_stall", "k_cap_bind", "d_stall", "uorf_reinit")) %>%
   filter(k_elong_stall == 0.001,
          uorf_init != 0,
          uorf_reinit == 50,
-         l_scan_capture == 0,
          k_abort == 0) %>%
   print()
 
@@ -323,7 +287,7 @@ plot_data %>%
   labs(x = "ribosome loading (log2, s-1)", y = "uORF\ninitiation (%)",
        color = "Baseline uORF\ninitiation (%)")
 
-ggsave('figures/queuing_mediated_enhanced_repression_increased_init_from_queue.pdf')
+ggsave('figures/fig_s2c.pdf')
 
 ```
 
@@ -335,8 +299,7 @@ plot_data <- data %>%
          uorf_init == 10,
          d_stall == 63,
          uorf_reinit == 50,
-         k_abort != 0,
-         l_scan_capture == 0) %>%
+         k_abort != 0) %>%
   print()
 
 plot_data %>% 
@@ -350,6 +313,6 @@ plot_data %>%
   labs(x = "ribosome loading\n(log2, s-1)", y = "main ORF protein\noutput (log2, s-1)",
        color = "dissociation\nrate (log2, s-1)")
 
-ggsave('figures/collision_mediated_40S_dissociation_buffering_more_abort_rates.pdf', limitsize = FALSE)
+ggsave('figures/fig_s2e.pdf', limitsize = FALSE)
 
 ```
