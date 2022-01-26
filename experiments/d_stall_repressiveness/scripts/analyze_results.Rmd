@@ -40,6 +40,7 @@ counts <- read_csv("../rawdata/20190829_fluc_nluc.csv") %>%
 
 ```{r}
 annotations <- read_csv("../annotations/sampleannotations.csv") %>%
+  janitor::clean_names() %>% 
   print()
 ```
 

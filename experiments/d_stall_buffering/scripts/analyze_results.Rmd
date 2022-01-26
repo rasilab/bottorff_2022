@@ -38,6 +38,7 @@ counts <- read_tsv("../rawdata/20201006_fluc_nluc.tsv") %>%
 
 ```{r}
 annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+  janitor::clean_names() %>% 
   print()
 ```
 
@@ -66,14 +67,14 @@ data <- counts %>%
 plot_data <- data %>%
   # select only reporters of interest
   mutate(mean_ratio = mean_ratio - mean_ratio[label=="uORF2 no AUG"]) %>%
-  filter(!is.na(Group)) %>%
-  filter(Group != "strong_kozak") %>%
+  filter(!is.na(group)) %>%
+  filter(group != "strong_kozak") %>%
   print()
 
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
  ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
-            xmin = mean_ratio - se_ratio, color = Status, shape = Status)) +
+            xmin = mean_ratio - se_ratio, color = status, shape = status)) +
   geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
   labs(x = 'NLuc / FLuc (log2, a.u.)', y = '', color = '') +
