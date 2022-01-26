@@ -59,27 +59,27 @@ fi
 # the script does not find data outside its parent directory
 
 # figure 2D
-#cd modeling/simulation_runs/80s_hit_model_fitting
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
-cd modeling/simulation_runs/queuing_dissociation_models_fitting
+cd modeling/simulation_runs/80s_hit_model_fitting
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../queuing_dissociation_models_fitting
 snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figures 3A, 3C, 3D, S2C, S2E, S2F
-#cd modeling/simulation_runs/constitutive_queuing_dissociation_models_buffering
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../constitutive_queuing_dissociation_models_buffering
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figures 3B, S2A, S2B, S3B
-#cd modeling/simulation_runs/80s_hit_model_buffering
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../80s_hit_model_buffering
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figures 3E, S3A
-#cd modeling/simulation_runs/regulated_reinitiation_model_buffering
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../regulated_reinitiation_model_buffering
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 5A
-#cd modeling/simulation_runs/backward_scanning_d_stall_periodicity
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../backward_scanning_d_stall_periodicity
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure S2D
-#cd modeling/simulation_runs/backward_scanning_buffering
-#snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+cd ../backward_scanning_buffering
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
