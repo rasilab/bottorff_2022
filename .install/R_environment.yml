@@ -7,3 +7,5 @@ dependencies:
   - r-irkernel
   - r-viridis
   - r-devtools
+  - r-janitor
+  - r-plotrix
