@@ -23,40 +23,35 @@ fi
 # figure 2C
 #cd experiments/platform_controls
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
+#cp tables/nluc_fluc_control_mutants.csv ../../modeling/simulation_runs/80s_hit_model_fitting/tables/
+#cp tables/nluc_fluc_control_mutants.csv ../../modeling_simulation_runs/queuing_dissociation_models_fitting/tables/
+#cp tables/nluc_fluc_control_mutants_not_normalized.csv ../drug_buffering/tables/
 
 # figure 4A
-#cd experiments/stem_loop_buffering
+#cd ../stem_loop_buffering
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 4B
-# needs table from experiments/platform_controls, should be fine as long as 2C run before 4B...?
-#cd experiments/drug_buffering
+#cd ../drug_buffering
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 4C
-#cd experiments/synthetic_uorf_buffering
+#cd ../synthetic_uorf_buffering
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 5B
-# uses plotrix library, perhaps an issue?
-#cd #cd experiments/d_stall_repressiveness
+#cd ../d_stall_repressiveness
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 5C
-# uses plotrix library, perhaps an issue?
-#cd experiments/d_stall_buffering
+#cd ../d_stall_buffering
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # figure 6
-# uses plotrix library, perhaps an issue?
-#cd #cd experiments/human_uorfs
+#cd ../human_uorfs
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 
 # simulations
-
-# Note that we should first analyze the experimental data and copy it to the
-# relevant directory before running the analyze_results.Rmd script. Otherwise
-# the script does not find data outside its parent directory
 
 # figure 2D
 cd modeling/simulation_runs/80s_hit_model_fitting
