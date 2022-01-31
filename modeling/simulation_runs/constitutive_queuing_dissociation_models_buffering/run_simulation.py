@@ -65,11 +65,12 @@ network = '-connect'  # whether to infer reaction network connectivity
 # print NFSim command
 nfsim_command = [
     'NFsim', '-xml', xmlfile, '-sim', tstop, '-oSteps', osteps,
-    '-seed', seed, '-o', gdatfile, '-rxnlog', rxnfile,
+    '-seed', seed, '-o', gdatfile, 
     '-utl', utl,
     '-gml', gml, '-maxcputime', maxcputime,
     network, 
-#     '-trackconnected'
+    '-printmoltypes', '-printrxncounts'
+    #     '-trackconnected'
 #have the trackconnected hashtagged out when running on cluster
 ]
 print(' '.join(nfsim_command))

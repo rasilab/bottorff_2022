@@ -69,6 +69,8 @@ nfsim_command = [
     '-gml', gml, '-maxcputime', maxcputime,
     network, 
     '-printmoltypes', '-printrxncounts'
+    #     '-trackconnected'
+#have the trackconnected hashtagged out when running on cluster
 ]
 print(' '.join(nfsim_command))
 
