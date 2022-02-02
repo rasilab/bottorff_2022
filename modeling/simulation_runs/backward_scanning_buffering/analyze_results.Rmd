@@ -17,7 +17,6 @@ knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
 library(tidyverse)
 library(rasilabRtemplates)
 library(viridis)
-library(plyr)
 library(dplyr)
 # disable scientific notation
 options(scipen=999)
