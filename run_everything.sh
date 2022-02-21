@@ -21,7 +21,8 @@ fi
 # Experiments
 
 # figure 2C
-#cd experiments/platform_controls
+cd experiments/platform_controls/scripts
+snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 #snakemake $CLUSTER_ARGS "$SLURM_COMMAND" $SINGULARITY_ARGS
 #cp tables/nluc_fluc_control_mutants.csv ../../modeling/simulation_runs/80s_hit_model_fitting/tables/
 #cp tables/nluc_fluc_control_mutants.csv ../../modeling_simulation_runs/queuing_dissociation_models_fitting/tables/
