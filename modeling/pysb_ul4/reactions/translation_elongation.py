@@ -34,7 +34,7 @@ def elongate(model, ssu, lsu, mrna, pos, k):
     sb.Rule(f'elongate_{pos}',
             ssu(**ssu_reactant_args) % lsu(**lsu_reactant_args) % mrna(**mrna_reactant_args) >>
             ssu(**ssu_product_args) % lsu(**
-                                            lsu_reactant_args) % mrna(**mrna_product_args),
+                                            lsu_product_args) % mrna(**mrna_product_args),
             k)
 
     # create temporary copy of mrna_reactant and mrna_product args for different conditions
