@@ -1,12 +1,15 @@
 # Docker container with conda
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3:4.12.0
+
+# install mamba to speed up installs
+RUN conda install -c conda-forge -y mamba
 
 # Download NFsim, PySB, and BioNetGen
-RUN wget https://github.com/RuleWorld/nfsim/releases/download/v1.2.0/NFsim_v1_2_linux.tgz -O nfsim.tar.gz
+RUN wget https://github.com/rasilab/nfsim/releases/download/v1.2.2-alpha/NFsim_v1_2_2_alpha_linux.tgz -O nfsim.tar.gz
 RUN wget https://github.com/RuleWorld/bionetgen/releases/download/BioNetGen-2.7.1/BioNetGen-2.7.1-linux.tgz -O bionetgen.tar.gz
 RUN wget https://github.com/rasilab/pysb/archive/refs/tags/v1.13.3-alpha.tar.gz -O pysb.tar.gz
 # Extract the archives
-RUN tar -xzf nfsim.tar.gz && rm nfsim.tar.gz && mv NFsim_v1_3 nfsim
+RUN mkdir nfsim && tar -xzf nfsim.tar.gz && rm nfsim.tar.gz && mv NFsim nfsim/
 RUN tar -xzf bionetgen.tar.gz && rm bionetgen.tar.gz && mv BioNetGen-2.7.1 bionetgen
 RUN tar -xzf pysb.tar.gz && rm pysb.tar.gz && mv pysb-1.13.3-alpha pysb
 
@@ -14,15 +17,23 @@ RUN tar -xzf pysb.tar.gz && rm pysb.tar.gz && mv pysb-1.13.3-alpha pysb
 ENV PATH=/nfsim:/bionetgen/:$PATH
 
 # Set up python conda environment
-COPY .install/python_environment.yml /install/python_environment.yml
-RUN conda env create -f /install/python_environment.yml
+RUN mamba create -y -n py 
+RUN mamba install -y -n py -c conda-forge -c defaults -c bioconda snakemake \
+    jupyter pandas matplotlib ipykernel pyyaml
 
 # Install PySB into python conda environment
 RUN conda run -n py pip install -e /pysb/
 
 # Set up R conda environment
-COPY .install/R_environment.yml /install/R_environment.yml
-RUN conda env create -f /install/R_environment.yml
+RUN mamba create -y -n R
+RUN mamba install -y -n R -c conda-forge -c defaults \
+    r-tidyverse \
+    r-irkernel \
+    r-viridis \
+    r-devtools \
+    r-janitor \
+    r-plotrix
+
 # Set up R jupyter kernel and make it visible to python
 ENV PATH="/opt/conda/envs/py/bin:$PATH"
 RUN /opt/conda/envs/R/bin/R -s -e "IRkernel::installspec(sys_prefix = T)"
