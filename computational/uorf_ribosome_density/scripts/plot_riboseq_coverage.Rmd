@@ -1,0 +1,164 @@
+---
+title: "Analyze GWIPS data to create figure S5B"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+suppressPackageStartupMessages(library(rtracklayer))
+suppressPackageStartupMessages(library(GenomicFeatures))
+suppressPackageStartupMessages(library(Biostrings))
+suppressPackageStartupMessages(library(plyranges))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(rasilabRtemplates))
+```
+
+# Load GWIPS coverage
+
+```{r}
+cvg <- import.bw("../data/Haas20_All.RiboProElong.bw")
+```
+
+# uORF peptide sequences
+
+```{r}
+uorf_peptides <- c(
+    "AZIN1" = "IPPKKRRRFTRLFGPLSHGELSDQVYNYPEGLGEVLYREQFDFNAEPPWEPS",
+    "AMD1"  = "MAGDIS",
+    "PPP1R15A" = "MNALASLTVRTCDRFWQTEPALLPPG",
+    "DDIT3" = "MLKMSGWQRQSQNQSWNLRRECSRRKCIFIHHHT",
+    "MTR" = "MSRRPPLPVFSWVLFRAVPRLRLWPRVSGC"
+)
+```
+
+# Read GENCODE annotations
+
+```{bash}
+zgrep -e "=AZIN1;" -e "=DDIT3;" -e "=AMD1;" -e "=PPP1R15A;" -e "=MTR;" gencode.v26.annotation.gff3.gz > uorf_tx.gff3
+```
+
+# Use below to find the transcripts that contain the uORF peptide of interest and the uORF locations
+ - vary index from 1 to 4 and uncomment the commented regions
+
+```{r}
+genome <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
+annotations <- import.gff3("../data/uorf_tx.gff3")
+tx_grl <- annotations %>% 
+  filter(type == "exon") %>% 
+  split(.$transcript_id)
+
+tx_seq <- extractTranscriptSeqs(genome, tx_grl)
+
+# aa_seq_1 <- translate(subseq(tx_seq, start=1, end=width(tx_seq)))
+# aa_seq_2 <- translate(subseq(tx_seq, start=2, end=width(tx_seq)))
+# aa_seq_3 <- translate(subseq(tx_seq, start=3, end=width(tx_seq)))
+
+# index <- 4
+
+# vmatchPattern(uorf_peptides[[index]], aa_seq_1)  %>% 
+#   unlist()
+# vmatchPattern(uorf_peptides[[index]], aa_seq_2)  %>% 
+#   unlist()
+# vmatchPattern(uorf_peptides[[index]], aa_seq_3)  %>% 
+#   unlist()
+```
+
+# Get uORF coordinates along transcript
+
+```{r}
+uorf_tx <- list(
+    c(gene_name="AZIN1", seq="ENST00000347770.8", start=112*3-2, end=163*3+3),
+    c(gene_name="AMD1", seq="ENST00000368882.7", start=5*3-2, end=10*3+3),
+    c(gene_name="PPP1R15A", seq="ENST00000200453.5", start=55*3-2, end=80*3+3),
+    c(gene_name="DDIT3", seq="ENST00000547303.5", start=5*3-2, end=38*3+3),
+    c(gene_name="MTR", seq="ENST00000535889.5", start=22*3-2, end=51*3+3)
+)  %>% 
+  bind_rows() %>% 
+  rename(seqnames = seq) %>% 
+  GRanges() %>% 
+  print()
+```
+
+# Check uORF sequence
+
+```{r}
+tx_seq[uorf_tx]
+```
+
+# Expand all pos between start and end tx coords of uORF for plotting
+
+```{r}
+uorf_tx_pos <- uorf_tx %>% 
+  as_tibble() %>% 
+  mutate(pos = map2(start, end, function (x,y) seq(x, y))) %>%
+  unnest(pos) %>%
+  select(gene_name, seqnames, pos) %>% 
+  print()
+```
+
+# Subset to only transcripts that contain uORFs
+
+```{r}
+subset_tx_grl <- tx_grl %>% 
+  subset(names(.) %in% seqnames(uorf_tx))
+```
+
+# Get all positions along transcripts and subset them to uORF coordinates
+
+```{r}
+tx_pos <- sum(width(subset_tx_grl)) %>% 
+  enframe("seqnames", "length") %>% 
+  mutate(pos = map(length, ~seq(1,.x))) %>% 
+  unnest(pos) %>% 
+  right_join(uorf_tx_pos, by = c("seqnames", "pos")) %>% 
+  print()
+```
+
+# Get coverage along transcripts
+
+```{r}
+cvg_tx <- mapToTranscripts(cvg, subset_tx_grl) %>% 
+  mutate(count = cvg[xHits]$score)
+```
+
+# Calculate plot data for coverage
+
+```{r}
+plot_data <- cvg_tx %>%
+  as_tibble() %>%
+  mutate(pos = map2(start, end, function (x,y) seq(x, y))) %>%
+  unnest(pos) %>%
+  group_by(seqnames, pos) %>% 
+  summarize(count = sum(count), .groups="drop") %>% 
+  ungroup() %>% 
+  right_join(tx_pos, by = c("seqnames","pos")) %>% 
+  mutate(count = if_else(is.na(count), 0, count)) %>% 
+  arrange(pos) %>% 
+  group_by(seqnames) %>% 
+  mutate(pos = pos - min(pos) + 1) %>% 
+  ungroup() %>% 
+  print()
+```
+
+# Plot coverage along uORFs
+
+```{r}
+options(repr.plot.width=6, repr.plot.height=4)
+plot_data %>%
+  ggplot(aes(x=pos, y=count)) +
+  facet_wrap(~ gene_name, ncol = 2, scales = "free") +
+  # geom_rect(xmin = start_stop['start_codon', 'tx_pos'],
+  #           xmax = start_stop['stop_codon', 'tx_pos'],
+  #           ymin = 0, ymax = Inf, color = "#DDDDDD", fill = "#DDDDDD") +
+  geom_line() +
+  geom_area() +
+  # scale_x_continuous(limits = c(NA, NA)) +
+  labs(x = "Location along uORF (nt)", y = "Ribo-seq count")
+
+ggsave("../figures/ribo_seq_uorf_coverage.pdf", width=6, height=4)
+```

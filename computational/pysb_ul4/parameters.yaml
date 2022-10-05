@@ -1,0 +1,379 @@
+- param: l_ssu
+  value: 30
+  desc: footprint of small ribosomal subunit on mRNA
+  ref: archer2016
+  pubmed: '27437580'
+  unit: nucleotide
+  range: '20:40'
+  comment: we assume that the first nt is the location of the a-site.
+
+- param: l_ribo
+  value: 30
+  desc: footprint of 80S ribosome on mRNA
+  ref: ingolia2011
+  pubmed: '22056041'
+  unit: nucleotide
+  range: '27:36'
+  comment: we assume that the first nt is the location of the a-site.
+
+- param: uorf1_start
+  value: 11
+  desc: first nt of the uORF1 AUG
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '11'
+
+- param: uorf1_stop
+  value: 23
+  desc: first nt of the uORF1 UGA
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '23'
+
+- param: uorf2_start
+  value: 25
+  desc: first nt of the uORF2 AUG
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '25'
+
+- param: uorf2_stop
+  value: 91
+  desc: first nt of the uORF2 TAA
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '91'
+
+- param: uorf3_start
+  value: 97
+  desc: first nt of the uORF3 AUG
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '97'
+
+- param: uorf3_stop
+  value: 106
+  desc: first nt of the uORF3 TAA
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '106'
+
+- param: orf_start
+  value: 232
+  desc: first nt of the main ORF AUG
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '232'
+
+- param: orf_stop
+  value: 277
+  desc: first nt of the main ORF TAA
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '677'
+
+- param: l_mrna
+  value: 279
+  desc: length of gp48 mRNA
+  ref: chang1989,schleiss1991
+  pubmed: 2545908,1658374
+  unit: nucleotide
+  range: '679'
+
+- param: k_elong
+  value: 5
+  desc: elongation rate of 80S ribosomes
+  ref: ingolia2011,yan2016,morisaki2016,wu2016
+  pubmed: 22056041,27153498,27313040,27313041
+  unit: nt s-1
+  range: '3:10'
+
+- param: k_scan
+  value: 5
+  desc: scanning rate of pre-initiation complexes
+  ref: berthelot2004,vassilenko2011,andreev2018,
+  pubmed: 22056041,21415006,29932418
+  unit: nt s-1
+  range: 1:10
+  comment:
+    - estimated to be the same order of magnitude as elongation in vassilenko 2011
+    - it is in fact 2x higher than elongation rate in vassilenko 2011
+
+- param: k_backward_scan
+  value: 0.00001
+  desc: backward scanning rate of pre-initiation complexes
+  ref: gu2021,matsuda2006
+  pubmed: 34782646,16682564
+  unit: nt s-1
+  range: 
+  comment:
+    - will fit rate to data that interaction between adjacent start codons due to backward scanning ~disappears around 15 nt distance
+
+- param: k_term
+  value: 1
+  desc: normal termination rate at stop codons
+  ref: ingolia2011
+  pubmed: '22056041'
+  unit: s-1
+  range: 0.5:5
+  comment: based on ribosome profiling density, fig. 1C
+
+- param: k_term_to_scan
+  value: 0
+  desc: rate at which terminating ribosomes at normal stop codons continue scanning
+    downstream
+  ref: andreev2018
+  pubmed: '29932418'
+  unit: NA
+  range: 0:1
+  comment: varied systematically in andreev2018
+
+- param: n_stall
+  value: 1
+  desc: number of total stall sites
+  unit: NA
+  comment: used for introducing stalls at specific locations on the mRNA
+
+- param: x_stall
+  value: 88
+  desc: location of stall site
+  unit: NA
+  comment: used for introducing stalls at specific locations on the mRNA
+
+- param: k_elong_stall
+  value: 5
+  desc: elongation rate of stall site
+  unit: s-1
+  ref: cao1998
+  pubmed: 9570317
+  comment:
+  - used for introducing stalls at specific locations on the mRNA
+  - default is set to be the same as normal elongation rate
+  - > 
+      Cao1998 estimate the half-life of terminating ribosomes to be between 5 and 15 minutes.
+      A half-life of 10 minutes corresponds to a k_elong_stall of 0.001.
+
+- param: k_ssu_tc_bind
+  value: 0.01
+  desc: second order rate constant for binding of ssu to TC,unit:per ribosome per
+    tc per s
+
+- param: k_terminated_ssu_recycle
+  value: 1000
+  desc: zeroth order rate constant for recycling of terminated SSU on an mRNA
+  comment:
+  - we assume that this is really fast at normal stop codons so that there is <0.5%
+    downstream scanning
+  - this rate will be lower for the uORF1 in GCN4 5UTR to allow reinitiation
+  unit: s-1
+
+- param: k_terminated_ssu_recycle_uorf2
+  value: 1000
+  desc: zeroth order rate constant for recycling of terminated SSU on an mRNA at the
+    termination codon of uORF2
+  comment: we will systematically lower this rate to examine the effect of reinitiation
+    on uORF-mediated regulation
+  unit: s-1
+
+- param: k_terminated_ssu_recycle_uorf3
+  value: 1000
+  desc: zeroth order rate constant for reycling of terminated SSU on an mRNA at the
+    termination codon of uORF3
+  comment: ' we will have this rate be very high for the atf4 model'
+  unit: s-1
+
+- param: k_cap_bind
+  value: 0.03
+  desc: rate of PIC binding to mRNA
+  ref: yan2016,morisaki2016,wu2016
+  pubmed: 27153498,27313040,27313041
+  unit: s-1
+  range: 0.02:0.06
+  comment: varied in our simulations
+
+- param: k_term_uorf2
+  value: 1
+  desc: termination rate at stop codon of uORF2
+  unit: s-1
+  range: 0.001:1
+  comment:
+  - is slower than normal due to Pro-Pro-Stop
+  - we will systematically lower this rate to examine the effect of the Pro-Pro-Stop
+    stall at termination codon
+
+- param: k_term_uorf3
+  value: 1
+  desc: ' termination rate at uORF3 stop codon'
+  unit: s-1
+  range: '1'
+  comment: ' keep at 1'
+
+- param: k_start_orf
+  value: 200
+  desc: normal rate of 80S complex formation at AUG start codon of main ORF
+  ref: cao1995
+  pubmed: '7815480'
+  unit: s-1
+  range: 0.01:1
+  comment:
+  - is set 40x faster than scanning rate to have >95% scanning to elongation conversion
+  - this rate is the value assumed for optimal initiation context and codon
+
+- param: k_start_uorf1
+  value: 0
+  desc: normal rate of 80S complex formation at AUG start codon of uORF1
+  ref: cao1995
+  pubmed: '7815480'
+  unit: s-1
+  range: 0:1
+
+- param: k_start_uorf2
+  value: 0.2
+  desc: normal rate of 80S complex formation at AUG start codon of uORF2
+  ref: cao1995
+  pubmed: '7815480'
+  unit: s-1
+  range: 0:5
+  comment:
+    - > 
+      The initiation rate at the WT uORF2 is 20-30 fold lower than optimal Kozak uORF2 in Cao1995.
+      Assuming that reinitiation at the end of uORF2 is 0, and that the optimal Kozak
+      uORF2 is 50% efficient at initiating (Ty this paper and unpublished), then
+      k_start_uorf2 is 0.2.
+
+- param: k_start_uorf3
+  value: 0
+  desc: normal rate of 80S complex formation at AUG start codon of uORF3
+  ref: cao1995
+  pubmed: '7815480'
+  unit: s-1
+  range: 0:1
+
+- param: k_scan_term_3_end
+  value: 1
+  desc: dissociation rate of scanning ribosomes at the 3' end of mRNA
+  unit: s-1
+  range: 0:10
+  comment: enables recycling of scanning ribosomes that have not fallen off
+
+- param: k_scan_term_no_hit
+  value: 0
+  desc: dissociation rate of scanning ribosomes that have not collided
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_elong_preterm_no_hit
+  value: 0
+  desc: dissociation rate of elongating ribosomes that have not collided at non-stop
+    codons
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_5_hit_80s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that have been hit by trailing 80s
+    ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_5_hit_40s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that have been hit by trailing scanning
+    ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_3_hit_80s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that have hit a leading 80s ribosome
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_3_hit_40s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that have hit a leading scanning ribosome
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_both_hit_40s_40s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that are hit by leading scanning and
+    trailing scanning ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_both_hit_40s_80s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that are hit by leading elongating
+    and trailing scanning ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_both_hit_80s_40s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that are hit by leading scanning and
+    trailing elongating ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: k_scan_term_both_hit_80s_80s
+  value: 0
+  desc: dissociation rate of scanning ribosomes that are hit by leading elongating
+    and trailing elongating ribosomes
+  unit: s-1
+  range: 0:10
+  comment: varied in our simulations
+
+- param: n_mrna_0
+  value: 1
+  desc:
+  - number of mRNAs at the beginning of the simulation
+  - this should not change in the absence of synthesis or degradation
+  unit: NA
+
+- param: n_ssu_0
+  value: 100
+  desc:
+  - number of small ribosomal subunits at the beginning of the simulation
+  - this should not change in the absence of synthesis or degradation
+  unit: NA
+
+- param: n_lsu_0
+  value: 100
+  desc:
+  - number of large ribosomal subunits at the beginning of the simulation
+  - this should not change in the absence of synthesis or degradation
+  unit: NA
+
+- param: n_tc_0
+  value: 100
+  desc:
+  - number of free ternary complexes at the beginning of the simulation
+  - we assume that ternary complexes are immediately recharged after dissociating
+    from 40s
+  unit: NA
+
+- param: l_scan_capture
+  value: 0
+  desc: distance on either side of the start codon in which a scanning ribosome can
+    become an elongating ribosome
+  ref: ivanov2018
+  pubmed: '29677493'
+  unit: nt

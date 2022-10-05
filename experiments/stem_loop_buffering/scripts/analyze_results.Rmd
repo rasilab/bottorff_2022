@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from reduced ribosome loading via a stem loop"
+title: "Analyze luminescent data to create figure 5A"
 output: github_document
 ---
 
@@ -50,7 +50,7 @@ data <- counts %>%
   mutate(status = fct_reorder(status, status_order)) %>%
   print()
 ```
-# Plot Fluc / Nluc for Stem Loops
+# Plot Fluc / Nluc
 
 ```{r, fig.width=2.5, fig.height=1.25}
 plot_data <- data %>%
@@ -71,7 +71,7 @@ plot_data %>%
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/fig_4a_left_panel.pdf")
+ggsave("../figures/fig_5a_left.pdf")
 ```
 
 ```{r, fig.width=0.75, fig.height=1.25}
@@ -97,5 +97,5 @@ plot_data %>%
   theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
   scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/fig_4a_right_panel.pdf")
+ggsave("../figures/fig_5a_right.pdf")
 ```

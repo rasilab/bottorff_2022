@@ -1,0 +1,8 @@
+rule all:
+  """Analyze experiments and make plots"""
+  output:
+    "../figures/fig_5c.pdf"
+  shell:
+    """
+    Rscript -e "rmarkdown::render('analyze_results.Rmd')"
+    """

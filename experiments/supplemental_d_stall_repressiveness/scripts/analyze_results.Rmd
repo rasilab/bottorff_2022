@@ -1,0 +1,70 @@
+---
+title: "Analyze luminescent data from UL4 uORF2 mutants to create figure S4"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+# Load libraries
+
+```{r}
+library(plotrix)
+library(tidyverse)
+library(rasilabRtemplates)
+```
+
+# Read in data
+
+```{r}
+counts <- read_csv("../rawdata/20220407_fluc_nluc.csv") %>%
+  print()
+```
+
+# Read in annotations
+
+```{r}
+annotations <- read_csv("../annotations/sampleannotations.csv") %>%
+  print()
+```
+
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
+
+```{r}
+data <- counts %>% 
+  pivot_wider(names_from = assay, values_from = counts) %>%
+  left_join(annotations, by = "well") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
+  mutate(ratio = log2(nluc) - log2(fluc)) %>% 
+  group_by(reporter) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>%
+  slice(1) %>% 
+  ungroup() %>% 
+  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  mutate(label = fct_reorder(label, label_order)) %>%
+  print()
+```
+
+# Plot FLuc / NLuc
+
+```{r, fig.width=2.1, fig.height=1.7}
+plot_data <- data %>%
+  filter(reporter %in% c("pASHS64", "pTBHS2", "pTBHS3", "pHPHS579", "pHPHS580", "pHPHS581", "pHPHS582", "pHPHS583", "pHPHS584")) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="gp48UTR-no-AUG"]) %>%
+  print()
+
+plot_data %>%
+# Plot average nluc/fluc ratios by reporter construct
+ ggplot(aes(x = label, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio)) +  
+  geom_point(size = 1) +
+  geom_errorbar(width = 0.5) +
+  labs(y = 'NLuc / FLuc (log2, a.u.)',
+       x = '') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
+  coord_flip() +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
+ggsave("../figures/fig_s4.pdf")
+```

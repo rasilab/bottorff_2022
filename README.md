@@ -103,6 +103,8 @@ module purge
 module load Singularity
 # pull docker image from GitHub and convert to .sif file 
 singularity pull docker://ghcr.io/rasilab/bottorff_2022
+# initialize shell
+conda init bash
 # this conda environment contains snakemake-minimal and pandas and has to be
 # outside the Singularity container since it cannot call singularity otherwise
 conda activate snakemake

@@ -1,5 +1,0 @@
-reporter,label,label_order,mean_ratio,se_ratio
-pASHS64,gp48UTR,4,-4.49,0.17
-pTBHS1,gp48UTR-no-stall,5,-0.04,0.21
-pTBHS2,gp48UTR-no-AUG,6,0,0.2
-pTBHS3,gp48UTR-stronger-start,7,-5.93,0.32

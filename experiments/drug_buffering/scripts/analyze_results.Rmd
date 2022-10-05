@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from reduced ribosome loading via 4ER1Cat"
+title: "Analyze luminescent data from UL4 uORF2 mutants to create figure 5B"
 output: github_document
 ---
 
@@ -10,44 +10,40 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 # Load libraries
 
 ```{r}
+library(plotrix)
 library(tidyverse)
 library(rasilabRtemplates)
-library(plotrix)
 ```
 
 # Read in data
 
 ```{r}
-counts <- read_tsv("../rawdata/20201121_fluc_nluc.tsv") %>%
+counts <- read_csv("../rawdata/20220612_fluc_nluc.csv") %>%
   print()
 ```
 
-# Read in annotationsl
+# Read in annotations
 
 ```{r}
-annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
+annotations <- read_csv("../annotations/sampleannotations.csv") %>%
   print()
 ```
 
-# Join data with annotations, normalize NLuc by Fluc, calculate mean and error
+# Join data with annotations, normalize NLuc by FLuc, calculate mean and error
 
 ```{r}
 data <- counts %>% 
   pivot_wider(names_from = assay, values_from = counts) %>%
   left_join(annotations, by = "well") %>%
   mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
-  filter(label != "mock") %>% 
+  filter(label != "mock") %>%
+  filter(fluc > 0) %>%
   mutate(ratio = log2(nluc) - log2(fluc)) %>% 
-  group_by(reporter, concentration) %>% 
+  group_by(reporter, status) %>% 
   mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
-  slice(1) %>% 
-  ungroup() %>% 
-  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
-  mutate(label = fct_reorder(label, label_order)) %>%
-  mutate(concentration = as.character(concentration)) %>% 
-  mutate(concentration = str_replace(concentration, "^0" , "–")) %>% 
-  mutate(concentration = str_replace(concentration, "116" , "+")) %>% 
-  mutate(concentration = fct_reorder(as.factor(concentration), concentration_order)) %>%
+  ungroup() %>%
+  select(-well, -fluc, -nluc, -replicate) %>%
+  #mutate(label = fct_rev(fct_reorder(label, label_order))) %>%
   print()
 ```
 
@@ -61,52 +57,58 @@ norm_data <- read_csv("../../20190422_exp2_ul4_mutants/tables/nluc_fluc_control_
 
 ```
 
-# Plot FLuc / NLuc for Drug Treatment
+# Plot FLuc / NLuc for drug treatment
 
-```{r, fig.width=1.75, fig.height=1}
+```{r, fig.width=2.3, fig.height=1}
 plot_data <- data %>%
-  filter(!is.na(concentration_order)) %>%
   mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
   print()
 
+plot_data$label <- factor(plot_data$label, levels = c("WT", "No-stall"))
+
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
- ggplot(aes(x = concentration, y = mean_ratio, ymax = mean_ratio + se_ratio,
+ ggplot(aes(x = status, y = mean_ratio, ymax = mean_ratio + se_ratio,
             ymin = mean_ratio - se_ratio, color = label, shape = label)) +  
   geom_point(size = 2) +
-  geom_errorbar(width = 0.2, show.legend = F) +
+  geom_errorbar(width = 0.5, show.legend = F) +
   labs(y = 'NLuc / FLuc\n(log2, a.u.)',
-       x = 'eIF4E inhibitor') +
+       x = 'ER stressor') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
   coord_flip() +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7)) +
   scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/fig_4b_left_panel.pdf")
+ggsave("../figures/fig_5b_left.pdf")
 ```
+
+# Plot FLuc / NLuc for drug treatment, normalized
 
 ```{r, fig.width=0.75, fig.height=1}
 plot_data <- data %>%
-  filter(!is.na(concentration_order)) %>%
-  mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
-  group_by(concentration) %>%
-  mutate(mean_ratio = mean_ratio - mean_ratio[label=="no stall"]) %>%
+  #mutate(mean_ratio = mean_ratio - norm_data$mean_ratio) %>%
+  group_by(status) %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="No-stall"]) %>%
   ungroup() %>%
   filter(label == 'WT') %>%
   print()
 
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
- ggplot(aes(x = concentration, y = mean_ratio, ymax = mean_ratio + se_ratio,
+ ggplot(aes(x = status, y = mean_ratio, ymax = mean_ratio + se_ratio,
             ymin = mean_ratio - se_ratio)) +  
   geom_point(size = 1) +
-  geom_errorbar(width = 0.2, show.legend = F) +
+  geom_errorbar(width = 0.5, show.legend = F) +
   labs(y = 'WT / no stall\n(ratio)',
-       x = 'eIF4E inhibitor') +
+       x = '') +
   scale_y_continuous(breaks = scales::pretty_breaks(n=2)) +
+  scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
   theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
-  scale_color_manual(values = cbPalette[c(2,1)])
 
-ggsave("../figures/fig_4b_right_panel.pdf")
+ggsave("../figures/fig_5b_right.pdf")
 ```
+
+# Conclusions
+
+ - 

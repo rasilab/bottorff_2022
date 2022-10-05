@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from perturbed uORF2 d_stall mutants"
+title: "Analyze luminescent data from perturbed uORF2 d_stall mutants to create figure 6B"
 output: 
   github_document:
     toc: 2
@@ -83,5 +83,5 @@ plot_data %>%
   scale_x_continuous(breaks = scales::pretty_breaks(n=4)) +
   theme(panel.grid = element_blank(), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
 
-ggsave("../figures/fig_5b.pdf")
+ggsave("../figures/fig_6b.pdf")
 ```

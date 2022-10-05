@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from reduced ribosome loading +/- perturbed uORF2 d_stall"
+title: "Analyze luminescent data from UL4 uORF2 mutants to create figure 6C"
 output: github_document
 ---
 
@@ -10,36 +10,22 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 # Load libraries
 
 ```{r}
+library(plotrix)
 library(tidyverse)
 library(rasilabRtemplates)
-library(plotrix)
-
-theme_rasilab <- function() {
-  theme_classic(base_family = "Helvetica", base_size = 8) +
-    theme(
-      strip.background = ggplot2::element_blank(),
-      legend.text = element_text(size = 8),
-      strip.text.x = element_text(size = 8),
-      axis.line = element_line(color = "black", size=.25),
-      axis.text = element_text(color = "black", size = 8)
-    )
-}
-
-theme_set(theme_rasilab())
 ```
 
 # Read in data
 
 ```{r}
-counts <- read_tsv("../rawdata/20201006_fluc_nluc.tsv") %>%
+counts <- read_csv("../rawdata/20220413_fluc_nluc.csv") %>%
   print()
 ```
 
 # Read in annotations
 
 ```{r}
-annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
-  janitor::clean_names() %>% 
+annotations <- read_csv("../annotations/sampleannotations.csv") %>%
   print()
 ```
 
@@ -49,38 +35,38 @@ annotations <- read_tsv("../annotations/sampleannotations.tsv") %>%
 data <- counts %>% 
   pivot_wider(names_from = assay, values_from = counts) %>%
   left_join(annotations, by = "well") %>%
-  mutate(fluc = fluc - 2, nluc = nluc - mean(nluc[reporter == "mock"])) %>%
-  filter(fluc > 0) %>% 
-  filter(label != "mock") %>%
+  mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  filter(label != "mock") %>% 
   mutate(ratio = log2(nluc) - log2(fluc)) %>% 
   group_by(reporter) %>% 
-  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
-  slice(1) %>%
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>%
+  slice(1) %>% 
   ungroup() %>% 
   select(-well, -fluc, -nluc, -ratio, -replicate) %>%
   mutate(label = fct_reorder(label, label_order)) %>%
   print()
 ```
 
-# Plot FLuc / NLuc for GAPDH added and longer d_stall
+# Plot FLuc / NLuc
 
 ```{r, fig.width=3.6, fig.height=1}
 plot_data <- data %>%
-  # select only reporters of interest
-  mutate(mean_ratio = mean_ratio - mean_ratio[label=="uORF2 no AUG"]) %>%
-  filter(!is.na(group)) %>%
-  filter(group != "strong_kozak") %>%
+  mutate(mean_ratio = mean_ratio - mean_ratio[label=="gp48UTR-no-AUG"]) %>%
+  filter(reporter %in% c("pTBHS12", "pTBHS13", "pTBHS23", "pTBHS24", "pTBHS58", "pTBHS59", "pTBHS60", "pTBHS61")) %>%
   print()
 
 plot_data %>%
 # Plot average nluc/fluc ratios by reporter construct
- ggplot(aes(y = label, x = mean_ratio, xmax = mean_ratio + se_ratio,
-            xmin = mean_ratio - se_ratio, color = status, shape = status)) +
+ ggplot(aes(x = label, y = mean_ratio, ymax = mean_ratio + se_ratio,
+            ymin = mean_ratio - se_ratio, color = P22A, shape = P22A)) +  
   geom_point(size = 2) +
   geom_errorbar(width = 0.5, show.legend = F) +
-  labs(x = 'NLuc / FLuc (log2, a.u.)', y = '', color = '') +
-  scale_color_manual(values = cbPalette) +
-  scale_x_continuous(breaks = scales::pretty_breaks(n=3)) +
+  labs(y = 'NLuc / FLuc\n(log2, a.u.)',
+       x = '') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=3)) +
+  scale_color_manual(values = cbPalette[c(2,1)]) +
+  scale_shape_manual(values=c(17, 16)) +
+  coord_flip() +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
-ggsave("../figures/fig_5c.pdf")
+ggsave("../figures/fig_6c.pdf")
 ```

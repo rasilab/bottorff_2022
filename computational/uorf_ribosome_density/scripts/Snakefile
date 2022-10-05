@@ -1,0 +1,9 @@
+rule all:
+  """Analyze experiments and make plots"""
+  output:
+    "../figures/fig_s5.pdf"
+  shell:
+    """
+    Rscript -e "rmarkdown::render('plot_tcpseq_coverage.Rmd')"
+    Rscript -e "rmarkdown::render('plot_riboseq_coverage.Rmd')"
+    """

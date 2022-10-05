@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from UL4 uORF2 control mutants"
+title: "Analyze luminescent data from UL4 uORF2 control mutants to create figures 2C and S1B"
 output: github_document
 ---
 
@@ -36,17 +36,42 @@ data <- counts %>%
   pivot_wider(names_from = assay, values_from = counts) %>%
   left_join(annotations, by = "well") %>%
   mutate(fluc = fluc - mean(fluc[reporter == "mock"]), nluc = nluc - mean(nluc[reporter == "mock"])) %>%
+  write_csv("../tables/raw_nluc_fluc.csv") %>%
   filter(label != "mock") %>% 
   mutate(ratio = log2(nluc) - log2(fluc)) %>% 
   group_by(reporter) %>% 
-  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>% 
-  slice(1) %>% 
+  mutate(mean_ratio = mean(ratio), se_ratio = std.error(ratio)) %>%
+  #slice(1) %>% 
   ungroup() %>% 
-  select(-well, -fluc, -nluc, -ratio, -replicate) %>%
+  select(-well, -fluc, -nluc, -replicate) %>%
   mutate(label = fct_reorder(label, label_order)) %>%
   print()
 ```
-# Plot FLuc / NLuc for WT and 3 standard controls
+
+# Plot FLuc, NLuc raw values
+
+```{r, fig.width=3, fig.height=1.2}
+raw_plot_data <- read_csv("../tables/raw_nluc_fluc.csv") %>%
+  filter(str_detect(reporter, "pASHS64|pTBHS[123]|mock")) %>%
+  select(-label_order, -replicate, -reporter, -well) %>%
+  rename(FLuc = fluc, NLuc = nluc) %>%
+  pivot_longer(!label, names_to = "luc", values_to = "count") %>%
+  print()
+
+raw_plot_data %>%
+ #Plot raw nluc, fluc by reporter construct
+ ggplot(aes(x = label, y = log2(count), color = luc)) +
+  geom_point(size = 1) +
+  labs(y = 'Luc (log2, a.u.)',
+       x = '') +
+  scale_y_continuous(breaks = scales::pretty_breaks(n=4)) +
+  scale_color_manual(values = cbPalette[c(2,1)]) +
+  coord_flip() +
+  theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7), legend.title = element_blank())
+ggsave("../figures/fig_s1b.pdf")
+```
+
+# Plot FLuc / NLuc
 
 ```{r, fig.width=2.4, fig.height=0.9}
 plot_data <- data %>%

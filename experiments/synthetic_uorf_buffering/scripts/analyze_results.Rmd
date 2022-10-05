@@ -1,5 +1,5 @@
 ---
-title: "Analyze luminescent data from reduced ribosome loading via a 5' synthetic uORF"
+title: "Analyze luminescent data from reduced ribosome loading via a 5' synthetic uORF to create figure 5C"
 output: github_document
 ---
 
@@ -48,7 +48,7 @@ data <- counts %>%
   mutate(status = fct_reorder(status, status_order)) %>%
   print()
 ```
-# Plot Fluc / NLuc for different synthetic uORF mutants
+# Plot Fluc / NLuc
 
 ```{r, fig.width=2.4, fig.height=1.5}
 plot_data <- data %>%
@@ -69,10 +69,10 @@ plot_data %>%
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
   theme(axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7))
-ggsave("../figures/fig_4c_left_panel.pdf")
+ggsave("../figures/fig_5c_left.pdf")
 ```
 
-# Plot Fluc / NLuc for different synthetic uORF mutants normalized by no stall
+# Plot Fluc / NLuc
 
 ```{r, fig.width=0.75, fig.height=1.5}
 plot_data <- data %>%
@@ -97,5 +97,5 @@ plot_data %>%
   scale_color_manual(values = cbPalette[c(2,1)]) +
   coord_flip() +
   theme(axis.text.y = element_blank(), axis.text.x = element_text(size = 7), axis.title.y = element_blank())
-ggsave("../figures/fig_4c_right_panel.pdf")
+ggsave("../figures/fig_5c_right.pdf")
 ```

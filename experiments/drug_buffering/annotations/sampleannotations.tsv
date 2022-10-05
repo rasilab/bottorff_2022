@@ -1,28 +1,45 @@
-well	reporter	label	replicate	concentration	label_order	concentration_order
-B2	mock	mock	1		0	
-B3	pTBHS134	WT	1	0	1	0
-B4	pTBHS134	WT	1	116	1	1
-B5	pTBHS135	no stall	1	0	2	0
-B6	pTBHS135	no stall	1	116	2	1
-B7	pTBHS134	WT	1	367	1	
-B8	pTBHS134	WT	1	1081	1	
-B9	pTBHS135	no stall	1	367	2	
-B10	pTBHS135	no stall	1	1081	2	
-C10	mock	mock	2		0	
-C9	pTBHS134	WT	2	0	1	0
-C8	pTBHS134	WT	2	116	1	1
-C7	pTBHS135	no stall	2	0	2	
-C6	pTBHS135	no stall	2	116	2	
-C5	pTBHS134	WT	2	367	1	
-C4	pTBHS134	WT	2	1081	1	
-C3	pTBHS135	no stall	2	367	2	
-C2	pTBHS135	no stall	2	1081	2	
-D2	mock	mock	3		0	
-D3	pTBHS134	WT	3	0	1	0
-D4	pTBHS134	WT	3	116	1	1
-D5	pTBHS135	no stall	3	0	2	0
-D6	pTBHS135	no stall	3	116	2	1
-D7	pTBHS134	WT	3	367	1	
-D8	pTBHS134	WT	3	1081	1	
-D9	pTBHS135	no stall	3	367	2	
-D10	pTBHS135	no stall	3	1081	2	
+well,reporter,label,replicate,status,label_order
+B1,mock,mock,1,,
+B2,pTBHS134,WT,1,-,1
+B3,pTBHS135,No-stall,1,-,1
+B4,pTBHS134,WT,1,0.25X,2
+B5,pTBHS135,No-stall,1,0.25X,2
+B6,pTBHS134,WT,1,0.5X,3
+B7,pTBHS135,No-stall,1,0.5X,3
+B8,pTBHS134,WT,1,1X,4
+B9,pTBHS135,No-stall,1,1X,4
+B10,pTBHS134,WT,1,2X,5
+B11,pTBHS135,No-stall,1,2X,5
+D1,mock,mock,2,,
+D2,pTBHS134,WT,2,-,1
+D3,pTBHS135,No-stall,2,-,1
+D4,pTBHS134,WT,2,0.25X,2
+D5,pTBHS135,No-stall,2,0.25X,2
+D6,pTBHS134,WT,2,0.5X,3
+D7,pTBHS135,No-stall,2,0.5X,3
+D8,pTBHS134,WT,2,1X,4
+D9,pTBHS135,No-stall,2,1X,4
+D10,pTBHS134,WT,2,2X,5
+D11,pTBHS135,No-stall,2,2X,5
+F1,mock,mock,3,,
+F2,pTBHS134,WT,3,-,1
+F3,pTBHS135,No-stall,3,-,1
+F4,pTBHS134,WT,3,0.25X,2
+F5,pTBHS135,No-stall,3,0.25X,2
+F6,pTBHS134,WT,3,0.5X,3
+F7,pTBHS135,No-stall,3,0.5X,3
+F8,pTBHS134,WT,3,1X,4
+F9,pTBHS135,No-stall,3,1X,4
+F10,pTBHS134,WT,3,2X,5
+F11,pTBHS135,No-stall,3,2X,5
+H1,mock,mock,4,,
+H2,pTBHS134,WT,4,-,1
+H3,pTBHS135,No-stall,4,-,1
+H4,pTBHS134,WT,4,0.25X,2
+H5,pTBHS135,No-stall,4,0.25X,2
+H6,pTBHS134,WT,4,0.5X,3
+H7,pTBHS135,No-stall,4,0.5X,3
+H8,pTBHS134,WT,4,1X,4
+H9,pTBHS135,No-stall,4,1X,4
+H10,pTBHS134,WT,4,2X,5
+H11,pTBHS135,No-stall,4,2X,5
