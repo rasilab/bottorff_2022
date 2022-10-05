@@ -17,7 +17,11 @@ RUN mamba install -y -n R -c conda-forge -c defaults \
     r-viridis \
     r-devtools \
     r-janitor \
-    r-plotrix
+    r-plotrix \
+    r-rtracklayer \
+    r-GenomicFeatures \
+    r-Biostrings \
+    r-plyranges
 
 # Set up R jupyter kernel and make it visible to python
 ENV PATH="/opt/conda/envs/py/bin:$PATH"

@@ -9,3 +9,7 @@ dependencies:
   - r-devtools
   - r-janitor
   - r-plotrix
+  - r-rtracklayer
+  - r-GenomicFeatures
+  - r-Biostrings
+  - r-plyranges
