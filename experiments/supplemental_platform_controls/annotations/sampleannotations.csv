@@ -1,0 +1,46 @@
+well,reporter,label,replicate,P22A,label_order
+B2,pASHS64,gp48UTR,1,,1
+B3,pTBHS1,gp48UTR-no-stall,1,,2
+B4,pTBHS2,gp48UTR-no-AUG,1,,3
+B5,pTBHS3,gp48UTR-stronger-start,1,,5
+B6,pTBHS12,GAPDH GACACC stop before uORF2,1,no,2
+B7,pTBHS13,GAPDH GACACC stop before uORF2,1,yes,2
+B8,pTBHS23,GAPDH no start stop before uORF2,1,no,1
+B9,pTBHS24,GAPDH no start stop before uORF2,1,yes,1
+B10,pTBHS58,GAPDH GACACC 2 eYFP codons longer,1,no,4
+B11,pTBHS59,GAPDH GACACC 2 eYFP codons longer,1,yes,4
+C2,pASHS64,gp48UTR,2,,1
+C3,pTBHS1,gp48UTR-no-stall,2,,2
+C4,pTBHS2,gp48UTR-no-AUG,2,,3
+C5,pTBHS3,gp48UTR-stronger-start,2,,5
+C6,pTBHS12,GAPDH GACACC stop before uORF2,2,no,2
+C7,pTBHS13,GAPDH GACACC stop before uORF2,2,yes,2
+C8,pTBHS23,GAPDH no start stop before uORF2,2,no,1
+C9,pTBHS24,GAPDH no start stop before uORF2,2,yes,1
+C10,pTBHS58,GAPDH GACACC 2 eYFP codons longer,2,no,4
+C11,pTBHS59,GAPDH GACACC 2 eYFP codons longer,2,yes,4
+D2,pASHS64,gp48UTR,3,,1
+D3,pTBHS1,gp48UTR-no-stall,3,,2
+D4,pTBHS2,gp48UTR-no-AUG,3,,3
+D5,pTBHS3,gp48UTR-stronger-start,3,,5
+D6,pTBHS12,GAPDH GACACC stop before uORF2,3,no,2
+D7,pTBHS13,GAPDH GACACC stop before uORF2,3,yes,2
+D8,pTBHS23,GAPDH no start stop before uORF2,3,no,1
+D9,pTBHS24,GAPDH no start stop before uORF2,3,yes,1
+D10,pTBHS58,GAPDH GACACC 2 eYFP codons longer,3,no,4
+D11,pTBHS59,GAPDH GACACC 2 eYFP codons longer,3,yes,4
+E5,pTBHS60,GAPDH no AUG 2 eYFP codons longer,1,no,3
+E6,pTBHS61,GAPDH no AUG 2 eYFP codons longer,1,yes,3
+E7,pHPHS577,no Nluc starts,1,,6
+E8,pHPHS578,no non cognate uORF2 starts,1,,4
+E9,mock,mock,1,,
+F5,pTBHS60,GAPDH no AUG 2 eYFP codons longer,2,no,3
+F6,pTBHS61,GAPDH no AUG 2 eYFP codons longer,2,yes,3
+F7,pHPHS577,no Nluc starts,2,,6
+F8,pHPHS578,no non cognate uORF2 starts,2,,4
+F9,mock,mock,2,,
+G5,pTBHS60,GAPDH no AUG 2 eYFP codons longer,3,no,3
+G6,pTBHS61,GAPDH no AUG 2 eYFP codons longer,3,yes,3
+G7,pHPHS577,no Nluc starts,3,,6
+G8,pHPHS578,no non cognate uORF2 starts,3,,4
+G9,mock,mock,3,,

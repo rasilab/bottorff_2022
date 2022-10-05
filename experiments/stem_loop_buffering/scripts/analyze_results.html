@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  padding-top: 0px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id="analyze-luminescent-data-to-create-figure-5a">Analyze
+luminescent data to create figure 5A</h1>
+<h1 id="load-libraries">Load libraries</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rasilabRtemplates)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotrix)</span></code></pre></div>
+<h1 id="read-in-data">Read in data</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;../rawdata/20191223_fluc_nluc.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 108 × 3
+##    well  assay counts
+##    &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+##  1 B2    fluc       2
+##  2 B3    fluc    1242
+##  3 B4    fluc     610
+##  4 B5    fluc     761
+##  5 B6    fluc     486
+##  6 B7    fluc      52
+##  7 B8    fluc     285
+##  8 B9    fluc      42
+##  9 B10   fluc     642
+## 10 C2    fluc     885
+## # … with 98 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
+<h1 id="read-in-annotationsl">Read in annotationsl</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>annotations <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;../annotations/sampleannotations.tsv&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 54 × 7
+##    well  reporter label              replicate status label_order status_order
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+##  1 B2    mock     mock                       1 &lt;NA&gt;             0           NA
+##  2 B3    pASHS64  WT UL4                     1 &lt;NA&gt;             1           NA
+##  3 B4    pTBHS1   P22A                       1 &lt;NA&gt;             2           NA
+##  4 B5    pTBHS2   uORF2 no AUG               1 &lt;NA&gt;             3           NA
+##  5 B6    pTBHS3   uORF2 strong Kozak         1 &lt;NA&gt;             4           NA
+##  6 B7    pTBHS18  GC52                       1 WT              11            1
+##  7 B8    pTBHS19  GC62                       1 WT              12            1
+##  8 B9    pTBHS20  GC78                       1 WT              14            1
+##  9 B10   pTBHS21  GC92                       1 WT              15            1
+## 10 C10   mock     mock                       2 &lt;NA&gt;             0           NA
+## # … with 44 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
+<h1 id="join-data-with-annotations-normalize-nluc-by-fluc-calculate-mean-and-error">Join
+data with annotations, normalize NLuc by FLuc, calculate mean and
+error</h1>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> counts <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> assay, <span class="at">values_from =</span> counts) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(annotations, <span class="at">by =</span> <span class="st">&quot;well&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fluc =</span> fluc <span class="sc">-</span> <span class="fu">mean</span>(fluc[reporter <span class="sc">==</span> <span class="st">&quot;mock&quot;</span>]), <span class="at">nluc =</span> nluc <span class="sc">-</span> <span class="fu">mean</span>(nluc[reporter <span class="sc">==</span> <span class="st">&quot;mock&quot;</span>])) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(label <span class="sc">!=</span> <span class="st">&quot;mock&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ratio =</span> <span class="fu">log2</span>(nluc) <span class="sc">-</span> <span class="fu">log2</span>(fluc)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(reporter) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_ratio =</span> <span class="fu">mean</span>(ratio), <span class="at">se_ratio =</span> <span class="fu">std.error</span>(ratio)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>well, <span class="sc">-</span>fluc, <span class="sc">-</span>nluc, <span class="sc">-</span>ratio, <span class="sc">-</span>replicate) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(status)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">str_replace</span>(label, <span class="st">&quot;GC&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">str_replace</span>(label, <span class="st">&quot;CAA repeat&quot;</span>, <span class="st">&quot;no SL&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">fct_reorder</span>(label, label_order)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">status =</span> <span class="fu">fct_reorder</span>(status, status_order)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 16 × 7
+##    reporter label                     status   label_o…¹ statu…² mean_…³ se_ra…⁴
+##    &lt;chr&gt;    &lt;fct&gt;                     &lt;fct&gt;        &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 pTBHS18  52                        WT              11       1    6.53  0.0955
+##  2 pTBHS19  62                        WT              12       1    6.67  0.161 
+##  3 pTBHS20  78                        WT              14       1    5.85  0.431 
+##  4 pTBHS21  92                        WT              15       1    5.01  0.0988
+##  5 pTBHS22  no SL                     WT              13       1    5.16  0.637 
+##  6 pTBHS35  52                        no stall        11       2   10.4   0.236 
+##  7 pTBHS36  62                        no stall        12       2    9.27  0.0802
+##  8 pTBHS37  78                        no stall        14       2    5.82  0.192 
+##  9 pTBHS38  92                        no stall        15       2    5.91  0.0904
+## 10 pTBHS39  no SL                     no stall        13       2    8.74  0.165 
+## 11 pASHS64  WT UL4                    &lt;NA&gt;             1      NA    6.05  0.304 
+## 12 pTBHS1   P22A                      &lt;NA&gt;             2      NA   10.1   0.153 
+## 13 pTBHS2   uORF2 no AUG              &lt;NA&gt;             3      NA   10.5   0.0936
+## 14 pTBHS3   uORF2 strong Kozak        &lt;NA&gt;             4      NA    4.54  0.301 
+## 15 pTBHS53  GAPDH strong uORF2        &lt;NA&gt;             6      NA    5.85  0.269 
+## 16 pTBHS54  GAPDH no AUG strong uORF2 &lt;NA&gt;             5      NA    3.06  0.313 
+## # … with abbreviated variable names ¹​label_order, ²​status_order, ³​mean_ratio,
+## #   ⁴​se_ratio</code></pre>
+<h1 id="plot-fluc--nluc">Plot Fluc / Nluc</h1>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_ratio =</span> mean_ratio <span class="sc">-</span> <span class="fu">max</span>(mean_ratio)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(status)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 7
+##    reporter label status   label_order status_order mean_ratio se_ratio
+##    &lt;chr&gt;    &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+##  1 pTBHS18  52    WT                11            1    -3.94     0.0955
+##  2 pTBHS19  62    WT                12            1    -3.79     0.161 
+##  3 pTBHS20  78    WT                14            1    -4.62     0.431 
+##  4 pTBHS21  92    WT                15            1    -5.45     0.0988
+##  5 pTBHS22  no SL WT                13            1    -5.31     0.637 
+##  6 pTBHS35  52    no stall          11            2    -0.0904   0.236 
+##  7 pTBHS36  62    no stall          12            2    -1.19     0.0802
+##  8 pTBHS37  78    no stall          14            2    -4.65     0.192 
+##  9 pTBHS38  92    no stall          15            2    -4.55     0.0904
+## 10 pTBHS39  no SL no stall          13            2    -1.73     0.165</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot average nluc/fluc ratios by reporter construct</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> label, <span class="at">y =</span> mean_ratio, <span class="at">ymax =</span> mean_ratio <span class="sc">+</span> se_ratio,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">ymin =</span> mean_ratio <span class="sc">-</span> se_ratio, <span class="at">color =</span> status, <span class="at">shape =</span> status)) <span class="sc">+</span>  </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">width =</span> <span class="fl">0.5</span>, <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&#39;NLuc / FLuc</span><span class="sc">\n</span><span class="st">(log2, a.u.)&#39;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&#39;stem loop GC %&#39;</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n=</span><span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> cbPalette[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)])</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;../figures/fig_5a_left.pdf&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_ratio =</span> mean_ratio <span class="sc">-</span> <span class="fu">max</span>(mean_ratio)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(status)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(label) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_ratio =</span> mean_ratio <span class="sc">-</span> mean_ratio[status<span class="sc">==</span><span class="st">&quot;no stall&quot;</span>]) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(status <span class="sc">==</span> <span class="st">&#39;WT&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 7
+##   reporter label status label_order status_order mean_ratio se_ratio
+##   &lt;chr&gt;    &lt;fct&gt; &lt;fct&gt;        &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+## 1 pTBHS18  52    WT              11            1    -3.85     0.0955
+## 2 pTBHS19  62    WT              12            1    -2.60     0.161 
+## 3 pTBHS20  78    WT              14            1     0.0248   0.431 
+## 4 pTBHS21  92    WT              15            1    -0.903    0.0988
+## 5 pTBHS22  no SL WT              13            1    -3.58     0.637</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot average nluc/fluc ratios by reporter construct</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> label, <span class="at">y =</span> mean_ratio, <span class="at">ymax =</span> mean_ratio <span class="sc">+</span> se_ratio,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">ymin =</span> mean_ratio <span class="sc">-</span> se_ratio)) <span class="sc">+</span>  </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">width =</span> <span class="fl">0.5</span>, <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&#39;WT / no stall</span><span class="sc">\n</span><span class="st">(ratio)&#39;</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&#39;stem loop GC %&#39;</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>), <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> cbPalette[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)])</span></code></pre></div>
+<pre><code>## &lt;ggproto object: Class ScaleDiscrete, Scale, gg&gt;
+##     aesthetics: colour
+##     axis_order: function
+##     break_info: function
+##     break_positions: function
+##     breaks: waiver
+##     call: call
+##     clone: function
+##     dimension: function
+##     drop: TRUE
+##     expand: waiver
+##     get_breaks: function
+##     get_breaks_minor: function
+##     get_labels: function
+##     get_limits: function
+##     guide: legend
+##     is_discrete: function
+##     is_empty: function
+##     labels: waiver
+##     limits: NULL
+##     make_sec_title: function
+##     make_title: function
+##     map: function
+##     map_df: function
+##     n.breaks.cache: NULL
+##     na.translate: TRUE
+##     na.value: grey50
+##     name: waiver
+##     palette: function
+##     palette.cache: NULL
+##     position: left
+##     range: &lt;ggproto object: Class RangeDiscrete, Range, gg&gt;
+##         range: NULL
+##         reset: function
+##         train: function
+##         super:  &lt;ggproto object: Class RangeDiscrete, Range, gg&gt;
+##     rescale: function
+##     reset: function
+##     scale_name: manual
+##     train: function
+##     train_df: function
+##     transform: function
+##     transform_df: function
+##     super:  &lt;ggproto object: Class ScaleDiscrete, Scale, gg&gt;</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;../figures/fig_5a_right.pdf&quot;</span>)</span></code></pre></div>
+
+</body>
+</html>
