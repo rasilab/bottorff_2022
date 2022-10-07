@@ -64,31 +64,37 @@ snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 # computational
 
 # figure 2D
-# cd ../computational/simulation_runs/80s_hit_model_fitting
-# snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
-#cd ../queuing_dissociation_models_fitting
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../../../computational/simulation_runs/80s_hit_model_fitting
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../queuing_dissociation_models_fitting
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figures 4A, 4C, 4D, S2C, S2E, S2F
-#cd ../constitutive_queuing_dissociation_models_buffering
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../constitutive_queuing_dissociation_models_buffering
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figures 4B, S2A, S2B, S3B
-#cd ../80s_hit_model_buffering
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../80s_hit_model_buffering
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figures 4E, S3A
-#cd ../regulated_reinitiation_model_buffering
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../regulated_reinitiation_model_buffering
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figure 6A
-#cd ../backward_scanning_d_stall_periodicity
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../backward_scanning_d_stall_periodicity
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figure S2D
-#cd ../backward_scanning_buffering
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../backward_scanning_buffering
+mkdir output
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
 
 # figure S5 (ribosome density over uORFs with conserved stalling peptides)
-#cd ../../uorf_ribosome_density
-#snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
+cd ../../uorf_ribosome_density/scripts
+snakemake $CLUSTER_ARGS $SLURM_COMMAND $SINGULARITY_ARGS
