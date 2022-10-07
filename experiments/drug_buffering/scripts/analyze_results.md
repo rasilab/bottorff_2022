@@ -7,6 +7,19 @@ Analyze luminescent data from UL4 uORF2 mutants to create figure 5B
 library(plotrix)
 library(tidyverse)
 library(rasilabRtemplates)
+
+theme_rasilab <- function() {
+  theme_classic(base_family = "Helvetica", base_size = 8) +
+    theme(
+      strip.background = ggplot2::element_blank(),
+      legend.text = element_text(size = 8),
+      strip.text.x = element_text(size = 8),
+      axis.line = element_line(color = "black", size=.25),
+      axis.text = element_text(color = "black", size = 8)
+    )
+}
+
+theme_set(theme_rasilab())
 ```
 
 # Read in data
