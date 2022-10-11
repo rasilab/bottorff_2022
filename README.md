@@ -85,7 +85,7 @@ For example, run the following to recreate figure 5B:
 ```bash
 docker run --rm -it -v $(pwd):/workspace bottorff_2022 /bin/bash
 cd workspace/experiments/drug_buffering/scripts
-snakemake -p --cores=8
+Rscript -e "rmarkdown::render('analyze_results.Rmd')"
 ```
 
 See [run_everything.sh](run_everything.sh) for which folders correspond to which figures in the manuscript (included as comments).
