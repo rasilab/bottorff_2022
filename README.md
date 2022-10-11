@@ -77,13 +77,18 @@ cd workspace
 sh run_everything.sh
 ```
 
-The last above command will take a very long time to run (days or weeks
-depending on your computer). Instead, you will likely want to open subfolders
-for specific experiments or simulations and run the scripts separately there in
-the above created Docker environment. See README.md in
-[experiments](./experiments) and [modeling](./modeling) folders for further
-information. See [run_everything.sh](run_everything.sh) for which folders
-correspond to which figures in the manuscript (included as comments).
+The last above command will take a very long time to run (days or weeks depending on your computer).
+Instead, you will likely want to open subfolders for specific experiments or simulations and run the scripts separately there in
+the above created Docker environment.
+For example, run the following to recreate figure 5B:
+
+```bash
+docker run --rm -it -v $(pwd):/workspace bottorff_2022 /bin/bash
+cd workspace/experiments/drug_buffering/scripts
+snakemake -p --cores=8
+```
+
+See [run_everything.sh](run_everything.sh) for which folders correspond to which figures in the manuscript (included as comments).
 
 ### Fred Hutch computing cluster
 
@@ -112,3 +117,27 @@ conda activate snakemake
 # see run_everything.sh for details on what the two arguments do
 sh run_everything.sh --use-singularity --use-cluster
 ```
+
+To recreate figures 4A, 4C, 4D, S2C, S2E, S2F specifically, we run:
+
+```bash
+mkdir -p /fh/scratch/delete90/subramaniam_a/user/tbottorf/git/
+cd /fh/scratch/delete90/subramaniam_a/user/tbottorf/git/
+# clone this repo and go inside
+git clone git@github.com:rasilab/bottorff_2022.git
+cd bottorff_2022/simulation_runs/computational/constitutive_queuing_dissociation_models_buffering
+mkdir output
+# load singularity module
+module purge
+module load Singularity
+# pull docker image from GitHub and convert to .sif file 
+singularity pull docker://ghcr.io/rasilab/bottorff_2022
+# initialize shell
+conda init bash
+# this conda environment contains snakemake-minimal and pandas and has to be
+# outside the Singularity container since it cannot call singularity otherwise
+conda activate snakemake
+snakemake -p --cores=8
+```
+
+Again, see [run_everything.sh](run_everything.sh) for which folders correspond to which figures in the manuscript (included as comments).
