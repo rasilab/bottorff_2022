@@ -1,9 +1,12 @@
 base_folder=$(pwd)
-experiments_folder = $(pwd)/experiments
-computational_folder = $(pwd)/computational
-simulations_folder = computational_folder/simulation_runs
+experiments_folder=base_folder/experiments
+computational_folder=base_folder/computational
+simulations_folder=computational_folder/simulation_runs
+
+conda init bash
 
 # Comment out below commands if not using Singularity
+grabnode # for fred hutch only, get max 36 nodes, max 720G memory, for **1** day, with no GPU
 echo "Loading modules"
 module load Singualarity
 conda activate snakemake
