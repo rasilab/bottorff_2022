@@ -1,5 +1,5 @@
 {
-    "image":  "ghcr.io/rasilab/bottorff_2022",
+    "image":  "ghcr.io/rasilab/bottorff_2022:latest",
     // "build": {
     //     "dockerfile": "../Dockerfile",
     //     "context": "..",

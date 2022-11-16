@@ -54,7 +54,7 @@ ENV PATH=/nfsim:/bionetgen/:$PATH
 RUN conda run -n py pip install -e /pysb/
 
 # Install pysb_ul4 as package to make it available for all modeling
-COPY modeling/setup.py /install/ul4/
-COPY modeling/setup.cfg /install/ul4/
-COPY modeling/pysb_ul4 /install/ul4/pysb_ul4/
+COPY ../tybottorffdocs/modeling/setup.py /install/ul4/
+COPY ../tybottorffdocs/modeling/setup.cfg /install/ul4/
+COPY ../tybottorffdocs/modeling/pysb_ul4 /install/ul4/pysb_ul4/
 RUN conda run -n py pip install -e /install/ul4/
