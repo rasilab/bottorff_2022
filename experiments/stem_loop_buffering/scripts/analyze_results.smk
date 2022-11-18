@@ -4,7 +4,7 @@ container: "../../../bottorff_2022.sif"
 rule all:
   """Analyze experiments and make plots"""
   output:
-    "../figures/fig_6c.pdf"
+    "../figures/fig_5a.pdf"
   conda: "R"
   shell:
     """

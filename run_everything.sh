@@ -21,9 +21,9 @@ echo "Performing experimental analyses"
 # figures 2C & S1B
 cd $experiments_folder/platform_controls/scripts
 sh submit_local.sh "--snakefile" analyze_results.smk $@
-cp ../tables/nluc_fluc_control_mutants.csv simulations_folder/80s_hit_model_fitting/tables/
-cp ../tables/nluc_fluc_control_mutants.csv simulations_folder/queuing_dissociation_models_fitting/tables/
-cp ../tables/nluc_fluc_control_mutants_not_normalized.csv experiments_folder/drug_buffering/tables/
+cp ../tables/nluc_fluc_control_mutants.csv $simulations_folder/80s_hit_model_fitting/tables/
+cp ../tables/nluc_fluc_control_mutants.csv $simulations_folder/queuing_dissociation_models_fitting/tables/
+cp ../tables/nluc_fluc_control_mutants_not_normalized.csv $experiments_folder/drug_buffering/tables/
 
 # figure 5A
 cd $experiments_folder/stem_loop_buffering/scripts
